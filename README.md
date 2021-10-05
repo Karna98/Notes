@@ -5,4 +5,8 @@
     <h1>Notes</h1>
 </div>
 
-Check out [***dev** branch*](https://github.com/Karna98/Notes/tree/dev) for Development.
+Check out [**\*dev** branch\*](https://github.com/Karna98/Notes/tree/dev) for Development.
+
+## Development
+
+-   [Setup Documents](SETUP.MD)

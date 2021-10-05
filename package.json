@@ -1,0 +1,25 @@
+{
+  "name": "notes",
+  "productName": "Notes",
+  "version": "0.0.1",
+  "description": "Local and Secure Notes",
+  "main": "main.js",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^14.0.0"
+  },
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Vedant Wakalkar",
+    "email": "developer.karna98@gmail.com",
+    "url": "https://karna98.github.io"
+  },
+  "homepage": "To be updated",
+  "repository": "https://github.com/Karna98/Notes",
+  "license": "MIT"
+}
