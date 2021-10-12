@@ -1,0 +1,35 @@
+/*-----     -----     -----     -----     -----     -----     -----     ----- 
+.babelrc
+
+Description: Babel configuration file.
+
+Version  : 0.0.1
+Date     : 10-10-2021 
+Author   : Vedant Wakalkar 
+Email    : developer.karna98@gmail.com 
+-----     -----     -----     -----     -----     -----     -----     -----*/
+
+/* 
+  1. Read More about Presets at https://babeljs.io/docs/en/presets.
+  2. Read More about Plugins at https://babeljs.io/docs/en/plugins.
+*/
+{
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-typescript",
+    [
+      "@babel/preset-react",
+      {
+        "runtime": "automatic"
+      }
+    ]
+  ],
+  "plugins": [
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "regenerator": true
+      }
+    ]
+  ]
+}

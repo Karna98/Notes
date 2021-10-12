@@ -1,6 +1,6 @@
 ## Pre-requisites
 
--   Install **Node** for respective platform from https://nodejs.org/en/
+- Install **Node** for respective platform from https://nodejs.org/en/
 
 ### Windows
 
@@ -18,12 +18,36 @@ _To be updated._
 
 1. Install all **npm** dependencies by running following command
 
-    ```
-    npm install
-    ```
+   ```
+   npm install
+   ```
 
-2. Start Notes Application
+2. Start Electron Application.
 
-    ```
-    npm start
-    ```
+   - For Production mode
+
+     ```
+     npm start prod
+     ```
+
+   - For Development mode
+
+     ```
+     npm start dev
+     ```
+
+### Linting code
+
+```
+npm run lint
+```
+
+### Formatting code
+
+```
+npm run format
+```
+
+## Resources
+
+1. [Electron Developers Checklist](https://www.electronjs.org/docs/latest/tutorial/performance)
