@@ -1,0 +1,9 @@
+# Generated files
+build
+
+# Third-party files
+node_modules
+
+# TS Config
+src/main/tsconfig.json
+src/renderer/tsconfig.json
