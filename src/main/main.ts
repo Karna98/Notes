@@ -1,23 +1,17 @@
-/*-----     -----     -----     -----     -----     -----     -----     ----- 
-index.tsx
-
-Description: Main process file for ELectron. Entry file for ELectron.
-
-Version  : 0.0.1
-Date     : 10-10-2021 
-Author   : Vedant Wakalkar 
-Email    : developer.karna98@gmail.com 
------     -----     -----     -----     -----     -----     -----     -----*/
+/**
+ * main.ts
+ *
+ * Description:
+ *    Main process file for ELectron. Entry file for ELectron.
+ *
+ */
 
 // Modules to control application life and create native browser window
 import { app, BrowserWindow } from 'electron';
-import { join as pathJoin } from 'path';
-
-const APP_DIRECTORY = app.getAppPath();
-const BUILD_DIRECTORY = pathJoin(APP_DIRECTORY, `build`);
+import { resolveHtmlPath } from './util';
 
 /*
-  TODO: Find if we still need to keep global reference (read below cooments) when we create window using Class.
+  @TODO: Find if we still need to keep global reference (read below cooments) when we create window using Class.
   
   // Keep a global reference of the window object, if you don't, the window will
   // be closed automatically when the JavaScript object is garbage collected.
@@ -79,9 +73,7 @@ class Main {
     // Open Devtools
     // this.mainWindow.webContents.openDevTools();
 
-    this.mainWindow.loadURL(
-      pathJoin(BUILD_DIRECTORY, `renderer`, `index.html`)
-    );
+    this.mainWindow.loadURL(resolveHtmlPath(`index.html`));
 
     this.mainWindow.once('ready-to-show', () => {
       this.mainWindow?.show();

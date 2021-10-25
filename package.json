@@ -12,26 +12,22 @@
   "homepage": "To be updated",
   "repository": "https://github.com/Karna98/Notes",
   "license": "MIT",
-  "main": "./build/main/main.bundle.js",
   "private": true,
   "dependencies": {
-    "electron": "^14.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.8",
-    "@babel/plugin-transform-runtime": "^7.15.8",
-    "@babel/preset-env": "^7.15.8",
-    "@babel/preset-react": "^7.14.5",
-    "@babel/preset-typescript": "^7.15.0",
-    "@babel/runtime": "^7.15.4",
+    "@types/node": "^16.11.4",
     "@types/react": "^17.0.27",
     "@types/react-dom": "^17.0.9",
-    "@typescript-eslint/eslint-plugin": "^4.33.0",
-    "@typescript-eslint/parser": "^4.33.0",
-    "babel-loader": "^8.2.2",
+    "@types/webpack-env": "^1.16.3",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "cross-env": "^7.0.3",
     "css-loader": "^6.3.0",
+    "electron": "^14.0.0",
+    "electron-builder": "^22.13.1",
+    "electron-rebuild": "^3.2.3",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
@@ -49,24 +45,28 @@
     "sass-loader": "^12.1.0",
     "style-loader": "^3.3.0",
     "ts-loader": "^9.2.6",
+    "ts-node": "^10.3.0",
     "typescript": "^4.4.3",
     "webpack": "^5.57.1",
     "webpack-cli": "^4.9.0",
+    "webpack-dev-server": "^4.3.1",
     "webpack-merge": "^5.8.0"
   },
+  "devEngines": {
+    "node": ">=14.x",
+    "npm": ">=8.x"
+  },
   "scripts": {
-    "start": "electron .",
-    "lint": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx,json}\"",
-    "format": "prettier --write \"./src/**/*.{html,css,js,json,md,scss,ts,tsx}\"",
-    "webpack:prod": "webpack --config webpack.config.js --env env=production",
-    "webpack:dev": "webpack --config webpack.config.js --env env=development",
-    "webpack:dev:watch": "webpack --config webpack.config.js --env env=development --watch",
-    "prod": "run-s -clns lint webpack:prod start",
-    "predev": "npm run webpack:dev",
-    "dev": "run-p -clns dev:*",
-    "dev:electron": "npm start",
-    "dev:webpack": "npm run webpack:dev:watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "run-p build:main build:renderer",
+    "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.config/webpack/webpack.config.prod.main.ts",
+    "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.config/webpack/webpack.config.prod.renderer.ts",
+    "start": "npx electron release/app",
+    "dev": "npm run dev:renderer",
+    "dev:main": "cross-env NODE_ENV=development electron -r ts-node/register/transpile-only ./src/main/main.ts",
+    "dev:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.config/webpack/webpack.config.dev.renderer.ts",
+    "lint": "cross-env NODE_ENV=development eslint . --cache --ext .js,.jsx,.ts,.tsx,.json",
+    "format": "prettier --config .prettierrc.js --write \"./**/*.{html,css,scss,json,js,jsx,ts,tsx,md}\"",
+    "postinstall": "ts-node ./.config/script/check-native-dep.js && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.config/webpack/webpack.config.dev.renderer.dll.ts"
   },
   "husky": {
     "hooks": {
@@ -74,11 +74,17 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,json}": [
-      "eslint --fix"
+    "*.{js,jsx,ts,tsx}": [
+      "cross-env NODE_ENV=development eslint --cache"
     ],
-    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-      "prettier --write"
+    "*.json,.{eslintrc,prettierrc}": [
+      "prettier --ignore-path .eslintignore --parser json --write"
+    ],
+    "*.{css,scss}": [
+      "prettier --ignore-path .eslintignore --single-quote --write"
+    ],
+    "*.{html,md,yml}": [
+      "prettier --ignore-path .eslintignore --single-quote --write"
     ]
   }
 }

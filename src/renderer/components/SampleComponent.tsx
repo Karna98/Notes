@@ -1,20 +1,29 @@
-/*-----     -----     -----     -----     -----     -----     -----     ----- 
-SampleComponent.tsx
+/**
+ * SampleComponent.tsx
+ *
+ * Description:
+ *    Sample Component file.
+ *
+ */
 
-Description: Sample Component file.
+import React from 'react';
+import IMAGE from '../../assets/images/logo/Notes_Logo_250.png';
 
-Version  : 0.0.1
-Date     : 10-10-2021 
-Author   : Vedant Wakalkar 
-Email    : developer.karna98@gmail.com 
------     -----     -----     -----     -----     -----     -----     -----*/
-
-export const Sample = () => {
+const SampleDiv = () => {
   return (
-    <>
+    <div>
       <h1>Notes</h1>
-      <div>ENV: {process.env.NODE_ENV}</div>
-      <div>Custom ENV : {process.env.CUSTOM_ENV}</div>
-    </>
+      <h1>
+        {process.env.NODE_ENV !== undefined
+          ? process.env.NODE_ENV.toString().toUpperCase()
+          : ``}
+        -Mode
+      </h1>
+      <img src={IMAGE} alt="Notes Logo"></img>
+    </div>
   );
 };
+
+export default function Sample() {
+  return <SampleDiv />;
+}

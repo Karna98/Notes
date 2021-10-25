@@ -2,52 +2,46 @@
 
 - Install **Node** for respective platform from https://nodejs.org/en/
 
-### Windows
+- **Windows**
 
-1. Git Bash
+  - Git Bash
 
-### MacOS
+- **MacOS**
 
-_To be updated. (Device Constraints)_
+  _To be updated. (Device Constraints)_
 
-### Linux
+- **Linux**
 
-_To be updated._
+  _To be updated._
 
 ## Steps
 
-1. Install all **npm** dependencies by running following command
+1.  Install all **npm** dependencies by running following command
 
-   ```
-   npm install
-   ```
+        npm install
 
-2. Start Electron Application.
+2.  Start Notes Application.
 
-   - For Production mode
+    - For PRODUCTION Mode
 
-     ```
-     npm start prod
-     ```
+      - Bundling and building code
 
-   - For Development mode
+            npm run build
 
-     ```
-     npm start dev
-     ```
+        Output files are generated in **_release/app/dist_**
+
+      - Running Notes app
+
+            npm start
+
+    - For DEVELOPMENT Mode
+    
+          npm start dev
 
 ### Linting code
 
-```
-npm run lint
-```
+    npm run lint
 
 ### Formatting code
 
-```
-npm run format
-```
-
-## Resources
-
-1. [Electron Developers Checklist](https://www.electronjs.org/docs/latest/tutorial/performance)
+    npm run format

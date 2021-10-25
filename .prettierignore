@@ -1,9 +1,5 @@
 # Generated files
-build
+release/app/dist
 
 # Third-party files
 node_modules
-
-# TS Config
-src/main/tsconfig.json
-src/renderer/tsconfig.json
