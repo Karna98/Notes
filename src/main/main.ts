@@ -18,8 +18,11 @@ import { resolveHtmlPath } from './util';
   // let mainWindow: any; 
 */
 
+const isDevelopmentMode = process.env.NODE_ENV === `development`;
+
 class Main {
-  private mainWindow!: Electron.BrowserWindow;
+  private launchWindow!: Electron.BrowserWindow | null;
+  private mainWindow!: Electron.BrowserWindow | null;
 
   public init() {
     app.on('ready', this.createWindow);
@@ -53,6 +56,32 @@ class Main {
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.
 
+    const launcherWindow = () => {
+      // Launch Window
+      this.launchWindow = new BrowserWindow({
+        width: 300,
+        height: 300,
+        center: true,
+        frame: false,
+        transparent: true,
+        show: false,
+        resizable: false,
+        alwaysOnTop: true,
+        skipTaskbar: true,
+        webPreferences: {
+          // devTools can work in DEVELOPMENT mode
+          devTools: false || isDevelopmentMode,
+        },
+      });
+
+      this.launchWindow.loadURL(resolveHtmlPath(`launch.html`));
+
+      this.launchWindow?.show();
+
+      // Open Devtools
+      // this.launchWindow.webContents.openDevTools();
+    };
+
     // Main Window
     this.mainWindow = new BrowserWindow({
       minWidth: 800,
@@ -60,15 +89,16 @@ class Main {
       center: true,
       show: false,
       webPreferences: {
-        // devTools: false,
+        devTools: false || isDevelopmentMode,
         contextIsolation: true, // protect against prototype pollution
         // preload: path to preload,
       },
       // icon: link to icon
     });
 
-    // Disable Window menu
-    // this.mainWindow.setMenu(null);
+    if (!isDevelopmentMode)
+      // Disable Window menu in PRODUCTION Mode
+      this.mainWindow.setMenu(null);
 
     // Open Devtools
     // this.mainWindow.webContents.openDevTools();
@@ -76,7 +106,21 @@ class Main {
     this.mainWindow.loadURL(resolveHtmlPath(`index.html`));
 
     this.mainWindow.once('ready-to-show', () => {
-      this.mainWindow?.show();
+      if (!isDevelopmentMode) {
+        // Only PRODUCTION Mode
+        launcherWindow();
+
+        setTimeout(() => {
+          this.launchWindow?.destroy();
+          this.launchWindow = null;
+
+          setTimeout(() => {
+            this.mainWindow?.show();
+          }, 250);
+        }, 2000);
+      } else {
+        this.mainWindow?.show();
+      }
     });
   }
 }
