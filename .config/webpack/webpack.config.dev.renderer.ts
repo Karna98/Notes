@@ -21,9 +21,11 @@ import { spawn, execSync } from 'child_process';
 import { existsSync as fsExistsSync } from 'fs';
 import chalk from 'chalk';
 
+const isDevelopmentMode = process.env.NODE_ENV === `development`;
+
 // When an ESLint server is running, we can't set the NODE_ENV so we'll check if it's
 // at the dev webpack config is not accidentally run in a production environment
-if (process.env.NODE_ENV === 'production') {
+if (!isDevelopmentMode) {
   checkNodeEnv('development');
 }
 
@@ -55,14 +57,17 @@ export default webpackMergeConfig(baseConfig, {
 
   target: ['web', 'electron-renderer'],
 
-  entry: [
-    `webpack-dev-server/client?http://localhost:${port}/dist`,
-    'webpack/hot/only-dev-server',
-    pathJoin(webpackPaths.srcRendererPath, `index.tsx`),
-  ],
+  entry: {
+    renderer: [
+      `webpack-dev-server/client?http://localhost:${port}/dist`,
+      'webpack/hot/only-dev-server',
+      pathJoin(webpackPaths.srcRendererPath, `index.tsx`),
+    ],
+    launch: pathJoin(webpackPaths.srcRendererPath, `launch`, `launch.tsx`),
+  },
 
   output: {
-    filename: 'renderer.dev.js',
+    filename: '[name].dev.js',
     path: webpackPaths.distRendererPath,
     publicPath: '/',
     library: {
@@ -115,6 +120,7 @@ export default webpackMergeConfig(baseConfig, {
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: pathJoin(webpackPaths.srcRendererPath, 'index.html'),
+      chunks: [`renderer`],
       minify: {
         collapseWhitespace: true,
         removeAttributeQuotes: true,
@@ -122,8 +128,19 @@ export default webpackMergeConfig(baseConfig, {
       },
       isBrowser: false,
       env: process.env.NODE_ENV,
-      isDevelopment: process.env.NODE_ENV !== 'production',
+      isDevelopment: isDevelopmentMode,
       nodeModules: webpackPaths.appNodeModulesPath,
+    }),
+
+    new HtmlWebpackPlugin({
+      filename: 'launch.html',
+      template: pathJoin(webpackPaths.srcRendererPath, `launch`, 'launch.html'),
+      chunks: [`launch`],
+      minify: {
+        collapseWhitespace: true,
+        removeAttributeQuotes: true,
+        removeComments: true,
+      },
     }),
   ],
 
