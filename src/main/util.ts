@@ -12,10 +12,10 @@ import path from 'path';
 export let resolveHtmlPath: (htmlFileName: string) => string;
 
 if (process.env.NODE_ENV === 'development') {
+  // In DEVELOPMENT MODE
   const port = process.env.PORT || 1234;
 
   resolveHtmlPath = (htmlFileName: string) => {
-    // In DEVELOPMENT MODE
     const url = new URL(`http://localhost:${port}`);
     url.pathname = htmlFileName;
     return url.href;

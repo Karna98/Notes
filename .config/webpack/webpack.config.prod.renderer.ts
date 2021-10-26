@@ -16,6 +16,8 @@ import checkNodeEnv from '../script/check-node-env';
 
 checkNodeEnv('production');
 
+const isDevelopmentMode = process.env.NODE_ENV === `development`;
+
 const devtoolsConfig =
   process.env.DEBUG_PROD === `true`
     ? {
@@ -32,10 +34,11 @@ export default webpackMergeConfig(baseConfig, {
 
   entry: {
     renderer: pathJoin(webpackPaths.srcRendererPath, `index.tsx`),
+    launch: pathJoin(webpackPaths.srcRendererPath, `launch`, `launch.tsx`),
   },
 
   output: {
-    filename: `renderer.js`,
+    filename: `[name].js`,
     path: webpackPaths.distRendererPath,
     publicPath: './',
   },
@@ -75,13 +78,25 @@ export default webpackMergeConfig(baseConfig, {
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: pathJoin(webpackPaths.srcRendererPath, 'index.html'),
+      chunks: [`renderer`],
       minify: {
         collapseWhitespace: true,
         removeAttributeQuotes: true,
         removeComments: true,
       },
       isBrowser: false,
-      isDevelopment: process.env.NODE_ENV !== 'production',
+      isDevelopment: isDevelopmentMode,
+    }),
+
+    new HtmlWebpackPlugin({
+      filename: 'launch.html',
+      template: pathJoin(webpackPaths.srcRendererPath, `launch`, 'launch.html'),
+      chunks: [`launch`],
+      minify: {
+        collapseWhitespace: true,
+        removeAttributeQuotes: true,
+        removeComments: true,
+      },
     }),
   ],
 });
