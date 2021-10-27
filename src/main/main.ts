@@ -7,7 +7,8 @@
  */
 
 // Modules to control application life and create native browser window
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
+import { join as pathJoin } from 'path';
 import { resolveHtmlPath } from './util';
 
 /*
@@ -89,9 +90,10 @@ class Main {
       center: true,
       show: false,
       webPreferences: {
-        devTools: false || isDevelopmentMode,
+        nodeIntegration: false,
         contextIsolation: true, // protect against prototype pollution
-        // preload: path to preload,
+        devTools: false || isDevelopmentMode,
+        preload: pathJoin(__dirname, 'preload.js'),
       },
       // icon: link to icon
     });
@@ -121,6 +123,26 @@ class Main {
       } else {
         this.mainWindow?.show();
       }
+    });
+
+    ipcMain.on('toMain', (_event: IpcMainEvent, args: string) => {
+      const getTime = () => {
+        const currentTime = new Date();
+        return `[${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}] MAIN PROCESS : `;
+      };
+
+      console.log(`${getTime()} Receviced from RENDERER Process - ${args}`);
+
+      console.log(`${getTime()} Getting Environment ...`);
+
+      const getEnvironment = process.env.NODE_ENV;
+
+      console.log(`${getTime()} Sending Response to RENDERER process`);
+
+      this?.mainWindow?.webContents.send(
+        `fromMain`,
+        JSON.stringify({ getEnvironment })
+      );
     });
   }
 }
