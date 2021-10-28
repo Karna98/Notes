@@ -7,7 +7,7 @@
  */
 
 // Modules to control application life and create native browser window
-import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import { join as pathJoin } from 'path';
 import { resolveHtmlPath } from './util';
 
@@ -125,7 +125,7 @@ class Main {
       }
     });
 
-    ipcMain.on('toMain', (_event: IpcMainEvent, args: string) => {
+    ipcMain.on('toMain', (_event: Electron.IpcMainEvent, args: string) => {
       const getTime = () => {
         const currentTime = new Date();
         return `[${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}] MAIN PROCESS : `;

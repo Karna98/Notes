@@ -2,8 +2,7 @@
  * preload.js
  *
  * Description:
- *    This file provides the renderer process to use restricted node.js API's
- *    securely. Read more at
+ *    This file provides the renderer process to communicate with Electron's Main process securely. Read more at
  *    https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
  *
  */
