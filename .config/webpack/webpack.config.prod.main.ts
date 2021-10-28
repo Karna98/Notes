@@ -31,6 +31,7 @@ export default webpackMergeConfig(baseConfig, {
 
   entry: {
     main: pathJoin(webpackPaths.srcMainPath, `main.ts`),
+    preload: pathJoin(webpackPaths.srcMainPath, `preload.js`),
   },
 
   output: {
