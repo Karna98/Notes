@@ -6,7 +6,6 @@
  *
  */
 
-import { EnvironmentPlugin } from 'webpack';
 import webpackPaths from './webpack.paths';
 
 export default {
