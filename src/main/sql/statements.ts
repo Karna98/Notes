@@ -42,7 +42,8 @@ export const createDatabaseStatement = (
 
 // Return all the logs from Database
 export const getAllLogsStatement = <T>(db: Database): Statement<T> => {
-  if (SCHEMA_VERSION == 0) {
+  // Temporary if condition fix to toggle between Schema version 0 and 1.
+  if (!SCHEMA_VERSION) {
     // For SCHEMA_VERSION = 0
     return dbPrepare(db, `SELECT * FROM sample`);
   } else {
@@ -53,7 +54,8 @@ export const getAllLogsStatement = <T>(db: Database): Statement<T> => {
 
 // Insert log into Database
 export const insertLogStatement = <T>(db: Database): Statement<T> => {
-  if (SCHEMA_VERSION == 0) {
+  // Temporary if condition fix to toggle between Schema version 0 and 1.
+  if (!SCHEMA_VERSION) {
     // For SCHEMA_VERSION = 0
     return dbPrepare(db, `INSERT INTO sample (t2) VALUES (?)`);
   } else {
