@@ -10,7 +10,7 @@
 import { execSync } from 'child_process';
 import { existsSync as fsExistsSync } from 'fs';
 import { dependencies } from '../../release/app/package.json';
-import webpackPaths from '../configs/webpack.paths';
+import webpackPaths from '../webpack/webpack.paths';
 
 if (
   Object.keys(dependencies || {}).length > 0 &&

@@ -26,3 +26,10 @@ if (process.env.NODE_ENV === 'development') {
     return `file://${path.resolve(__dirname, '../renderer/', htmlFileName)}`;
   };
 }
+
+export const createResponseObject = (responseType: string, data: object) => {
+  return {
+    responseType,
+    data,
+  };
+};
