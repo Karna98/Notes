@@ -20,6 +20,10 @@
 
         npm install
 
+    Installing and compiling native node modules
+
+        npm run native-dep
+
 2.  Start Notes Application.
 
     - For PRODUCTION Mode
