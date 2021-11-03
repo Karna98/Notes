@@ -7,8 +7,11 @@
  */
 
 import webpackPaths from './webpack.paths';
+import { dependencies as externals } from '../../release/app/package.json';
 
 export default {
+  externals: [...Object.keys(externals || {})],
+  stats: 'errors-only',
   module: {
     rules: [
       {
@@ -20,18 +23,13 @@ export default {
       },
     ],
   },
-  /**
-   * @TODO : As of now, The Notes (Electron) app runs successfully in both
-   *        DEV and PROD mode even if following code is commented. It will be
-   *        removed if not required in upcoming PRs when we setup DB.
-   */
-  // output: {
-  //   path: webpackPaths.srcPath,
-  //   // https://github.com/webpack/webpack/issues/1114
-  //   library: {
-  //     type: 'commonjs2',
-  //   },
-  // },
+  output: {
+    path: webpackPaths.srcPath,
+    // https://github.com/webpack/webpack/issues/1114
+    library: {
+      type: 'commonjs2',
+    },
+  },
 
   resolve: {
     // Determine the array of extensions that should be used to resolve modules.

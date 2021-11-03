@@ -9,7 +9,12 @@
 // Modules to control application life and create native browser window
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { join as pathJoin } from 'path';
-import { resolveHtmlPath } from './util';
+import {
+  createLogs,
+  getLogs,
+  init as initializeDataBase,
+} from './sql/database';
+import { createResponseObject, resolveHtmlPath } from './util';
 
 /*
   @TODO: Find if we still need to keep global reference (read below cooments) when we create window using Class.
@@ -26,6 +31,9 @@ class Main {
   private mainWindow!: Electron.BrowserWindow | null;
 
   public init() {
+    // Intialize Database.
+    initializeDataBase();
+
     app.on('ready', this.createWindow);
 
     // Emitted when the window is closed.
@@ -126,23 +134,50 @@ class Main {
     });
 
     ipcMain.on('toMain', (_event: Electron.IpcMainEvent, args: string) => {
-      const getTime = () => {
-        const currentTime = new Date();
-        return `[${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}] MAIN PROCESS : `;
-      };
+      const requestObject = JSON.parse(args);
+      let responseObject: object | null = null;
 
-      console.log(`${getTime()} Receviced from RENDERER Process - ${args}`);
+      const requestObjectType = requestObject[`requestType`];
 
-      console.log(`${getTime()} Getting Environment ...`);
+      // Split Request Type on ':'
+      const requestType = requestObjectType.split(`:`);
 
-      const getEnvironment = process.env.NODE_ENV;
+      switch (requestType[0]) {
+        case `LOGS`:
+          // If Request related to logs
+          if (requestType[1] === `CREATE`) {
+            // Sub-Request is to create new log in Database
+            console.log(`[ MAIN ] : ${requestObject}`);
 
-      console.log(`${getTime()} Sending Response to RENDERER process`);
+            console.log(`[ MAIN ] : Saving RENDERER's Request ...`);
 
-      this?.mainWindow?.webContents.send(
-        `fromMain`,
-        JSON.stringify({ getEnvironment })
-      );
+            // Save the received Request log in Database.
+            createLogs(requestObject[`data`]);
+
+            console.log(`[ MAIN ] : Saving MAIN's Response.`);
+
+            // Save the Received request in Database.
+            createLogs(`[ MAIN ] : Environment - ${process.env.NODE_ENV}`);
+          } else {
+            // Create Response Object to be sent to Renderer Process.
+            responseObject = createResponseObject(
+              requestObject[`requestType`],
+              getLogs()
+            );
+          }
+          break;
+        default:
+          console.log(`Invalid Request`);
+          break;
+      }
+
+      if (responseObject != null) {
+        // If Response object is created, send it as response
+        this?.mainWindow?.webContents.send(
+          `fromMain`,
+          JSON.stringify(responseObject)
+        );
+      }
     });
   }
 }
