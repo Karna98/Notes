@@ -6,4 +6,4 @@
  *
  */
 
-module.exports = require('./webpack.config.renderer.dev').default;
+module.exports = require('./webpack.config.dev.renderer').default;

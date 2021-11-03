@@ -15,5 +15,8 @@
     "url": "https://karna98.github.io"
   },
   "private": true,
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "better-sqlite3": "^7.4.4"
+  }
 }

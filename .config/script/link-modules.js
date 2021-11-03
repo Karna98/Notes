@@ -9,11 +9,8 @@
 
 import { existsSync as fsExistsSync, symlinkSync as fsSymlinkSync } from 'fs';
 
-import {
-  appNodeModulesPath,
-  srcNodeModulesPath,
-} from '../webpack/webpack.paths';
+import webpackPath from '../webpack/webpack.paths';
 
-if (!fsExistsSync(srcNodeModulesPath) && fsExistsSync(appNodeModulesPath)) {
-  fsSymlinkSync(appNodeModulesPath, srcNodeModulesPath, 'junction');
+if (!fsExistsSync(webpackPath.srcNodeModulesPath) && fsExistsSync(webpackPath.appNodeModulesPath)) {
+  fsSymlinkSync(webpackPath.appNodeModulesPath, webpackPath.srcNodeModulesPath, 'junction');
 }
