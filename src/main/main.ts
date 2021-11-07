@@ -26,9 +26,11 @@ import { createResponseObject, resolveHtmlPath } from './util';
 
 const isDevelopmentMode = process.env.NODE_ENV === `development`;
 
+const ASSETS_DIRECTORY = pathJoin(__dirname, `..`, `assets`);
+
 class Main {
-  private launchWindow!: Electron.BrowserWindow | null;
-  private mainWindow!: Electron.BrowserWindow | null;
+  private launchWindow: Electron.BrowserWindow | null = null;
+  private mainWindow: Electron.BrowserWindow | null = null;
 
   public init() {
     // Intialize Database.
@@ -103,7 +105,7 @@ class Main {
         devTools: false || isDevelopmentMode,
         preload: pathJoin(__dirname, 'preload.js'),
       },
-      // icon: link to icon
+      icon: pathJoin(ASSETS_DIRECTORY, `logo`, `png`, `256x256.png`),
     });
 
     if (!isDevelopmentMode)
