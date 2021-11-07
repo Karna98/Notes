@@ -8,7 +8,7 @@
 
 import React, { ReactElement, useState } from 'react';
 import { sendToIpcMain } from '../util';
-import IMAGE from '../../assets/images/logo/Notes_Logo_250.png';
+import IMAGE from '../../assets/logo/png/256x256.png';
 
 const SampleDiv = () => {
   const [LOGS, setLOGS] = useState([<div key={-1}>No Data available</div>]);
