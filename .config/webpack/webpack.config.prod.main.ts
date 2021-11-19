@@ -12,8 +12,10 @@ import { merge as webpackMergeConfig } from 'webpack-merge';
 import { join as pathJoin } from 'path';
 import { EnvironmentPlugin } from 'webpack';
 import checkNodeEnv from '../script/check-node-env';
+import { copyAssetsFolder } from '../script/temp-fix';
 
 checkNodeEnv('production');
+(process.env.NODE_ENV === `production`) && copyAssetsFolder();
 
 const devtoolsConfig =
   process.env.DEBUG_PROD === `true`

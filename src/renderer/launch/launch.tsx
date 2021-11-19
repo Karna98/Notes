@@ -9,7 +9,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import './launch.scss';
-import IMAGE from '../../assets/images/logo/Notes_Logo_250.png';
+import IMAGE from '../../assets/logo/png/256x256.png';
 
 render(
   <>
