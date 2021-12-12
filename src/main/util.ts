@@ -9,27 +9,26 @@
 import { URL } from 'url';
 import path from 'path';
 
-export let resolveHtmlPath: (htmlFileName: string) => string;
+/**
+ * Returns URL to be displayed in Electron's Window.
+ *
+ * @param htmlFileName
+ * @returns {string} URL to be loaded.
+ */
+const resolveHtmlPath = (htmlFileName: string): string => {
+  if (process.env.NODE_ENV === 'development') {
+    // In DEVELOPMENT MODE
+    const port = process.env.PORT || 1234;
 
-if (process.env.NODE_ENV === 'development') {
-  // In DEVELOPMENT MODE
-  const port = process.env.PORT || 1234;
-
-  resolveHtmlPath = (htmlFileName: string) => {
     const url = new URL(`http://localhost:${port}`);
-    url.pathname = htmlFileName;
-    return url.href;
-  };
-} else {
-  // In PRODUCTION MODE
-  resolveHtmlPath = (htmlFileName: string) => {
-    return `file://${path.resolve(__dirname, '../renderer/', htmlFileName)}`;
-  };
-}
 
-export const createResponseObject = (responseType: string, data: object) => {
-  return {
-    responseType,
-    data,
-  };
+    url.pathname = htmlFileName;
+
+    return url.href;
+  } else {
+    // In PRODUCTION MODE
+    return `file://${path.resolve(__dirname, '../renderer/', htmlFileName)}`;
+  }
 };
+
+export { resolveHtmlPath };

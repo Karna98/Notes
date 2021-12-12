@@ -6,60 +6,120 @@
  *
  */
 
-import { Database, Statement } from 'better-sqlite3';
-import { SCHEMA_VERSION } from './util';
+// ================================================================================
+// Common Statements.
+// ================================================================================
 
-// Prepare Statement for DB queries.
-export const dbPrepare = <T>(db: Database, query: string): Statement<T> => {
-  const result = db.prepare<T>(query);
-  return result;
+/**
+ * Generalize INSERT Statement.
+ *
+ * @param table Name of the table.
+ * @param columns Name of the column/s.
+ * @param values Values to be inserted.
+ * @returns {string} INSERT Statement with provided params.
+ */
+const insertStatement = (
+  table: string,
+  columns: string[],
+  values: string[]
+) => {
+  return `
+    INSERT INTO ${table}
+    ( ${columns.join(', ')} )
+    VALUES ( ${values.join(', ')} );
+  `;
 };
 
-// Statements for creating Database for first time.
-export const createDatabaseStatement = (
-  schemaVersion: number = SCHEMA_VERSION
-): string => {
-  switch (schemaVersion) {
-    case 0:
-      return `
-        CREATE TABLE IF NOT EXISTS sample (
-          t1 INTEGER PRIMARY KEY,
-          t2 TEXT
-        );
-      `;
-    case 1:
-      return `
-        CREATE TABLE IF NOT EXISTS logs (
-          id INTEGER PRIMARY KEY,
-          timestamp datetime DEFAULT CURRENT_TIMESTAMP,
-          message TEXT NOT NULL
-        );
-      `;
-    default:
-      throw new Error('Invalid Schema Version');
-  }
+/**
+ * Generalize GET Statement.
+ *
+ * @param table Name of the table.
+ * @param columns Name of the column/s.
+ * @returns {string} GET Statement with provided params.
+ */
+const getStatement = (table: string, columns: string[]) => {
+  return `
+    SELECT ${columns.join(', ')}
+    FROM ${table};
+  `;
 };
 
-// Return all the logs from Database
-export const getAllLogsStatement = <T>(db: Database): Statement<T> => {
-  // Temporary if condition fix to toggle between Schema version 0 and 1.
-  if (!SCHEMA_VERSION) {
-    // For SCHEMA_VERSION = 0
-    return dbPrepare(db, `SELECT * FROM sample`);
-  } else {
-    // For SCHEMA_VERSION = 1
-    return db.prepare(`SELECT * FROM logs`);
-  }
+/**
+ * Generalize GET Conditonal Statement.
+ *
+ * @param table Name of the table.
+ * @param columns Name of the column/s.
+ * @param condition Conditions to be applied.
+ * @returns {string} GET Statement with provided params.
+ */
+// const getConditionalStatement = (
+//   table: string,
+//   columns: string[],
+//   condition: string
+// ) => {
+//   return `
+//     SELECT ${columns.join(', ')}
+//     FROM ${table}
+//     WHERE ${condition};
+//   `;
+// };
+
+// ================================================================================
+// Create Database Statements.
+// ================================================================================
+
+/**
+ * Statement to create Database for very first time.
+ *
+ * @returns {string}
+ */
+const createDatabaseStatement = (): string => {
+  return `
+  CREATE TABLE IF NOT EXISTS users (
+    _id INTEGER PRIMARY KEY,
+    username VARCHAR(20) UNIQUE NOT NULL,
+    created_at datetime NOT NULL,
+    last_logged_in datetime,
+    password VARCHAR(60) NOT NULL,
+    l_pin VARCHAR(60),
+    s_pin VARCHAR(60)
+  );
+  `;
 };
 
-// Insert log into Database
-export const insertLogStatement = <T>(db: Database): Statement<T> => {
-  // Temporary if condition fix to toggle between Schema version 0 and 1.
-  if (!SCHEMA_VERSION) {
-    // For SCHEMA_VERSION = 0
-    return dbPrepare(db, `INSERT INTO sample (t2) VALUES (?)`);
-  } else {
-    // For SCHEMA_VERSION = 1
-    return db.prepare('INSERT INTO logs (message) VALUES (?)');
-  }
+// ================================================================================
+// Users Related Statements.
+// ================================================================================
+
+/**
+ * Insert new user into Database.
+ *
+ * @returns {string}
+ */
+const createUserStatement = (): string => {
+  return insertStatement(
+    `users`,
+    [`username`, `created_at`, `password`],
+    [`?`, `?`, `?`]
+  );
 };
+
+/**
+ * Get User having provided username from Database.
+ *
+ * @returns {string}
+ */
+// const getUserByUsernameStatement = (): string => {
+//   return getConditionalStatement(`users`, [`*`], `username = ?`);
+// };
+
+/**
+ * Get Count of Users from Database.
+ *
+ * @returns {string}
+ */
+const getUsersCountStatement = (): string => {
+  return getStatement(`users`, [`COUNT(*)`]);
+};
+
+export { createDatabaseStatement, createUserStatement, getUsersCountStatement };

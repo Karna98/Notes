@@ -1,0 +1,20 @@
+/**
+ * Header.scss 
+ * 
+ * Description:
+ *    Styles for Header Component.
+ *
+*/
+
+.navbar {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.navbar h1 {
+  display: flex;
+  width: 200px;
+  justify-content: space-evenly;
+  align-items: center;
+}
