@@ -1,6 +1,6 @@
 <div align="center">
     <a name="logo" href="https://github.com/Karna98/Save-Tabs">
-        <img src="src/assets/images/logo/Notes_Logo_250.png" alt="Notes Logo">
+        <img src="src/assets/logo/png/256x256.png" alt="Notes Logo">
     </a>
     <h1>Notes</h1>
 </div>

@@ -59,37 +59,37 @@ const dbInstance = () => {
  * upgrading to latest schema version if required.
  */
 const init = () => {
-  if (checkIfDbExsts()) {
-    // If Database aready exists
-    console.log(`[DATABASE] : Database Found.`);
+  // Creates new database
+  console.log(`[DATABASE] : No Database Found.`);
+  console.log(`[DATABASE] : Creating Notes Database ...`);
 
+  try {
     const db = dbInstance();
-
-    const [mismatchStatus, clientVersion]: [boolean, number] =
-      schemaVersionMismatch(db);
-
-    // If Client's database schema version is not latest schema version.
-    if (mismatchStatus) {
-      console.log(`[DATABASE] : Upgrading Database Schema Version ..`);
-      updateDatabaseSchema(db, clientVersion);
-    }
-
+    db.prepare(createDatabaseStatement()).run();
+    setClientSchemaVersion(db);
     db.close();
-  } else {
-    // Creates new database
-    console.log(`[DATABASE] : No Database Found.`);
-    console.log(`[DATABASE] : Creating Notes Database ...`);
-
-    try {
-      const db = dbInstance();
-      db.prepare(createDatabaseStatement()).run();
-      setClientSchemaVersion(db);
-      db.close();
-    } catch (error) {
-      console.log(error);
-      throw new Error('Database creation failed.');
-    }
+  } catch (error) {
+    console.log(error);
+    throw new Error('Database creation failed.');
   }
+};
+
+/**
+ * Update Database to latest Schema.
+ */
+const updateDatabase = () => {
+  const db = dbInstance();
+
+  const [mismatchStatus, clientVersion]: [boolean, number] =
+    schemaVersionMismatch(db);
+
+  // If Client's database schema version is not latest schema version.
+  if (mismatchStatus) {
+    console.log(`[DATABASE] : Upgrading Database Schema Version ..`);
+    updateDatabaseSchema(db, clientVersion);
+  }
+
+  db.close();
 };
 
 /**
@@ -119,4 +119,10 @@ const getUsersCount = () => {
   return results;
 };
 
-export default { getUsersCount, createNewUser, init, checkIfDbExsts };
+export default {
+  getUsersCount,
+  createNewUser,
+  init,
+  checkIfDbExsts,
+  updateDatabase,
+};

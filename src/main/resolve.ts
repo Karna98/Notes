@@ -28,6 +28,9 @@ const authRequest = (
     case `STATUS`:
       // Check if database exists
       if (database.checkIfDbExsts()) {
+        // Update database if Schema is outdated.
+        database.updateDatabase();
+
         // Get Users Count from Database.
         result = database.getUsersCount();
         message = createMessage('success', 'Request Executed Successfully.');

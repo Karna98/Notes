@@ -30,7 +30,7 @@ const Auth = () => {
 
   useEffect(() => {
     if (!requestStatus) {
-      // If No request is sent yet.
+      // Check Auth Status.
       sendToIpcMain(IPCRequestObject(`auth-status`));
 
       setRequestStatus(true);

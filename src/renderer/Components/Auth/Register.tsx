@@ -43,7 +43,7 @@ const Register = () => {
       type: 'password',
       label: 'Retype Password',
       name: 'retypePassword',
-      placeholder: 'Retype password',
+      placeholder: 'Retype Password',
       required: true,
     },
   ];
