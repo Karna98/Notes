@@ -2,21 +2,63 @@
  * interface.d.ts
  *
  * Description:
- *    Declaring Interface to be use across project.
+ *    Interface Declaration.
  *
  */
 
-export interface contextBridgeAPI {
+// ================================================================================
+// IPC Communication.
+// ================================================================================
+
+interface contextBridgeAPI {
   send: (channel: string, data: string) => Promise<void>;
   receive: (channel: string, func: unknown) => Promise<void>;
 }
 
-/**
- * @NOTE :
- *     Needs to be declare so that React Components can detect window.NotesAPI and does not throw error on opening the application.
- */
-declare global {
-  interface Window {
-    NotesAPI: contextBridgeAPI;
-  }
+interface MessageInterface {
+  status: string | number;
+  message?: string;
+}
+
+interface IPCRequestInterface {
+  URI: string;
+  timestamp: number;
+  data?: unknown | object;
+}
+
+interface IPCResponseInterface extends IPCRequestInterface, MessageInterface {}
+
+// ================================================================================
+// Elements
+// ================================================================================
+
+interface InputElementInterface {
+  label?: string;
+  name: string;
+  placeholder?: string;
+  type: string;
+  value?: string | number | readonly string[] | undefined;
+  onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
+  required?: boolean;
+}
+
+interface ButtonElementInterface {
+  type?: 'button' | 'submit' | 'reset' | undefined;
+  label: string;
+}
+
+interface FormElementInterface {
+  method: string;
+  inputElements: InputElementInterface[];
+  formFields: RegisterFormType;
+  submitAction: (form: RegisterFormType) => void;
+}
+
+// ================================================================================
+// Authentication.
+// ================================================================================
+
+interface AuthCredentialInterface {
+  username: string;
+  password: string;
 }

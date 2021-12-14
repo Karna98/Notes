@@ -32,3 +32,6 @@ release/build
 
 # database
 *.sqlite
+
+# VS Code Files
+.vscode

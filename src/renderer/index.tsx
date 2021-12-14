@@ -8,7 +8,16 @@
 
 import React from 'react';
 import { render } from 'react-dom';
-import Sample from './components/SampleComponent';
+import { Provider } from 'react-redux';
+import App from './App';
+import store from './State';
 import './style.scss';
 
-render(<Sample />, document.getElementById(`root`));
+render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById(`root`)
+);
