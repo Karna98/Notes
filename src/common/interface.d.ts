@@ -42,6 +42,11 @@ interface InputElementInterface {
   required?: boolean;
 }
 
+interface ButtonElementInterface {
+  type?: 'button' | 'submit' | 'reset' | undefined;
+  label: string;
+}
+
 interface FormElementInterface {
   method: string;
   inputElements: InputElementInterface[];

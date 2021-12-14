@@ -2,7 +2,7 @@
  * Navbar.tsx
  *
  * Description:
- *    Navbar Component.
+ *    Styles for Navbar.
  *
  */
 
@@ -11,11 +11,9 @@ import IMAGE from '../../../assets/logo/png/256x256.png';
 
 const Navbar = () => {
   return (
-    <div className="navbar">
-      <h1>
-        <img src={IMAGE} alt="Notes Logo" />
-        Notes
-      </h1>
+    <div className="d-flex flex-row align-items-center navbar">
+      <img src={IMAGE} alt="Notes Logo" className="icon" />
+      <h2>Notes</h2>
     </div>
   );
 };

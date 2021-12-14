@@ -2,15 +2,168 @@
  * style.scss 
  * 
  * Description:
- *    Sample scss file.
+ *    Base style file.
  *
 */
 
-h1 {
-  color: orange;
+/*-----     -----     ----- 
+Remove padding and margin
+-----     -----     -----*/
+html,
+body {
+  height: 100%;
+  width: 100%;
 }
 
-h1 img {
-  width: 50px;
-  height: auto;
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/*-----     -----     -----
+Headers
+-----     -----     -----*/
+
+h1 {
+  font-size: 2.2em;
+}
+
+h2 {
+  font-size: 2em;
+}
+
+h3 {
+  font-size: 1.8em;
+}
+
+h4 {
+  font-size: 1.6em;
+}
+
+h5 {
+  font-size: 1.4em;
+}
+
+p {
+  font-size: 1.2em;
+}
+
+/*-----     -----     -----
+Colors
+-----     -----     -----*/
+
+:root {
+  --fluorescent-blue: #15f4ee;
+  --turquoise-blue: #08e8de;
+  --black: #000000;
+  --white: #ffffff;
+}
+
+/*-----     -----     -----
+Flex
+-----     -----     -----*/
+.d-flex {
+  display: flex;
+}
+
+.flex-row {
+  flex-flow: row;
+}
+
+.flex-column {
+  flex-flow: column;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.justify-content-evenly {
+  justify-content: space-evenly;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.d-none {
+  display: none;
+  visibility: hidden;
+}
+
+.visibility-hidden {
+  visibility: hidden;
+}
+
+/*-----     -----     -----
+Border
+-----     -----     -----*/
+
+.border--rounded {
+  border-radius: 50%;
+}
+
+.border--x {
+  border-radius: 6px;
+}
+
+.border--2x {
+  border-radius: 12px;
+}
+
+.border--4x {
+  border-radius: 18px;
+}
+
+/*-----
+Icon
+-----*/
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+}
+
+/*-----     -----     -----
+Body
+-----     -----     -----*/
+
+body {
+  --navbar-height: 50px;
+}
+
+/* Message */
+
+.message {
+  position: absolute;
+  padding: 4px 8px;
+  top: 10px;
+  z-index: 1;
+  background-color: var(--turquoise-blue);
+}
+
+/* Page */
+
+main {
+  position: absolute;
+  margin: 5px;
+  height: calc(100% - var(--navbar-height) - 10px);
+  width: calc(100% - 10px);
+  overflow-y: auto;
 }

@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import './Header.scss';
+import './header.scss';
 import Navbar from './Navbar';
 
 const Header = () => {

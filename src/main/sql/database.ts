@@ -20,7 +20,7 @@ import { schemaVersionMismatch, setClientSchemaVersion } from './util';
 const isDevelopmentMode = process.env.NODE_ENV === `development`;
 
 // Database Name
-const DATABASE_NAME = isDevelopmentMode ? `notes_dev.sqlite` : `notes.sqlite`;
+const DATABASE_NAME = `${isDevelopmentMode ? `notes_dev` : `notes`}.sqlite`;
 
 // Path to Database
 const DATABASE_PATH = pathResolve(__dirname);

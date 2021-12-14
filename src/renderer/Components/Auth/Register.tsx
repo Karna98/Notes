@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { updateMessageState } from '../../State/reducer';
 import { IPCRequestObject } from '../../../common/util';
+import { updateMessageState } from '../../State/reducer';
 import { sendToIpcMain } from '../../util';
 import Form from '../Elements/Form';
 
@@ -70,14 +70,12 @@ const Register = () => {
   };
 
   return (
-    <div>
-      <Form
-        method="POST"
-        formFields={form}
-        inputElements={InputElementData}
-        submitAction={onFormSubmit}
-      />
-    </div>
+    <Form
+      method="POST"
+      formFields={form}
+      inputElements={InputElementData}
+      submitAction={onFormSubmit}
+    />
   );
 };
 

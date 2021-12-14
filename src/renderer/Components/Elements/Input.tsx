@@ -7,6 +7,7 @@
  */
 
 import React from 'react';
+import './input.scss';
 
 const Input: React.FC<InputElementInterface> = (props) => {
   const {
@@ -20,8 +21,8 @@ const Input: React.FC<InputElementInterface> = (props) => {
   } = props;
 
   return (
-    <div>
-      {label && <label>{label}</label>}
+    <div className="d-flex flex-row input-element">
+      {label && <label className="d-flex align-items-center">{label}</label>}
       <input
         type={type}
         value={value}
@@ -29,6 +30,7 @@ const Input: React.FC<InputElementInterface> = (props) => {
         placeholder={placeholder}
         onChange={onChange}
         required={required}
+        className="d-flex align-items-center"
       />
     </div>
   );

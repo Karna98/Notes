@@ -8,8 +8,8 @@
 import React, { useEffect } from 'react';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { MemoryRouter as Router, Route, Routes } from 'react-router-dom';
-import { updateResponseState } from '../State/reducer';
 import Header from '../Components/Header';
+import { updateResponseState } from '../State/reducer';
 import Auth from './Auth';
 
 const App = () => {
@@ -30,15 +30,17 @@ const App = () => {
   return (
     <Router>
       <Header />
-      <div>
-        <div>
-          {messageState.status !== undefined &&
-            `Message : [${messageState.status}] : ${messageState.message}`}
-        </div>
+      <main className="d-flex flex-column justify-content-center align-items-center">
+        {messageState.status !== undefined && (
+          <div className="message">
+            Message : [{messageState.status}] : {messageState.message}
+          </div>
+        )}
+
         <Routes>
           <Route path="/" element={<Auth />} />
         </Routes>
-      </div>
+      </main>
     </Router>
   );
 };

@@ -12,6 +12,7 @@ import { IPCRequestObject } from '../../common/util';
 import Register from '../Components/Auth/Register';
 import { updateMessageState } from '../State/reducer';
 import { sendToIpcMain } from '../util';
+import './auth.scss';
 
 const Auth = () => {
   const dispatch = useDispatch();
@@ -63,7 +64,7 @@ const Auth = () => {
   }, [responseState]);
 
   return (
-    <>
+    <div className="d-flex flex-row align-items-center justify-items-center auth">
       {!(registrationStatus === undefined) ? (
         registrationStatus ? (
           <div> Login Page </div>
@@ -73,7 +74,7 @@ const Auth = () => {
       ) : (
         <div> Loading.. </div>
       )}
-    </>
+    </div>
   );
 };
 

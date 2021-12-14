@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Button from './Button';
+import './form.scss';
 import Input from './Input';
 
 const Form: React.FC<FormElementInterface> = (props: FormElementInterface) => {
@@ -28,7 +30,11 @@ const Form: React.FC<FormElementInterface> = (props: FormElementInterface) => {
   };
 
   return (
-    <form method={method} onSubmit={submitForm}>
+    <form
+      method={method}
+      onSubmit={submitForm}
+      className="d-flex flex-column align-items-center justify-content-evenly"
+    >
       {inputElements.map((attributes: InputElementInterface) => {
         return (
           <Input
@@ -39,7 +45,7 @@ const Form: React.FC<FormElementInterface> = (props: FormElementInterface) => {
           />
         );
       })}
-      <button type="submit">Submit</button>
+      <Button label="Submit" type="submit" />
     </form>
   );
 };
