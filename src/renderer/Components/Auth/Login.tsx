@@ -1,8 +1,8 @@
 /**
- * Register.tsx
+ * Login.tsx
  *
  * Description:
- *    Register Component.
+ *    Login Component.
  *
  */
 
@@ -13,14 +13,13 @@ import { updateMessageState } from '../../State/reducer';
 import { sendToIpcMain } from '../../util';
 import Form from '../Elements/Form';
 
-const Register = () => {
+const Login = () => {
   const dispatch = useDispatch();
 
   // Form Fields.
-  const form: RegisterFormType = {
+  const form: LoginFormType = {
     username: '',
     password: '',
-    retypePassword: '',
   };
 
   // Input Element Attributes.
@@ -39,13 +38,6 @@ const Register = () => {
       placeholder: 'Password',
       required: true,
     },
-    {
-      type: 'password',
-      label: 'Retype Password',
-      name: 'retypePassword',
-      placeholder: 'Retype Password',
-      required: true,
-    },
   ];
 
   /**
@@ -54,19 +46,14 @@ const Register = () => {
    * @param event Event
    */
   const onFormSubmit = (formData: FormType): void => {
-    if (formData?.password === formData?.retypePassword) {
-      dispatch(updateMessageState(0, `Registering User...`));
+    dispatch(updateMessageState(0, `Checking Credentials ..`));
 
-      sendToIpcMain(
-        IPCRequestObject(`auth-register`, {
-          username: formData?.username,
-          password: formData?.password,
-        })
-      );
-    } else {
-      // Passored & Retype Password Mismatch.
-      dispatch(updateMessageState(-1, `Password Mismatch.`));
-    }
+    sendToIpcMain(
+      IPCRequestObject(`auth-login`, {
+        username: formData?.username,
+        password: formData?.password,
+      })
+    );
   };
 
   return (
@@ -79,4 +66,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;

@@ -14,6 +14,7 @@ import {
   createDatabaseStatement,
   createUserStatement,
   getUsersCountStatement,
+  getUsersStatement,
 } from './statements';
 import { schemaVersionMismatch, setClientSchemaVersion } from './util';
 
@@ -119,10 +120,24 @@ const getUsersCount = () => {
   return results;
 };
 
+/**
+ * Get all users from Database.
+ *
+ * @returns {object} Returns all users details.
+ */
+const getUsers = () => {
+  const db = dbInstance();
+  const results = db.prepare(getUsersStatement()).get();
+  db.close();
+
+  return results;
+};
+
 export default {
-  getUsersCount,
-  createNewUser,
-  init,
   checkIfDbExsts,
+  createNewUser,
+  getUsers,
+  getUsersCount,
+  init,
   updateDatabase,
 };

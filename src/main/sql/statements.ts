@@ -122,4 +122,18 @@ const getUsersCountStatement = (): string => {
   return getStatement(`users`, [`COUNT(*)`]);
 };
 
-export { createDatabaseStatement, createUserStatement, getUsersCountStatement };
+/**
+ * Get all Users from Database.
+ *
+ * @returns {string}
+ */
+const getUsersStatement = (): string => {
+  return getStatement(`users`, [`*`]);
+};
+
+export {
+  createDatabaseStatement,
+  createUserStatement,
+  getUsersCountStatement,
+  getUsersStatement,
+};

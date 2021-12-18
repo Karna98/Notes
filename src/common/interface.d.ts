@@ -50,8 +50,8 @@ interface ButtonElementInterface {
 interface FormElementInterface {
   method: string;
   inputElements: InputElementInterface[];
-  formFields: RegisterFormType;
-  submitAction: (form: RegisterFormType) => void;
+  formFields: FormType;
+  submitAction: (form: FormType) => void;
 }
 
 // ================================================================================
