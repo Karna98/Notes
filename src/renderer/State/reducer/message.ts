@@ -6,27 +6,32 @@
  *
  */
 
-const MESSAGE = 'message';
+const SET_MESSAGE = 'set-message';
+const CLEAR_MESSAGE = 'clear-message';
 
 // Update Response State.
 export const updateMessageState = (status: number, message: string) => ({
-  type: MESSAGE,
+  type: SET_MESSAGE,
   payload: { status, message },
 });
 
+// Update Response State.
+export const clearMessageState = () => ({
+  type: CLEAR_MESSAGE,
+});
+
 // Intialize Response State.
-const initialState = {
-  status: undefined,
-  message: undefined,
-};
+const initialState: MessageInterface | null = null;
 
 export default (
   state = initialState,
   action: { type: string; payload: MessageInterface }
 ) => {
   switch (action.type) {
-    case MESSAGE:
-      return { ...state, ...action.payload };
+    case SET_MESSAGE:
+      return action.payload;
+    case CLEAR_MESSAGE:
+      return null;
     default:
       return state;
   }

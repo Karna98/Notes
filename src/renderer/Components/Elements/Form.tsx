@@ -1,3 +1,11 @@
+/**
+ * Form.tsx
+ *
+ * Description:
+ *    Form Component similar to HTML Form.
+ *
+ */
+
 import React, { useState } from 'react';
 import Button from './Button';
 import './form.scss';
@@ -22,6 +30,11 @@ const Form: React.FC<FormElementInterface> = (props: FormElementInterface) => {
     setForm(updatedForm);
   };
 
+  /**
+   * Executes the Submit Action on Form Submit.
+   *
+   * @param event
+   */
   const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
     // Preventing the page from reloading
     event.preventDefault();

@@ -6,12 +6,12 @@
  *
  */
 
-const RESPONSE_OBJECT = 'response';
+const SET_RESPONSE = 'set-response';
 
 // Update Response State.
-export const updateResponseState = (responseObject: IPCResponseInterface) => ({
-  type: RESPONSE_OBJECT,
-  payload: responseObject,
+export const updateResponseState = (response: IPCResponseInterface) => ({
+  type: SET_RESPONSE,
+  payload: response,
 });
 
 // Intialize Response State.
@@ -22,7 +22,7 @@ export default (
   action: { type: string; payload: IPCResponseInterface }
 ) => {
   switch (action.type) {
-    case RESPONSE_OBJECT:
+    case SET_RESPONSE:
       return action.payload;
     default:
       return state;

@@ -10,6 +10,19 @@
 const definedRoutes: Record<string, string> = {
   'auth-status': 'AUTH:STATUS',
   'auth-register': 'AUTH:REGISTER',
+  'auth-login': 'AUTH:LOGIN',
+};
+
+// Mapped React Routes
+const definedReactRoutes: Record<string, Record<string, string>> = {
+  home: {
+    value: '/',
+    redirect: '/auth',
+  },
+  auth: {
+    value: '/auth',
+    redirect: '/',
+  },
 };
 
 /**
@@ -24,4 +37,18 @@ const resolveRoute = (route: string): string[] => {
   else throw new Error('Invalid Route Request.');
 };
 
-export { resolveRoute };
+/**
+ * Gets React Route.
+ *
+ * @param route React Route alias.
+ * @returns {string} URL calue of route.
+ */
+const resolveReactRoute = (route: string, redirect = false) => {
+  if (definedReactRoutes.hasOwnProperty(route))
+    return redirect
+      ? definedReactRoutes[route]['redirect']
+      : definedReactRoutes[route]['value'];
+  else throw new Error('Invalid React Route Request.');
+};
+
+export { resolveRoute, resolveReactRoute };

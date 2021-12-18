@@ -2,18 +2,32 @@
  * type.d.ts
  *
  * Description:
- *    Type Declaration.
+ *    Type Declaration to be accessed across the project..
  *
  */
+
+//  Session Store Type
+type SessionStoreType = {
+  _id: number;
+  last_logged_in: number;
+  username: string;
+};
 
 // ================================================================================
 // Different Form Types.
 // ================================================================================
 
-// Register Form
-type RegisterFormType = {
+// Login Form
+type LoginFormType = {
   [key: string]: string;
-  username: string;
   password: string;
+  username: string;
+};
+
+// Register Form
+type RegisterFormType = LoginFormType & {
   retypePassword: string;
 };
+
+// Form Types
+type FormType = RegisterFormType | LoginFormType;

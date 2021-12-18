@@ -8,6 +8,7 @@
 
 import message, { updateMessageState } from './message';
 import response, { updateResponseState } from './response';
+import session, { updateSessionState } from './session';
 
-export { updateMessageState, updateResponseState };
-export default { message, response };
+export { updateMessageState, updateResponseState, updateSessionState };
+export default { message, response, session };

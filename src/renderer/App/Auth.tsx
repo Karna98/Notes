@@ -8,14 +8,18 @@
 
 import React, { useEffect, useState } from 'react';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { resolveReactRoute } from '../../common/routes';
 import { IPCRequestObject } from '../../common/util';
+import Login from '../Components/Auth/Login';
 import Register from '../Components/Auth/Register';
-import { updateMessageState } from '../State/reducer';
+import { updateMessageState, updateSessionState } from '../State/reducer';
 import { sendToIpcMain } from '../util';
 import './auth.scss';
 
 const Auth = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // Get response value stored in Redux Store.
   const responseState = useSelector((state: RootStateOrAny) => state.response);
@@ -59,20 +63,32 @@ const Auth = () => {
               setRegistrationStatus(true);
             }
             break;
+
+          case 'auth-login':
+            // Set Message to be displayed.
+            dispatch(
+              updateMessageState(responseState.status, responseState.message)
+            );
+
+            if (responseState.status == 200) {
+              dispatch(updateSessionState(responseState.data));
+
+              // Redirect to Home page.
+              navigate(resolveReactRoute('home'));
+            }
+            break;
         }
     }
   }, [responseState]);
 
   return (
     <div className="d-flex flex-row align-items-center justify-items-center auth">
-      {!(registrationStatus === undefined) ? (
-        registrationStatus ? (
-          <div> Login Page </div>
-        ) : (
-          <Register />
-        )
-      ) : (
+      {registrationStatus === undefined ? (
         <div> Loading.. </div>
+      ) : registrationStatus ? (
+        <Login />
+      ) : (
+        <Register />
       )}
     </div>
   );

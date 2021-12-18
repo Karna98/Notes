@@ -8,7 +8,7 @@
 
 import { resolveRoute } from '../common/routes';
 import { createMessage, IPCResponseObject } from '../common/util';
-import { cryptBcryptHash } from './secure-util';
+import { cryptBcryptCompare, cryptBcryptHash } from './secure-util';
 import database from './sql/database';
 
 /**
@@ -59,6 +59,34 @@ const authRequest = (
         message = createMessage('server-error', 'User Registration failed.');
       }
       break;
+
+    case `LOGIN`:
+      const registeredUsers = database.getUsers();
+
+      const loginStatus =
+        cryptBcryptCompare(requestData.username, registeredUsers.username) &&
+        cryptBcryptCompare(requestData.password, registeredUsers.password);
+
+      if (loginStatus) {
+        // Update Last Login time.
+        database.updateUser(
+          { last_logged_in: Date.now() },
+          registeredUsers._id
+        );
+
+        // Session Data to be stored.
+        result = {
+          username: requestData.username,
+          _id: registeredUsers._id,
+          last_logged_in: registeredUsers.last_logged_in,
+        };
+      }
+
+      message = loginStatus
+        ? createMessage('success', 'Login Successful.')
+        : createMessage('client-error', 'Wrong Credentials.');
+      break;
+
     default:
       // Invalid Sub Request.
       message = createMessage('client-error', 'Invalid Request');
