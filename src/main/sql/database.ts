@@ -15,6 +15,7 @@ import {
   createUserStatement,
   getUsersCountStatement,
   getUsersStatement,
+  updateUserStatement,
 } from './statements';
 import { schemaVersionMismatch, setClientSchemaVersion } from './util';
 
@@ -133,6 +134,15 @@ const getUsers = () => {
   return results;
 };
 
+/**
+ * Update user details in Database.
+ */
+const updateUser = (value: Record<string, unknown>, _id: number) => {
+  const db = dbInstance();
+  db.prepare(updateUserStatement(value)).run(_id);
+  db.close();
+};
+
 export default {
   checkIfDbExsts,
   createNewUser,
@@ -140,4 +150,5 @@ export default {
   getUsersCount,
   init,
   updateDatabase,
+  updateUser,
 };

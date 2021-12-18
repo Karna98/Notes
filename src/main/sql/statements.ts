@@ -64,6 +64,28 @@ const getStatement = (table: string, columns: string[]) => {
 //   `;
 // };
 
+/**
+ * Generalize UPDATE Statement.
+ *
+ * @param table Name of the table.
+ * @param values Values to be updated.
+ * @param condition Conditions to be applied.
+ * @returns {string} UPDATE Statement with provided params.
+ */
+const updateStatement = (
+  table: string,
+  values: Record<string, unknown>,
+  condition: string
+) => {
+  return `
+    UPDATE ${table}
+    SET ${Object.keys(values)
+      .map((key) => `${key} = ${values[key]}`)
+      .join(', ')}
+    WHERE ${condition};
+  `;
+};
+
 // ================================================================================
 // Create Database Statements.
 // ================================================================================
@@ -131,9 +153,19 @@ const getUsersStatement = (): string => {
   return getStatement(`users`, [`*`]);
 };
 
+/**
+ * Update User details in Database.
+ *
+ * @returns {string}
+ */
+const updateUserStatement = (values: Record<string, unknown>): string => {
+  return updateStatement('users', values, `_id = ?`);
+};
+
 export {
   createDatabaseStatement,
   createUserStatement,
   getUsersCountStatement,
   getUsersStatement,
+  updateUserStatement,
 };

@@ -68,8 +68,17 @@ const authRequest = (
         cryptBcryptCompare(requestData.password, registeredUsers.password);
 
       if (loginStatus) {
+        // Update Last Login time.
+        database.updateUser(
+          { last_logged_in: Date.now() },
+          registeredUsers._id
+        );
+
+        // Session Data to be stored.
         result = {
           username: requestData.username,
+          _id: registeredUsers._id,
+          last_logged_in: registeredUsers.last_logged_in,
         };
       }
 

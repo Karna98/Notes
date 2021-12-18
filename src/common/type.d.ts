@@ -8,6 +8,8 @@
 
 //  Session Store Type
 type SessionStoreType = {
+  _id: number;
+  last_logged_in: number;
   username: string;
 };
 
@@ -18,8 +20,8 @@ type SessionStoreType = {
 // Login Form
 type LoginFormType = {
   [key: string]: string;
-  username: string;
   password: string;
+  username: string;
 };
 
 // Register Form

@@ -28,6 +28,12 @@ const sendToIpcMain = (data: IPCRequestInterface) => {
 
 const BROWSER_STORE = `NOTES`;
 
+/**
+ * Get value from browser storage.
+ *
+ * @param type Type of Browser storage: session Storge or local storage.
+ * @returns {null | object} Value stored in browser storage.
+ */
 const getValue = (type: 'local' | 'session') => {
   let value: string | null = null;
 
@@ -43,6 +49,12 @@ const getValue = (type: 'local' | 'session') => {
   return value == null ? null : JSON.parse(value);
 };
 
+/**
+ * Set value from browser storage.
+ *
+ * @param type Type of Browser Storage: session storge or local storage.
+ * @param value Value to be stored in BrowserStorage.
+ */
 const setValue = (type: 'local' | 'session', value: object) => {
   if (process.env.NODE_ENV === 'development')
     switch (type) {

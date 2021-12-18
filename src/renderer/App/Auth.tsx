@@ -65,7 +65,7 @@ const Auth = () => {
             break;
 
           case 'auth-login':
-            // Set Message to be Displayed.
+            // Set Message to be displayed.
             dispatch(
               updateMessageState(responseState.status, responseState.message)
             );
