@@ -21,7 +21,7 @@ const Home = () => {
       <div>Welcome To Notes.</div>
       {sessionState.last_logged_in != null && (
         <div>
-          <b>Last Logged In at</b> :{' '}
+          <b>Last Logged In at</b> :
           <i>{new Date(sessionState.last_logged_in).toString()}</i>
         </div>
       )}
