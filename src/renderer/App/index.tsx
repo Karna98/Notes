@@ -1,5 +1,5 @@
 /**
- * App.tsx
+ * index.tsx
  *
  * Description:
  *    Base file for all the pages to be rendered.
@@ -8,13 +8,14 @@
 import React, { useEffect } from 'react';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { MemoryRouter as Router, Route, Routes } from 'react-router-dom';
-import { resolveReactRoute } from '../../common/routes';
+import { reactRoutes } from '../../common/routes';
 import Message from '../Components/Elements/Message';
 import Header from '../Components/Header';
 import { updateResponseState } from '../State/reducer';
 import Auth from './Auth';
-import Home from './Home';
+import Profile from './Profile';
 import ProtectedRoute from './ProtectedRoutes';
+import Spaces from './Spaces';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -44,10 +45,10 @@ const App = () => {
         )}
         <Routes>
           <Route
-            path={resolveReactRoute('auth')}
+            path={reactRoutes.auth}
             element={
               <ProtectedRoute
-                redirectTo={resolveReactRoute('auth', true)}
+                redirectTo={reactRoutes.space}
                 condition={!isAuthenticated()}
               >
                 <Auth />
@@ -55,13 +56,24 @@ const App = () => {
             }
           />
           <Route
-            path={resolveReactRoute('home')}
+            path={reactRoutes.space}
             element={
               <ProtectedRoute
-                redirectTo={resolveReactRoute('home', true)}
+                redirectTo={reactRoutes.auth}
                 condition={isAuthenticated()}
               >
-                <Home />
+                <Spaces />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={reactRoutes.profile}
+            element={
+              <ProtectedRoute
+                redirectTo={reactRoutes.auth}
+                condition={isAuthenticated()}
+              >
+                <Profile />
               </ProtectedRoute>
             }
           />

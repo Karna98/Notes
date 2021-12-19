@@ -9,7 +9,7 @@
 import React, { useEffect, useState } from 'react';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { resolveReactRoute } from '../../common/routes';
+import { reactRoutes } from '../../common/routes';
 import { IPCRequestObject } from '../../common/util';
 import Login from '../Components/Auth/Login';
 import Register from '../Components/Auth/Register';
@@ -74,7 +74,7 @@ const Auth = () => {
               dispatch(updateSessionState(responseState.data));
 
               // Redirect to Home page.
-              navigate(resolveReactRoute('home'));
+              navigate(reactRoutes.space);
             }
             break;
         }
