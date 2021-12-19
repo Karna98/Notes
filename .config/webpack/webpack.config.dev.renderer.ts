@@ -14,6 +14,7 @@ import {
   DllReferencePlugin,
   EnvironmentPlugin,
   LoaderOptionsPlugin,
+  HotModuleReplacementPlugin,
 } from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import checkNodeEnv from '../script/check-node-env';
@@ -142,6 +143,8 @@ export default webpackMergeConfig(baseConfig, {
         removeComments: true,
       },
     }),
+
+    new HotModuleReplacementPlugin(),
   ],
 
   node: {

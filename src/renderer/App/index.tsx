@@ -7,7 +7,7 @@
 
 import React, { useEffect } from 'react';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
-import { MemoryRouter as Router, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { reactRoutes } from '../../common/routes';
 import Message from '../Components/Elements/Message';
 import Header from '../Components/Header';
@@ -37,7 +37,7 @@ const App = () => {
   const isAuthenticated = () => !(sessionState === null);
 
   return (
-    <Router>
+    <>
       <Header />
       <main className="d-flex flex-column justify-content-center align-items-center">
         {messageState != null && (
@@ -79,7 +79,7 @@ const App = () => {
           />
         </Routes>
       </main>
-    </Router>
+    </>
   );
 };
 

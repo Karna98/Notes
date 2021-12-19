@@ -33,17 +33,18 @@ const BROWSER_STORE = `NOTES`;
  *
  * @param type Type of Browser storage: session Storge or local storage.
  * @returns {null | object} Value stored in browser storage.
+ * @param STORE_NAME Custom key name to be stored in browser storage.
  */
-const getValue = (type: 'local' | 'session') => {
+const getValue = (type: 'local' | 'session', STORE_NAME = BROWSER_STORE) => {
   let value: string | null = null;
 
   if (process.env.NODE_ENV === 'development')
     switch (type) {
       case 'local':
-        value = window.localStorage.getItem(BROWSER_STORE);
+        value = window.localStorage.getItem(STORE_NAME);
         break;
       case 'session':
-        value = window.sessionStorage.getItem(BROWSER_STORE);
+        value = window.sessionStorage.getItem(STORE_NAME);
         break;
     }
   return value == null ? null : JSON.parse(value);
@@ -54,15 +55,20 @@ const getValue = (type: 'local' | 'session') => {
  *
  * @param type Type of Browser Storage: session storge or local storage.
  * @param value Value to be stored in BrowserStorage.
+ * @param STORE_NAME Custom key name to be stored in browser storage.
  */
-const setValue = (type: 'local' | 'session', value: object) => {
+const setValue = (
+  type: 'local' | 'session',
+  value: object,
+  STORE_NAME = BROWSER_STORE
+) => {
   if (process.env.NODE_ENV === 'development')
     switch (type) {
       case 'local':
-        window.localStorage.setItem(BROWSER_STORE, JSON.stringify(value));
+        window.localStorage.setItem(STORE_NAME, JSON.stringify(value));
         break;
       case 'session':
-        window.sessionStorage.setItem(BROWSER_STORE, JSON.stringify(value));
+        window.sessionStorage.setItem(STORE_NAME, JSON.stringify(value));
         break;
     }
 };
@@ -71,15 +77,16 @@ const setValue = (type: 'local' | 'session', value: object) => {
  * Remove item from browser storage.
  *
  * @param type Type of Browser Storage: session storge or local storage.
+ * @param STORE_NAME Custom key name to be stored in browser storage.
  */
-const removeItem = (type: 'local' | 'session') => {
+const removeItem = (type: 'local' | 'session', STORE_NAME = BROWSER_STORE) => {
   if (process.env.NODE_ENV === 'development')
     switch (type) {
       case 'local':
-        window.localStorage.removeItem(BROWSER_STORE);
+        window.localStorage.removeItem(STORE_NAME);
         break;
       case 'session':
-        window.sessionStorage.removeItem(BROWSER_STORE);
+        window.sessionStorage.removeItem(STORE_NAME);
         break;
     }
 };
