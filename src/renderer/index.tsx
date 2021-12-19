@@ -21,3 +21,8 @@ render(
   </React.StrictMode>,
   document.getElementById(`root`)
 );
+
+// For HMR Webpack Plugin.
+if (module.hot) {
+  module.hot.accept();
+}
