@@ -23,7 +23,7 @@ const sendToIpcMain = (data: IPCRequestInterface) => {
   Browser Session or Local Storage.
 
   @NOTE: To be used in Development Mode only.
-  1. On Refresh react states do not persisted, so to handle persists session store, we will be storing it in browser's session storage.
+  1. On page refresh, react states do not persists. So to make session store persists, we will be storing session in browser's session storage.
 */
 
 const BROWSER_STORE = `NOTES`;

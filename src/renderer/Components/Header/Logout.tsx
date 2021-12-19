@@ -1,5 +1,5 @@
 /**
- * Navbar.tsx
+ * Logout.tsx
  *
  * Description:
  *    Logout Componenet.
