@@ -9,13 +9,13 @@
 const SET_MESSAGE = 'set-message';
 const CLEAR_MESSAGE = 'clear-message';
 
-// Update Response State.
+// Update Message State.
 export const updateMessageState = (status: number, message: string) => ({
   type: SET_MESSAGE,
   payload: { status, message },
 });
 
-// Update Response State.
+// Clear Message State.
 export const clearMessageState = () => ({
   type: CLEAR_MESSAGE,
 });
