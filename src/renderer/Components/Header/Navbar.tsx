@@ -6,6 +6,7 @@
  *
  */
 
+import { reactRoutes } from '../../../common/routes';
 import React from 'react';
 import { RootStateOrAny, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -24,8 +25,8 @@ const Navbar = () => {
       </div>
       {sessionState != null && (
         <div className="d-flex flex-row align-items-center">
-          <Link to="/">Home</Link>
-          <Link to="/profile">Profile</Link>
+          <Link to={reactRoutes.space}>Home</Link>
+          <Link to={reactRoutes.profile}>Profile</Link>
           <Logout />
         </div>
       )}
