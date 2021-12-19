@@ -12,17 +12,20 @@ import { Provider } from 'react-redux';
 import App from './App';
 import store from './State';
 import './style.scss';
+import { MemoryRouter as Router } from 'react-router-dom';
 
 render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <Router>
+        <App />
+      </Router>
     </Provider>
   </React.StrictMode>,
   document.getElementById(`root`)
 );
 
 // For HMR Webpack Plugin.
-if (module.hot) {
+if (process.env.NODE_ENV === 'development' && module.hot) {
   module.hot.accept();
 }
