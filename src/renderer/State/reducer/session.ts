@@ -9,11 +9,17 @@
 import { browserStorage } from '../../util';
 
 const SET_SESSION = 'set-session';
+const CLEAR_SESSION = 'clear-session';
 
 // Update Session State.
 export const updateSessionState = (sessionObject: SessionStoreType) => ({
   type: SET_SESSION,
   payload: sessionObject,
+});
+
+// Clear Session State.
+export const clearSessionState = () => ({
+  type: CLEAR_SESSION,
 });
 
 // Intialize Session State.
@@ -26,9 +32,11 @@ export default (
 ) => {
   switch (action.type) {
     case SET_SESSION:
-      if (process.env.NODE_ENV === 'development')
-        browserStorage.setValue('session', action.payload);
+      browserStorage.setValue('session', action.payload);
       return action.payload;
+    case CLEAR_SESSION:
+      browserStorage.removeItem('session');
+      return null;
     default:
       return state;
   }

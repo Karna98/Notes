@@ -6,9 +6,16 @@
  *
  */
 
-import message, { updateMessageState } from './message';
+import message, { clearMessageState, updateMessageState } from './message';
 import response, { updateResponseState } from './response';
-import session, { updateSessionState } from './session';
+import session, { clearSessionState, updateSessionState } from './session';
 
-export { updateMessageState, updateResponseState, updateSessionState };
+export {
+  updateMessageState,
+  clearMessageState,
+  updateResponseState,
+  updateSessionState,
+  clearSessionState,
+};
+
 export default { message, response, session };

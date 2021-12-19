@@ -8,7 +8,7 @@
 
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { clearMessageState } from '../../State/reducer/message';
+import { clearMessageState } from '../../State/reducer';
 
 type PropType = {
   messageState: MessageInterface;
