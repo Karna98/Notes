@@ -9,6 +9,7 @@
 //  Session Store Type
 type SessionStoreType = {
   _id: number;
+  created_at: number;
   last_logged_in: number;
   username: string;
 };

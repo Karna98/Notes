@@ -1,15 +1,15 @@
 /**
- * Home.tsx
+ * Spaces.tsx
  *
  * Description:
- *    Home Component.
+ *    Spaces Component.
  *
  */
 
 import React from 'react';
 import { RootStateOrAny, useSelector } from 'react-redux';
 
-const Home = () => {
+const Spaces = () => {
   // Get session value stored in Redux Store.
   const sessionState = useSelector((state: RootStateOrAny) => state.session);
 
@@ -18,15 +18,9 @@ const Home = () => {
       <div>
         <h1>Hey, {sessionState.username}</h1>
       </div>
-      <div>Welcome To Notes.</div>
-      {sessionState.last_logged_in != null && (
-        <div>
-          <b>Last Logged In at</b> :
-          <i>{new Date(sessionState.last_logged_in).toString()}</i>
-        </div>
-      )}
+      <div>Welcome To Notes. This are Spaces</div>
     </>
   );
 };
 
-export default Home;
+export default Spaces;

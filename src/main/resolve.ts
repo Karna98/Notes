@@ -76,8 +76,9 @@ const authRequest = (
 
         // Session Data to be stored.
         result = {
-          username: requestData.username,
           _id: registeredUsers._id,
+          username: requestData.username,
+          created_at: registeredUsers.created_at,
           last_logged_in: registeredUsers.last_logged_in,
         };
       }
