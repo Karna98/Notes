@@ -16,7 +16,7 @@ type ProtectedRouteType = {
   // Boolean condition to decide render or redirection.
   condition: boolean;
   // Component to be Render
-  children: JSX.Element;
+  children: React.ReactElement;
 };
 
 /**
