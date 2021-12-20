@@ -11,11 +11,11 @@ import { Route, Routes } from 'react-router-dom';
 import { reactRoutes } from '../../common/routes';
 import Message from '../Components/Elements/Message';
 import Header from '../Components/Header';
+import Spaces from '../Components/Spaces';
 import { updateResponseState } from '../State/reducer';
 import Auth from './Auth';
 import Profile from './Profile';
 import ProtectedRoute from './ProtectedRoutes';
-import Spaces from './Spaces';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -39,7 +39,7 @@ const App = () => {
   return (
     <>
       <Header />
-      <main className="d-flex flex-column justify-content-center align-items-center">
+      <main className="d-flex flex-column">
         {messageState != null && (
           <Message messageState={messageState} autoDisappear={true} />
         )}
@@ -48,7 +48,7 @@ const App = () => {
             path={reactRoutes.auth}
             element={
               <ProtectedRoute
-                redirectTo={reactRoutes.space}
+                redirectTo={reactRoutes.spaces}
                 condition={!isAuthenticated()}
               >
                 <Auth />
@@ -56,7 +56,7 @@ const App = () => {
             }
           />
           <Route
-            path={reactRoutes.space}
+            path={`${reactRoutes.spaces}/*`}
             element={
               <ProtectedRoute
                 redirectTo={reactRoutes.auth}

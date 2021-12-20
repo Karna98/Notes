@@ -16,8 +16,8 @@ const definedRoutes: Record<string, string> = {
 // Mapped React Routes
 const reactRoutes: Record<string, string> = {
   auth: '/',
-  space: '/spaces',
   profile: '/profile',
+  spaces: '/spaces',
 };
 
 /**

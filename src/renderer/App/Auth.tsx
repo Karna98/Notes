@@ -74,7 +74,7 @@ const Auth = () => {
               dispatch(updateSessionState(responseState.data));
 
               // Redirect to Home page.
-              navigate(reactRoutes.space);
+              navigate(reactRoutes.spaces);
             }
             break;
         }

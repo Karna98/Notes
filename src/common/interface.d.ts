@@ -43,9 +43,10 @@ interface InputElementInterface {
 }
 
 interface ButtonElementInterface {
-  type?: 'button' | 'submit' | 'reset' | undefined;
+  className?: string;
   label: string;
   onClick?: () => void;
+  type?: 'button' | 'submit' | 'reset' | undefined;
 }
 
 interface FormElementInterface {
