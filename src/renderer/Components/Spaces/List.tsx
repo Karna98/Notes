@@ -34,16 +34,13 @@ const List = () => {
   // Get spaces value stored in Redux Store.
   const spacesState = useSelector((state: RootStateOrAny) => state.spaces);
 
-  // Total no. of space can be created.
-  const TOTAL_SPACE_CARDS = 4;
-
   // Form Fields.
-  const spacesForm: SpaceFormType = {
+  const formFields: SpaceFormType = {
     space_name: '',
   };
 
-  // Form Input Element Attributes.
-  const InputElementData = [
+  // Form Elements Attributes.
+  const formElementsData = [
     {
       type: 'text',
       name: 'space_name',
@@ -70,7 +67,7 @@ const List = () => {
       case 'spaces-add':
         if (
           responseState.status == 200 &&
-          spacesState.length != responseState.data.length
+          spacesState.list.length != responseState.data.list.length
         ) {
           dispatchMessage(responseState.status, responseState.message);
           dispatch(updateSpacesState(responseState.data));
@@ -98,7 +95,7 @@ const List = () => {
           <div> Loading.. </div>
         ) : (
           <>
-            {spacesState.map((value: SpacesType) => (
+            {spacesState.list.map((value: SpaceDetailType) => (
               <Link
                 to={`${value._id}`}
                 key={value._id}
@@ -108,11 +105,12 @@ const List = () => {
                 {value.space_name}
               </Link>
             ))}
-            {spacesState.length < TOTAL_SPACE_CARDS && (
+            {spacesState.list.length <
+              spacesState.metaData.SPACES_MAX_COUNT_ALLOWED && (
               <Form
                 method="POST"
-                formFields={spacesForm}
-                inputElements={InputElementData}
+                formFields={formFields}
+                inputElements={formElementsData}
                 submitAction={addNewSpace}
                 className="d-flex flex-column justify-content-center align-items-center space-card"
                 reset={true}

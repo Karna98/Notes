@@ -9,13 +9,13 @@
 const SET_SPACES = 'set-spaces';
 
 // Update Spaces State.
-export const updateSpacesState = (spaces: Record<number, SpacesType>) => ({
+export const updateSpacesState = (payload: SpacesType) => ({
   type: SET_SPACES,
-  payload: spaces,
+  payload,
 });
 
 // Initialize Session State.
-const initialState: Record<number, SpacesType> | null = null;
+const initialState: SpacesType | null = null;
 
 export default (
   state = initialState,

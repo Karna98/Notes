@@ -6,12 +6,22 @@
  *
  */
 
-//  Session Store Type
+// ================================================================================
+// Redux Store Types.
+// ================================================================================
+
+//  Store Session Type
 type SessionStoreType = {
   _id: number;
   created_at: number;
   last_logged_in: number;
   username: string;
+};
+
+//  Store Spaces Type
+type SpacesType = {
+  metaData: Record<string, unknown>;
+  list: SpaceDetailType[];
 };
 
 // ================================================================================
@@ -40,10 +50,10 @@ type SpaceFormType = {
 type FormType = LoginFormType | RegisterFormType | SpaceFormType;
 
 // ================================================================================
-// Spaces.
+// Uncategorized Types.
 // ================================================================================
 
-type SpacesType = SpaceFormType & {
+type SpaceDetailType = SpaceFormType & {
   _id?: number;
   created_at?: string;
 };

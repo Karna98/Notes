@@ -18,8 +18,8 @@ const Space = () => {
   const { space_id } = useParams();
 
   // Get Space details regarding space_id.
-  const currentSpace = spacesState.filter(
-    ({ _id }: SpacesType) => _id == space_id
+  const currentSpace = spacesState.list.filter(
+    ({ _id }: SpaceDetailType) => _id == space_id
   )[0];
 
   return (

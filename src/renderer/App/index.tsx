@@ -74,7 +74,7 @@ const App = () => {
       ),
     },
     {
-      name: 'Space Page',
+      name: 'Spaces Page',
       path: `${reactRoutes.spaces}/*`,
       element: getProtectedRoutes(<Spaces />),
     },

@@ -212,7 +212,7 @@ const createNewSpace = (value: Array<string | number | unknown>) => {
  *
  * @returns {object} Returns all users details.
  */
-const getSpaces = () => {
+const getSpaces = (): SpaceDetailType[] => {
   const db = dbInstance();
   const results = db.prepare(getSpacesStatement()).all();
   db.close();

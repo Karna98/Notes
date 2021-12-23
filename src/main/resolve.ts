@@ -10,6 +10,7 @@ import { resolveRoute } from '../common/routes';
 import { createMessage, IPCResponseObject } from '../common/util';
 import { cryptBcryptCompare, cryptBcryptHash } from './secure-util';
 import database from './sql/database';
+import { SPACES_MAX_COUNT_ALLOWED } from './meta-data';
 
 /**
  * Handles Authentication related requests.
@@ -105,24 +106,32 @@ const authRequest = (
  */
 const spacesRequest = (
   requestType: string[],
-  requestData: SpacesType
+  requestData: SpaceDetailType
 ): [result: unknown, message: MessageInterface] => {
   let result, message: MessageInterface;
 
+  const metaData = { SPACES_MAX_COUNT_ALLOWED };
+
   switch (requestType[1]) {
     case `GET`:
-      // Get all spaces.
-      result = database.getSpaces();
+      result = {
+        metaData,
+        // Get all spaces.
+        list: database.getSpaces(),
+      };
 
       message = createMessage('success');
       break;
 
     case `ADD`:
-      result = database.createNewSpace([requestData.space_name]);
+      const createStatus = database.createNewSpace([requestData.space_name]);
 
-      if (result) {
-        // Get all spaces.
-        result = database.getSpaces();
+      if (createStatus) {
+        result = {
+          metaData,
+          // Get all spaces.
+          list: database.getSpaces(),
+        };
 
         message = createMessage(
           'success',
@@ -168,7 +177,10 @@ const resolveRequest = (request: IPCRequestInterface) => {
       break;
 
     case `SPACES`:
-      [data, message] = spacesRequest(requestSubURI, <SpacesType>request.data);
+      [data, message] = spacesRequest(
+        requestSubURI,
+        <SpaceDetailType>request.data
+      );
       break;
 
     default:

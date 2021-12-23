@@ -12,11 +12,25 @@ import List from './List';
 import Space from './Space';
 import './spaces.scss';
 
+const routeList = [
+  {
+    name: 'Spaces Page',
+    path: '/',
+    element: <List />,
+  },
+  {
+    name: 'Space Page',
+    path: `:space_id`,
+    element: <Space />,
+  },
+];
+
 const Spaces = () => {
   return (
     <Routes>
-      <Route path="/" element={<List />} />
-      <Route path={`:space_id`} element={<Space />} />
+      {routeList.map((route) => (
+        <Route key={route.name} path={route.path} element={route.element} />
+      ))}
     </Routes>
   );
 };
