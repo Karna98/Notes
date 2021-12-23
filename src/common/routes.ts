@@ -11,6 +11,8 @@ const definedRoutes: Record<string, string> = {
   'auth-status': 'AUTH:STATUS',
   'auth-register': 'AUTH:REGISTER',
   'auth-login': 'AUTH:LOGIN',
+  'spaces-get': 'SPACES:GET',
+  'spaces-add': 'SPACES:ADD',
 };
 
 // Mapped React Routes

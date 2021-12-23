@@ -30,5 +30,20 @@ type RegisterFormType = LoginFormType & {
   retypePassword: string;
 };
 
+// Spaces Form
+type SpaceFormType = {
+  [key: string]: string;
+  space_name: string;
+};
+
 // Form Types
-type FormType = RegisterFormType | LoginFormType;
+type FormType = LoginFormType | RegisterFormType | SpaceFormType;
+
+// ================================================================================
+// Spaces.
+// ================================================================================
+
+type SpacesType = SpaceFormType & {
+  _id?: number;
+  created_at?: string;
+};

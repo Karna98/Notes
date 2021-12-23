@@ -97,6 +97,56 @@ const authRequest = (
 };
 
 /**
+ * Handles Spaces related requests.
+ *
+ * @param requestType
+ * @param requestData
+ * @returns {[result, message]} Result and message regarding the request fulfillment.
+ */
+const spacesRequest = (
+  requestType: string[],
+  requestData: SpacesType
+): [result: unknown, message: MessageInterface] => {
+  let result, message: MessageInterface;
+
+  switch (requestType[1]) {
+    case `GET`:
+      // Get all spaces.
+      result = database.getSpaces();
+
+      message = createMessage('success');
+      break;
+
+    case `ADD`:
+      result = database.createNewSpace([requestData.space_name]);
+
+      if (result) {
+        // Get all spaces.
+        result = database.getSpaces();
+
+        message = createMessage(
+          'success',
+          `${requestData.space_name} Space added successfully.`
+        );
+      } else {
+        // Error while adding spaces.
+        message = createMessage(
+          'server-error',
+          `Error while adding ${requestData.space_name} Space.`
+        );
+      }
+      break;
+
+    default:
+      // Invalid Sub Request.
+      message = createMessage('client-error', 'Invalid Request');
+      break;
+  }
+
+  return [result, message];
+};
+
+/**
  * This functions resolves all the request received from renderer on main process.
  *
  * @param request
@@ -115,6 +165,10 @@ const resolveRequest = (request: IPCRequestInterface) => {
         requestSubURI,
         <AuthCredentialInterface>request.data
       );
+      break;
+
+    case `SPACES`:
+      [data, message] = spacesRequest(requestSubURI, <SpacesType>request.data);
       break;
 
     default:

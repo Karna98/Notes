@@ -9,6 +9,7 @@
 import message, { clearMessageState, updateMessageState } from './message';
 import response, { updateResponseState } from './response';
 import session, { clearSessionState, updateSessionState } from './session';
+import spaces, { updateSpacesState } from './spaces';
 
 export {
   updateMessageState,
@@ -16,6 +17,7 @@ export {
   updateResponseState,
   updateSessionState,
   clearSessionState,
+  updateSpacesState,
 };
 
-export default { message, response, session };
+export default { message, response, session, spaces };

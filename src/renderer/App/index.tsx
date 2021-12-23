@@ -20,8 +20,6 @@ import ProtectedRoute from './ProtectedRoutes';
 const App = () => {
   const dispatch = useDispatch();
 
-  // Get response value stored in Redux Store.
-  const responseState = useSelector((state: RootStateOrAny) => state.response);
   // Get message value stored in Redux Store.
   const messageState = useSelector((state: RootStateOrAny) => state.message);
   // Get session value stored in Redux Store.
@@ -32,9 +30,60 @@ const App = () => {
       // Update response in Redux Store
       dispatch(updateResponseState(JSON.parse(responseData)));
     });
-  }, [responseState]);
+  }, []);
 
-  const isAuthenticated = () => !(sessionState === null);
+  /**
+   * User is authenticated if session is created.
+   *
+   * @returns {boolean} Status of Session created or not.
+   */
+  const isAuthenticated = (): boolean => !(sessionState === null);
+
+  /**
+   * Return Protected Route element.
+   *
+   * @param element Children Element to be rendered.
+   * @param redirect To be redirect to.
+   * @param condition Boolean condition to redirect or not.
+   * @returns
+   */
+  const getProtectedRoutes = (
+    element: React.ReactElement,
+    redirect?: string,
+    condition?: boolean
+  ) => {
+    return (
+      <ProtectedRoute
+        redirectTo={redirect === undefined ? reactRoutes.auth : redirect}
+        condition={condition === undefined ? isAuthenticated() : condition}
+      >
+        {element}
+      </ProtectedRoute>
+    );
+  };
+
+  // List of Routes.
+  const RouteList = [
+    {
+      name: 'Auth Page',
+      path: reactRoutes.auth,
+      element: getProtectedRoutes(
+        <Auth />,
+        reactRoutes.spaces,
+        !isAuthenticated()
+      ),
+    },
+    {
+      name: 'Space Page',
+      path: `${reactRoutes.spaces}/*`,
+      element: getProtectedRoutes(<Spaces />),
+    },
+    {
+      name: 'Profile Page',
+      path: reactRoutes.profile,
+      element: getProtectedRoutes(<Profile />),
+    },
+  ];
 
   return (
     <>
@@ -44,39 +93,9 @@ const App = () => {
           <Message messageState={messageState} autoDisappear={true} />
         )}
         <Routes>
-          <Route
-            path={reactRoutes.auth}
-            element={
-              <ProtectedRoute
-                redirectTo={reactRoutes.spaces}
-                condition={!isAuthenticated()}
-              >
-                <Auth />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path={`${reactRoutes.spaces}/*`}
-            element={
-              <ProtectedRoute
-                redirectTo={reactRoutes.auth}
-                condition={isAuthenticated()}
-              >
-                <Spaces />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path={reactRoutes.profile}
-            element={
-              <ProtectedRoute
-                redirectTo={reactRoutes.auth}
-                condition={isAuthenticated()}
-              >
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
+          {RouteList.map((route) => (
+            <Route key={route.name} path={route.path} element={route.element} />
+          ))}
         </Routes>
       </main>
     </>
