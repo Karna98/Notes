@@ -10,6 +10,7 @@ import { resolveRoute } from '../common/routes';
 import { createMessage, IPCResponseObject } from '../common/util';
 import { cryptBcryptCompare, cryptBcryptHash } from './secure-util';
 import database from './sql/database';
+import { SPACES_MAX_COUNT_ALLOWED } from './meta-data';
 
 /**
  * Handles Authentication related requests.
@@ -97,6 +98,64 @@ const authRequest = (
 };
 
 /**
+ * Handles Spaces related requests.
+ *
+ * @param requestType
+ * @param requestData
+ * @returns {[result, message]} Result and message regarding the request fulfillment.
+ */
+const spacesRequest = (
+  requestType: string[],
+  requestData: SpaceDetailType
+): [result: unknown, message: MessageInterface] => {
+  let result, message: MessageInterface;
+
+  const metaData = { SPACES_MAX_COUNT_ALLOWED };
+
+  switch (requestType[1]) {
+    case `GET`:
+      result = {
+        metaData,
+        // Get all spaces.
+        list: database.getSpaces(),
+      };
+
+      message = createMessage('success');
+      break;
+
+    case `ADD`:
+      const createStatus = database.createNewSpace([requestData.space_name]);
+
+      if (createStatus) {
+        result = {
+          metaData,
+          // Get all spaces.
+          list: database.getSpaces(),
+        };
+
+        message = createMessage(
+          'success',
+          `${requestData.space_name} Space added successfully.`
+        );
+      } else {
+        // Error while adding spaces.
+        message = createMessage(
+          'server-error',
+          `Error while adding ${requestData.space_name} Space.`
+        );
+      }
+      break;
+
+    default:
+      // Invalid Sub Request.
+      message = createMessage('client-error', 'Invalid Request');
+      break;
+  }
+
+  return [result, message];
+};
+
+/**
  * This functions resolves all the request received from renderer on main process.
  *
  * @param request
@@ -114,6 +173,13 @@ const resolveRequest = (request: IPCRequestInterface) => {
       [data, message] = authRequest(
         requestSubURI,
         <AuthCredentialInterface>request.data
+      );
+      break;
+
+    case `SPACES`:
+      [data, message] = spacesRequest(
+        requestSubURI,
+        <SpaceDetailType>request.data
       );
       break;
 

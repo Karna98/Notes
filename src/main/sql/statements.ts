@@ -87,16 +87,17 @@ const updateStatement = (
 };
 
 // ================================================================================
-// Create Database Statements.
+// Database Statements.
 // ================================================================================
 
 /**
  * Statement to create Database for very first time.
  *
- * @returns {string}
+ * @returns {string[]}
  */
-const createDatabaseStatement = (): string => {
-  return `
+const createDatabaseStatement = (): string[] => {
+  return [
+    `
   CREATE TABLE IF NOT EXISTS users (
     _id INTEGER PRIMARY KEY,
     username VARCHAR(20) UNIQUE NOT NULL,
@@ -106,11 +107,35 @@ const createDatabaseStatement = (): string => {
     l_pin VARCHAR(60),
     s_pin VARCHAR(60)
   );
-  `;
+  `,
+    `
+  CREATE TABLE IF NOT EXISTS spaces (
+    _id INTEGER PRIMARY KEY,
+    space_name VARCHAR(60) UNIQUE NOT NULL,
+    created_at datetime NOT NULL
+  );
+  `,
+  ];
+};
+
+/**
+ * Statement to insert default data in Database.
+ *
+ * @returns {string}
+ */
+const insertDefaultValueStatement = (): string[] => {
+  return [
+    `
+  INSERT INTO spaces
+  ( space_name, created_at )
+  VALUES
+  ('Personal', ${Date.now()});
+  `,
+  ];
 };
 
 // ================================================================================
-// Users Related Statements.
+// Users Statements.
 // ================================================================================
 
 /**
@@ -162,10 +187,41 @@ const updateUserStatement = (values: Record<string, unknown>): string => {
   return updateStatement('users', values, `_id = ?`);
 };
 
+// ================================================================================
+// Spaces Statements.
+// ================================================================================
+
+/**
+ * Insert new space into Database.
+ *
+ * @returns {string}
+ */
+const createSpaceStatement = (): string => {
+  return insertStatement(
+    `spaces`,
+    [`space_name`, `created_at`],
+    [`?`, `${Date.now()}`]
+  );
+};
+
+/**
+ * Get all Spaces from Database.
+ *
+ * @returns {string}
+ */
+const getSpacesStatement = (): string => {
+  return getStatement(`spaces`, [`*`]);
+};
+
 export {
   createDatabaseStatement,
+  insertDefaultValueStatement,
+  // Users
   createUserStatement,
   getUsersCountStatement,
   getUsersStatement,
   updateUserStatement,
+  // Spaces
+  createSpaceStatement,
+  getSpacesStatement,
 };
