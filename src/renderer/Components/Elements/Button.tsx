@@ -10,7 +10,7 @@ import React from 'react';
 import './button.scss';
 
 const Button: React.FC<ButtonElementInterface> = (props) => {
-  const { label, type, onClick } = props;
+  const { label, type, onClick, className } = props;
 
   /**
    * Executes onClick() on Button Click.
@@ -21,7 +21,11 @@ const Button: React.FC<ButtonElementInterface> = (props) => {
 
   return (
     <button
-      className="d-flex button-element justify-content-center"
+      className={
+        className === undefined
+          ? 'd-flex button-element justify-content-center'
+          : className
+      }
       type={type}
       onClick={onButtonClick}
     >

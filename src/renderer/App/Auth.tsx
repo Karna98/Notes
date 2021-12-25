@@ -21,7 +21,7 @@ const Auth = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Get response value stored in Redux Store.
+  // Response stored in Redux Store.
   const responseState = useSelector((state: RootStateOrAny) => state.response);
 
   // On rendering, Request will be sent only once. This will be tracked by requestStatus.
@@ -33,51 +33,62 @@ const Auth = () => {
     React.Dispatch<React.SetStateAction<boolean | undefined>>
   ] = useState();
 
+  /**
+   * Displays Message.
+   *
+   * @param status Message Status.
+   * @param message Message.
+   */
+  const dispatchMessage = (status: number, message: string) => {
+    // Update Message in Redux Store..
+    dispatch(updateMessageState(status, message));
+  };
+
+  /**
+   * Resolves response received.
+   */
+  const resolveResponse = () => {
+    switch (responseState.URI) {
+      case 'auth-status':
+        // Based on auth-status, Login or Register Page will be displayed.
+        responseState.status == 200 && responseState.data == 0
+          ? // Register Page
+            setRegistrationStatus(false)
+          : // Login Page
+            setRegistrationStatus(true);
+        break;
+
+      case 'auth-register':
+        // Display response message.
+        dispatchMessage(responseState.status, responseState.message);
+
+        // Set Registration status to true.
+        responseState.status == 200 && setRegistrationStatus(true);
+        break;
+
+      case 'auth-login':
+        // Set Message to be displayed.
+        dispatchMessage(responseState.status, responseState.message);
+
+        if (responseState.status == 200) {
+          dispatch(updateSessionState(responseState.data));
+          sendToIpcMain(IPCRequestObject(`spaces-get`));
+
+          // Redirect to Home page.
+          navigate(reactRoutes.spaces);
+        }
+        break;
+    }
+  };
+
   useEffect(() => {
     if (!requestStatus) {
-      // Check Auth Status.
+      // Get Auth Status.
       sendToIpcMain(IPCRequestObject(`auth-status`));
-
       setRequestStatus(true);
     } else {
-      if (responseState != null)
-        switch (responseState.URI) {
-          case 'auth-status':
-            // Based on auth-status, Login or Register Page will be displayed.
-
-            if (responseState.status == 200) {
-              // Register Page
-              if (responseState.data == 0) setRegistrationStatus(false);
-              // Login Page
-              else setRegistrationStatus(true);
-            }
-            break;
-
-          case 'auth-register':
-            // Set Message to be Displayed.
-            dispatch(
-              updateMessageState(responseState.status, responseState.message)
-            );
-
-            if (responseState.status == 200) {
-              setRegistrationStatus(true);
-            }
-            break;
-
-          case 'auth-login':
-            // Set Message to be displayed.
-            dispatch(
-              updateMessageState(responseState.status, responseState.message)
-            );
-
-            if (responseState.status == 200) {
-              dispatch(updateSessionState(responseState.data));
-
-              // Redirect to Home page.
-              navigate(reactRoutes.space);
-            }
-            break;
-        }
+      // Resolve Response.
+      responseState != null && resolveResponse();
     }
   }, [responseState]);
 

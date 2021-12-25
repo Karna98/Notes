@@ -12,7 +12,8 @@ import './form.scss';
 import Input from './Input';
 
 const Form: React.FC<FormElementInterface> = (props: FormElementInterface) => {
-  const { method, formFields, inputElements, submitAction } = props;
+  const { method, formFields, inputElements, submitAction, reset, className } =
+    props;
 
   // Form Fields
   const [form, setForm] = useState(formFields);
@@ -40,13 +41,20 @@ const Form: React.FC<FormElementInterface> = (props: FormElementInterface) => {
     event.preventDefault();
 
     submitAction(form);
+
+    // Reset Form Field Values.
+    reset && setForm(formFields);
   };
 
   return (
     <form
       method={method}
       onSubmit={submitForm}
-      className="d-flex flex-column align-items-center justify-content-evenly"
+      className={
+        className === undefined
+          ? 'd-flex flex-column align-items-center justify-content-evenly'
+          : className
+      }
     >
       {inputElements.map((attributes: InputElementInterface) => {
         return (
