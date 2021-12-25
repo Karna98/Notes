@@ -7,15 +7,21 @@
  */
 
 import message, { clearMessageState, updateMessageState } from './message';
-import response, { updateResponseState } from './response';
+import response, { clearResponseState, updateResponseState } from './response';
 import session, { clearSessionState, updateSessionState } from './session';
+import spaces, { clearSpacesState, updateSpacesState } from './spaces';
 
+// Exports to update State.
 export {
-  updateMessageState,
   clearMessageState,
+  updateMessageState,
+  clearResponseState,
   updateResponseState,
-  updateSessionState,
   clearSessionState,
+  updateSessionState,
+  clearSpacesState,
+  updateSpacesState,
 };
 
-export default { message, response, session };
+// Default export to view State.
+export default { message, response, session, spaces };
