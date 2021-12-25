@@ -7,14 +7,20 @@
  */
 
 const SET_RESPONSE = 'set-response';
+const CLEAR_RESPONSE = 'clear-response';
 
 // Update Response State.
-export const updateResponseState = (response: IPCResponseInterface) => ({
+export const updateResponseState = (payload: IPCResponseInterface) => ({
   type: SET_RESPONSE,
-  payload: response,
+  payload,
 });
 
-// Intialize Response State.
+// Clear Response State.
+export const clearResponseState = () => ({
+  type: CLEAR_RESPONSE,
+});
+
+// Initialize Response State.
 const initialState: IPCResponseInterface | null = null;
 
 export default (
@@ -24,6 +30,8 @@ export default (
   switch (action.type) {
     case SET_RESPONSE:
       return action.payload;
+    case CLEAR_RESPONSE:
+      return null;
     default:
       return state;
   }

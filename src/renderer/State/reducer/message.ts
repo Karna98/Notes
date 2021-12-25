@@ -20,7 +20,7 @@ export const clearMessageState = () => ({
   type: CLEAR_MESSAGE,
 });
 
-// Intialize Response State.
+// Initialize Response State.
 const initialState: MessageInterface | null = null;
 
 export default (

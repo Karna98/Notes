@@ -7,6 +7,7 @@
  */
 
 const SET_SPACES = 'set-spaces';
+const CLEAR_SPACES = 'clear-spaces';
 
 // Update Spaces State.
 export const updateSpacesState = (payload: SpacesType) => ({
@@ -14,7 +15,12 @@ export const updateSpacesState = (payload: SpacesType) => ({
   payload,
 });
 
-// Initialize Session State.
+// Clear Spaces State.
+export const clearSpacesState = () => ({
+  type: CLEAR_SPACES,
+});
+
+// Initialize Spaces State.
 const initialState: SpacesType | null = null;
 
 export default (
@@ -24,6 +30,8 @@ export default (
   switch (action.type) {
     case SET_SPACES:
       return action.payload;
+    case CLEAR_SPACES:
+      return null;
     default:
       return state;
   }
