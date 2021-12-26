@@ -17,7 +17,7 @@ const Register = () => {
   const dispatch = useDispatch();
 
   // Form Fields.
-  const form: RegisterFormType = {
+  const form: RegisterFormInterface = {
     username: '',
     password: '',
     retypePassword: '',
@@ -53,7 +53,7 @@ const Register = () => {
    *
    * @param event Event
    */
-  const onFormSubmit = (formData: FormType): void => {
+  const onFormSubmit = (formData: FormType<RegisterFormInterface>): void => {
     if (formData?.password === formData?.retypePassword) {
       dispatch(updateMessageState(0, `Registering User...`));
 

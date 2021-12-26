@@ -4,6 +4,10 @@
  * Description:
  *    Interface Declaration.
  *
+ *    Note:
+ *    1. The naming convention should be consistent, simple and easy to understand where
+ *      this interface will be used. Ex. {Component/Page_Name}Interface
+ *
  */
 
 // ================================================================================
@@ -59,10 +63,47 @@ interface FormElementInterface {
 }
 
 // ================================================================================
-// Authentication.
+// Form.
+// ================================================================================
+
+// Login Form
+type LoginFormInterface = {
+  password: string;
+  username: string;
+};
+
+// Register Form
+interface RegisterFormInterface extends LoginFormInterface {
+  retypePassword: string;
+}
+
+// Spaces Form
+interface SpacesFormInterface {
+  space_name: string;
+}
+
+// ================================================================================
+// Others.
 // ================================================================================
 
 interface AuthCredentialInterface {
   username: string;
   password: string;
+}
+
+interface SpaceInterface extends SpacesFormInterface {
+  _id?: number;
+  created_at?: string;
+}
+
+interface SpacesInterface {
+  metaData: Record<string, unknown>;
+  list: SpaceInterface[];
+}
+
+interface SessionInterface {
+  _id: number;
+  created_at: number;
+  last_logged_in: number;
+  username: string;
 }

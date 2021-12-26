@@ -17,7 +17,7 @@ const Login = () => {
   const dispatch = useDispatch();
 
   // Form Fields.
-  const form: LoginFormType = {
+  const form: LoginFormInterface = {
     username: '',
     password: '',
   };
@@ -45,7 +45,7 @@ const Login = () => {
    *
    * @param event Event
    */
-  const onFormSubmit = (formData: FormType): void => {
+  const onFormSubmit = (formData: FormType<LoginFormInterface>): void => {
     dispatch(updateMessageState(0, `Checking Credentials ..`));
 
     sendToIpcMain(

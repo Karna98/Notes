@@ -106,7 +106,7 @@ const authRequest = (
  */
 const spacesRequest = (
   requestType: string[],
-  requestData: SpaceDetailType
+  requestData: SpaceInterface
 ): [result: unknown, message: MessageInterface] => {
   let result, message: MessageInterface;
 
@@ -179,7 +179,7 @@ const resolveRequest = (request: IPCRequestInterface) => {
     case `SPACES`:
       [data, message] = spacesRequest(
         requestSubURI,
-        <SpaceDetailType>request.data
+        <SpaceInterface>request.data
       );
       break;
 

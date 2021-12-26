@@ -19,7 +19,7 @@ const Space = () => {
 
   // Get Space details regarding space_id.
   const currentSpace = spacesState.list.filter(
-    ({ _id }: SpaceDetailType) => _id == space_id
+    ({ _id }: SpaceInterface) => _id == space_id
   )[0];
 
   return (

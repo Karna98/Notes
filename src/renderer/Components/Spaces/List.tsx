@@ -35,7 +35,7 @@ const List = () => {
   const spacesState = useSelector((state: RootStateOrAny) => state.spaces);
 
   // Form Fields.
-  const formFields: SpaceFormType = {
+  const formFields: SpacesFormInterface = {
     space_name: '',
   };
 
@@ -53,7 +53,7 @@ const List = () => {
    * Add new spaces.
    * @param formData Form fields data.
    */
-  const addNewSpace = (formData: FormType) => {
+  const addNewSpace = (formData: FormType<SpacesFormInterface>) => {
     sendToIpcMain(IPCRequestObject(`spaces-add`, formData));
   };
 
@@ -95,7 +95,7 @@ const List = () => {
           <div> Loading.. </div>
         ) : (
           <>
-            {spacesState.list.map((value: SpaceDetailType) => (
+            {spacesState.list.map((value: SpaceInterface) => (
               <Link
                 to={`${value._id}`}
                 key={value._id}
