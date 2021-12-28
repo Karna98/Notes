@@ -11,9 +11,17 @@ import Button from './Button';
 import './form.scss';
 import Input from './Input';
 
-const Form: React.FC<FormElementInterface> = (props: FormElementInterface) => {
-  const { method, formFields, inputElements, submitAction, reset, className } =
-    props;
+const Form: React.FC<FormInterface> = (props) => {
+  const { id, method, elements, submitAction, reset } = props;
+
+  const formFields: Record<
+    string,
+    string | number | readonly string[] | undefined
+  > = {};
+
+  elements.input?.map((element) => {
+    formFields[element.name] = element.value;
+  });
 
   // Form Fields
   const [form, setForm] = useState(formFields);
@@ -46,17 +54,25 @@ const Form: React.FC<FormElementInterface> = (props: FormElementInterface) => {
     reset && setForm(formFields);
   };
 
+  /**
+   * Apply class name based on different type of forms.
+   *
+   * @returns {string} Class Names.
+   */
+  const getClassName = () => {
+    const defaultClassName =
+      'd-flex flex-column align-items-center justify-content-evenly';
+    switch (id) {
+      case 'form-add-space':
+        return defaultClassName + ' space-card';
+      default:
+        return defaultClassName;
+    }
+  };
+
   return (
-    <form
-      method={method}
-      onSubmit={submitForm}
-      className={
-        className === undefined
-          ? 'd-flex flex-column align-items-center justify-content-evenly'
-          : className
-      }
-    >
-      {inputElements.map((attributes: InputElementInterface) => {
+    <form method={method} onSubmit={submitForm} className={getClassName()}>
+      {elements.input?.map((attributes: InputInterface) => {
         return (
           <Input
             key={attributes.name}
@@ -66,7 +82,11 @@ const Form: React.FC<FormElementInterface> = (props: FormElementInterface) => {
           />
         );
       })}
-      <Button label="Submit" type="submit" />
+      <div className="d-flex flex-row justify-content-evenly">
+        {elements.button?.map((button) => (
+          <Button key={button.id} {...button} />
+        ))}
+      </div>
     </form>
   );
 };

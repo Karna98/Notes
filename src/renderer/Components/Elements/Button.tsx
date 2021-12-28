@@ -9,24 +9,20 @@
 import React from 'react';
 import './button.scss';
 
-const Button: React.FC<ButtonElementInterface> = (props) => {
-  const { label, type, onClick, className } = props;
+const Button: React.FC<ButtonInterface> = (props) => {
+  const { label, onClick } = props;
 
   /**
    * Executes onClick() on Button Click.
    */
   const onButtonClick = () => {
+    // If onClick is defined then execute onClick.
     onClick && onClick();
   };
 
   return (
     <button
-      className={
-        className === undefined
-          ? 'd-flex button-element justify-content-center'
-          : className
-      }
-      type={type}
+      className={'d-flex button-element justify-content-center'}
       onClick={onButtonClick}
     >
       {label}

@@ -16,44 +16,51 @@ import Form from '../Elements/Form';
 const Register = () => {
   const dispatch = useDispatch();
 
-  // Form Fields.
-  const form: RegisterFormInterface = {
-    username: '',
-    password: '',
-    retypePassword: '',
+  // Register Form Elements.
+  const formElements: FormElementsInterface = {
+    input: [
+      {
+        id: 'register-username',
+        name: 'username',
+        type: 'text',
+        label: 'Username',
+        placeholder: 'Username',
+        required: true,
+        value: '',
+      },
+      {
+        id: 'register-password',
+        name: 'password',
+        type: 'password',
+        label: 'Password',
+        placeholder: 'Password',
+        required: true,
+        value: '',
+      },
+      {
+        id: 'register-retypePassword',
+        name: 'retypePassword',
+        type: 'password',
+        label: 'Retype Password',
+        placeholder: 'Retype Password',
+        required: true,
+        value: '',
+      },
+    ],
+    button: [
+      {
+        id: 'register',
+        label: 'Register',
+      },
+    ],
   };
 
-  // Input Element Attributes.
-  const InputElementData = [
-    {
-      type: 'text',
-      label: 'Username',
-      name: 'username',
-      placeholder: 'Username',
-      required: true,
-    },
-    {
-      type: 'password',
-      label: 'Password',
-      name: 'password',
-      placeholder: 'Password',
-      required: true,
-    },
-    {
-      type: 'password',
-      label: 'Retype Password',
-      name: 'retypePassword',
-      placeholder: 'Retype Password',
-      required: true,
-    },
-  ];
-
   /**
-   * Submit User Registration form.
+   * Submit Registration form.
    *
-   * @param event Event
+   * @param formData Form fields value.
    */
-  const onFormSubmit = (formData: FormType<RegisterFormInterface>): void => {
+  const formSubmitAction = (formData: Record<string, unknown>): void => {
     if (formData?.password === formData?.retypePassword) {
       dispatch(updateMessageState(0, `Registering User...`));
 
@@ -70,12 +77,14 @@ const Register = () => {
   };
 
   return (
-    <Form
-      method="POST"
-      formFields={form}
-      inputElements={InputElementData}
-      submitAction={onFormSubmit}
-    />
+    <div>
+      <Form
+        id="form-register"
+        method="POST"
+        elements={formElements}
+        submitAction={formSubmitAction}
+      />
+    </div>
   );
 };
 

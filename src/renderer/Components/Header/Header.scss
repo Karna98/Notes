@@ -1,5 +1,5 @@
 /**
- * Header.scss 
+ * header.scss 
  * 
  * Description:
  *    Styles for Header Component.
@@ -10,4 +10,14 @@
   width: 100%;
   height: var(--navbar-height);
   background-color: var(--fluorescent-blue);
+}
+
+.navbar-links a {
+  padding: 8px 8px;
+  text-decoration: none;
+}
+
+.navbar-links a:hover {
+  background-color: var(--turquoise-blue);
+  text-decoration: underline;
 }

@@ -110,6 +110,10 @@ Flex
   visibility: hidden;
 }
 
+.text-align-center {
+  text-align: center;
+}
+
 /*-----     -----     -----
 Border
 -----     -----     -----*/
@@ -151,18 +155,6 @@ Body
 body {
   --navbar-height: 50px;
 }
-
-/* Message */
-
-.message {
-  position: absolute;
-  padding: 4px 8px;
-  top: 10px;
-  z-index: 1;
-  background-color: var(--turquoise-blue);
-}
-
-/* Page */
 
 main {
   position: absolute;

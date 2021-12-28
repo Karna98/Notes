@@ -17,6 +17,42 @@ import Form from '../Elements/Form';
 const List = () => {
   const dispatch = useDispatch();
 
+  // Get session value stored in Redux Store.
+  const sessionState = useSelector((state: RootStateOrAny) => state.session);
+  // Get response value stored in Redux Store.
+  const responseState = useSelector((state: RootStateOrAny) => state.response);
+  // Get spaces value stored in Redux Store.
+  const spacesState = useSelector((state: RootStateOrAny) => state.spaces);
+
+  // Form Elements.
+  const formElements: FormElementsInterface = {
+    input: [
+      {
+        id: 'spaces-space_name',
+        name: 'space_name',
+        type: 'text',
+        placeholder: 'New Space',
+        required: true,
+        value: '',
+      },
+    ],
+    button: [
+      {
+        id: 'add-space',
+        label: 'Add',
+      },
+    ],
+  };
+
+  /**
+   * Adds new space.
+   *
+   * @param formData Form fields value.
+   */
+  const formSubmitAction = (formData: Record<string, unknown>) => {
+    sendToIpcMain(IPCRequestObject(`spaces-add`, formData));
+  };
+
   /**
    * Displays Message.
    *
@@ -27,36 +63,9 @@ const List = () => {
     dispatch(updateMessageState(status, message));
   };
 
-  // Get session value stored in Redux Store.
-  const sessionState = useSelector((state: RootStateOrAny) => state.session);
-  // Get response value stored in Redux Store.
-  const responseState = useSelector((state: RootStateOrAny) => state.response);
-  // Get spaces value stored in Redux Store.
-  const spacesState = useSelector((state: RootStateOrAny) => state.spaces);
-
-  // Form Fields.
-  const formFields: SpacesFormInterface = {
-    space_name: '',
-  };
-
-  // Form Elements Attributes.
-  const formElementsData = [
-    {
-      type: 'text',
-      name: 'space_name',
-      placeholder: 'New Space Name',
-      required: true,
-    },
-  ];
-
   /**
-   * Add new spaces.
-   * @param formData Form fields data.
+   * Resolves Response received.
    */
-  const addNewSpace = (formData: FormType<SpacesFormInterface>) => {
-    sendToIpcMain(IPCRequestObject(`spaces-add`, formData));
-  };
-
   const resolveResponse = () => {
     switch (responseState.URI) {
       case 'spaces-get':
@@ -107,14 +116,15 @@ const List = () => {
             ))}
             {spacesState.list.length <
               spacesState.metaData.SPACES_MAX_COUNT_ALLOWED && (
-              <Form
-                method="POST"
-                formFields={formFields}
-                inputElements={formElementsData}
-                submitAction={addNewSpace}
-                className="d-flex flex-column justify-content-center align-items-center space-card"
-                reset={true}
-              />
+              <div>
+                <Form
+                  id="form-add-space"
+                  method="POST"
+                  elements={formElements}
+                  submitAction={formSubmitAction}
+                  reset={true}
+                />
+              </div>
             )}
           </>
         )}

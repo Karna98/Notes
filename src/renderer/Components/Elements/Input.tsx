@@ -9,8 +9,9 @@
 import React from 'react';
 import './input.scss';
 
-const Input: React.FC<InputElementInterface> = (props) => {
+const Input: React.FC<InputInterface> = (props) => {
   const {
+    id,
     value,
     label,
     name,
@@ -19,6 +20,21 @@ const Input: React.FC<InputElementInterface> = (props) => {
     required,
     onChange,
   } = props;
+
+  /**
+   * Apply class name based on input name.
+   *
+   * @returns {string} Class Names.
+   */
+  const getClassName = () => {
+    const defaultClassName = 'd-flex align-items-center';
+    switch (id) {
+      case 'spaces-space_name':
+        return defaultClassName + ' text-align-center';
+      default:
+        return defaultClassName;
+    }
+  };
 
   return (
     <div className="d-flex flex-row input-element">
@@ -30,7 +46,7 @@ const Input: React.FC<InputElementInterface> = (props) => {
         placeholder={placeholder}
         onChange={onChange}
         required={required}
-        className="d-flex align-items-center"
+        className={getClassName()}
       />
     </div>
   );

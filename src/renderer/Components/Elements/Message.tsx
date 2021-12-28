@@ -9,6 +9,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { clearMessageState } from '../../State/reducer';
+import './message.scss';
 
 type PropType = {
   messageState: MessageInterface;
@@ -20,14 +21,14 @@ const Message = (props: PropType) => {
   const dispatch = useDispatch();
 
   if (autoDisappear) {
+    // Clears Message after 3 seconds.
     setTimeout(() => {
-      // Set Message to null.
       dispatch(clearMessageState());
     }, 3000);
   }
 
   return (
-    <div className="message">
+    <div className="text-align-center message-card">
       Message : [{messageState.status}] - {messageState.message}
     </div>
   );

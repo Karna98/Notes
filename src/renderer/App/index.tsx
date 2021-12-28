@@ -25,13 +25,6 @@ const App = () => {
   // Get session value stored in Redux Store.
   const sessionState = useSelector((state: RootStateOrAny) => state.session);
 
-  useEffect(() => {
-    window.NotesAPI.receive(`fromMain`, (responseData: string) => {
-      // Update response in Redux Store
-      dispatch(updateResponseState(JSON.parse(responseData)));
-    });
-  }, []);
-
   /**
    * User is authenticated if session is created.
    *
@@ -84,6 +77,13 @@ const App = () => {
       element: getProtectedRoutes(<Profile />),
     },
   ];
+
+  useEffect(() => {
+    window.NotesAPI.receive(`fromMain`, (responseData: string) => {
+      // Update response in Redux Store
+      dispatch(updateResponseState(JSON.parse(responseData)));
+    });
+  }, []);
 
   return (
     <>

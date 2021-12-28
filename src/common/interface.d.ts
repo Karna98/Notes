@@ -36,50 +36,34 @@ interface IPCResponseInterface extends IPCRequestInterface, MessageInterface {}
 // Elements
 // ================================================================================
 
-interface InputElementInterface {
-  label?: string;
+interface InputInterface {
+  id: string;
   name: string;
+  type: React.HTMLInputTypeAttribute | undefined;
+  label?: string;
   placeholder?: string;
-  type: string;
+  required?: boolean;
   value?: string | number | readonly string[] | undefined;
   onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
-  required?: boolean;
 }
 
-interface ButtonElementInterface {
-  className?: string;
-  label: string;
+interface ButtonInterface {
+  id: string;
+  label?: string;
   onClick?: () => void;
-  type?: 'button' | 'submit' | 'reset' | undefined;
 }
 
-interface FormElementInterface {
-  className?: string;
-  formFields: FormType;
-  inputElements: InputElementInterface[];
+interface FormInterface {
+  id: string;
   method: string;
+  elements: FormElementsInterface;
+  submitAction: (form: Record<string, unknown>) => void;
   reset?: boolean;
-  submitAction: (form: FormType) => void;
 }
 
-// ================================================================================
-// Form.
-// ================================================================================
-
-// Login Form
-type LoginFormInterface = {
-  password: string;
-  username: string;
-};
-
-// Register Form
-interface RegisterFormInterface extends LoginFormInterface {
-  retypePassword: string;
-}
-
-// Spaces Form
-interface SpacesFormInterface {
-  space_name: string;
+interface FormElementsInterface {
+  input?: InputInterface[];
+  button?: ButtonInterface[];
 }
 
 // ================================================================================
@@ -91,19 +75,20 @@ interface AuthCredentialInterface {
   password: string;
 }
 
-interface SpaceInterface extends SpacesFormInterface {
+interface SessionInterface {
+  _id: number;
+  username: string;
+  created_at: number;
+  last_logged_in: number;
+}
+
+interface SpaceInterface {
   _id?: number;
+  space_name: string;
   created_at?: string;
 }
 
 interface SpacesInterface {
   metaData: Record<string, unknown>;
   list: SpaceInterface[];
-}
-
-interface SessionInterface {
-  _id: number;
-  created_at: number;
-  last_logged_in: number;
-  username: string;
 }
