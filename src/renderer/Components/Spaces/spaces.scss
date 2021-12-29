@@ -10,8 +10,15 @@
   height: 100%;
 }
 
+.spaces-content a {
+  text-decoration: none;
+}
+
 .space-card {
-  width: 40%;
-  height: 40%;
+  min-width: 300px;
+  min-height: 200px;
+  background-color: var(--fluorescent-blue);
+}
+.space-card:hover {
   background-color: var(--turquoise-blue);
 }

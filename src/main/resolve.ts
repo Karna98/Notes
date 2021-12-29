@@ -8,9 +8,9 @@
 
 import { resolveRoute } from '../common/routes';
 import { createMessage, IPCResponseObject } from '../common/util';
+import CONSTANTS from './constants';
 import { cryptBcryptCompare, cryptBcryptHash } from './secure-util';
 import database from './sql/database';
-import { SPACES_MAX_COUNT_ALLOWED } from './meta-data';
 
 /**
  * Handles Authentication related requests.
@@ -21,9 +21,9 @@ import { SPACES_MAX_COUNT_ALLOWED } from './meta-data';
  */
 const authRequest = (
   requestType: string[],
-  requestData: AuthCredentialInterface
+  requestData: AuthCredentialType
 ): [result: unknown, message: MessageInterface] => {
-  let result, message: MessageInterface;
+  let result: unknown, message: MessageInterface;
 
   switch (requestType[1]) {
     case `STATUS`:
@@ -34,11 +34,11 @@ const authRequest = (
 
         // Get Users Count from Database.
         result = database.getUsersCount();
-        message = createMessage('success', 'Request Executed Successfully.');
+        message = createMessage('success');
       } else {
         // Set result to 0 if no Database found.
         result = 0;
-        message = createMessage('success', 'No Database Found.');
+        message = createMessage('success');
       }
       break;
 
@@ -46,11 +46,10 @@ const authRequest = (
       // Intialize Database.
       database.init();
 
-      result = database.createNewUser([
+      result = database.createNewUser(
         cryptBcryptHash(requestData.username),
-        Date.now(),
-        cryptBcryptHash(requestData.password),
-      ]);
+        cryptBcryptHash(requestData.password)
+      );
 
       if (result) {
         // Registration Successful.
@@ -106,32 +105,28 @@ const authRequest = (
  */
 const spacesRequest = (
   requestType: string[],
-  requestData: SpaceDetailType
+  requestData: Pick<SpacesTableInterface, 'space_name'>
 ): [result: unknown, message: MessageInterface] => {
-  let result, message: MessageInterface;
-
-  const metaData = { SPACES_MAX_COUNT_ALLOWED };
+  const result: SpacesInterface = {
+    metaData: { SPACES_MAX_COUNT_ALLOWED: CONSTANTS.SPACES_MAX_COUNT_ALLOWED },
+    list: [],
+  };
+  let message: MessageInterface;
 
   switch (requestType[1]) {
     case `GET`:
-      result = {
-        metaData,
-        // Get all spaces.
-        list: database.getSpaces(),
-      };
+      // Get all spaces.
+      result.list = database.getSpaces();
 
       message = createMessage('success');
       break;
 
     case `ADD`:
-      const createStatus = database.createNewSpace([requestData.space_name]);
+      const createStatus = database.createNewSpace(requestData.space_name);
 
       if (createStatus) {
-        result = {
-          metaData,
-          // Get all spaces.
-          list: database.getSpaces(),
-        };
+        // Get all spaces.
+        result.list = database.getSpaces();
 
         message = createMessage(
           'success',
@@ -161,9 +156,8 @@ const spacesRequest = (
  * @param request
  * @returns {IPCResponseObject} IPC Response Object to be sent to renderer process.
  */
-const resolveRequest = (request: IPCRequestInterface) => {
-  let data: unknown | object;
-  let message: MessageInterface;
+const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
+  let data: unknown, message: MessageInterface;
 
   // Resolve Request URI
   const requestSubURI = resolveRoute(request.URI);
@@ -172,14 +166,14 @@ const resolveRequest = (request: IPCRequestInterface) => {
     case `AUTH`:
       [data, message] = authRequest(
         requestSubURI,
-        <AuthCredentialInterface>request.data
+        <AuthCredentialType>request.data
       );
       break;
 
     case `SPACES`:
       [data, message] = spacesRequest(
         requestSubURI,
-        <SpaceDetailType>request.data
+        <Pick<SpacesTableInterface, 'space_name'>>request.data
       );
       break;
 

@@ -25,7 +25,7 @@ const Navbar = () => {
       </div>
 
       {sessionState != null && (
-        <div className="d-flex flex-row align-items-center">
+        <div className="d-flex flex-row align-items-center navbar-links">
           <Link to={reactRoutes.spaces}>Spaces</Link>
           <Link to={reactRoutes.profile}>Profile</Link>
           <Logout />

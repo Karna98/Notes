@@ -93,7 +93,7 @@ const Auth = () => {
   }, [responseState]);
 
   return (
-    <div className="d-flex flex-row align-items-center justify-items-center auth">
+    <div className="d-flex flex-column align-items-center justify-content-center auth">
       {registrationStatus === undefined ? (
         <div> Loading.. </div>
       ) : registrationStatus ? (

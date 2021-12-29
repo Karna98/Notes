@@ -4,13 +4,17 @@
  * Description:
  *    Interface Declaration.
  *
+ *    Note:
+ *    1. The naming convention should be consistent, simple and easy to understand where
+ *      this interface will be used. Ex. {Component/Page_Name}Interface
+ *
  */
 
 // ================================================================================
 // IPC Communication.
 // ================================================================================
 
-interface contextBridgeAPI {
+interface ContextBridgeInterface {
   send: (channel: string, data: string) => Promise<void>;
   receive: (channel: string, func: unknown) => Promise<void>;
 }
@@ -29,40 +33,64 @@ interface IPCRequestInterface {
 interface IPCResponseInterface extends IPCRequestInterface, MessageInterface {}
 
 // ================================================================================
+// Models.
+// ================================================================================
+
+interface UsersTableInteface {
+  _id: number;
+  username: string;
+  created_at: number;
+  last_logged_in: number;
+  password: string;
+  l_pin: string;
+  s_pin: string;
+}
+
+interface SpacesTableInterface {
+  _id: number;
+  space_name: string;
+  created_at: string;
+}
+
+// ================================================================================
 // Elements
 // ================================================================================
 
-interface InputElementInterface {
-  label?: string;
+interface InputInterface {
+  id: string;
   name: string;
+  type: React.HTMLInputTypeAttribute | undefined;
+  label?: string;
   placeholder?: string;
-  type: string;
+  required?: boolean;
   value?: string | number | readonly string[] | undefined;
   onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
-  required?: boolean;
 }
 
-interface ButtonElementInterface {
-  className?: string;
-  label: string;
+interface ButtonInterface {
+  id: string;
+  label?: string;
   onClick?: () => void;
-  type?: 'button' | 'submit' | 'reset' | undefined;
 }
 
-interface FormElementInterface {
-  className?: string;
-  formFields: FormType;
-  inputElements: InputElementInterface[];
+interface FormInterface {
+  id: string;
   method: string;
+  elements: FormElementsInterface;
+  submitAction: (form: Record<string, unknown>) => void;
   reset?: boolean;
-  submitAction: (form: FormType) => void;
+}
+
+interface FormElementsInterface {
+  input?: InputInterface[];
+  button?: ButtonInterface[];
 }
 
 // ================================================================================
-// Authentication.
+// Others.
 // ================================================================================
 
-interface AuthCredentialInterface {
-  username: string;
-  password: string;
+interface SpacesInterface {
+  metaData: Record<string, unknown>;
+  list: SpacesTableInterface[];
 }

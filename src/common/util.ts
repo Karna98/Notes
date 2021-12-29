@@ -14,7 +14,7 @@ import { getStatusCode } from './status-codes';
  */
 declare global {
   interface Window {
-    NotesAPI: contextBridgeAPI;
+    NotesAPI: ContextBridgeInterface;
   }
 }
 

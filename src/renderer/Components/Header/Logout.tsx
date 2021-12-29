@@ -13,13 +13,23 @@ import {
   clearSessionState,
   clearSpacesState,
 } from '../../State/reducer';
-import Button from '../Elements/Button';
+import Form from '../Elements/Form';
 
 const Logout = () => {
   const dispatch = useDispatch();
 
+  // Form Elements.
+  const formElements: FormElementsInterface = {
+    button: [
+      {
+        id: 'logout',
+        label: 'Logout',
+      },
+    ],
+  };
+
   /**
-   * Clear Session data on click.
+   * Clears all store data.
    */
   const onClick = () => {
     // Clear all redux stores on logout.
@@ -30,9 +40,12 @@ const Logout = () => {
   };
 
   return (
-    <div>
-      <Button label="Logout" onClick={onClick} />
-    </div>
+    <Form
+      id="form-logout"
+      method="POST"
+      elements={formElements}
+      submitAction={onClick}
+    />
   );
 };
 
