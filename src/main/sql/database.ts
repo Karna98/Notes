@@ -9,6 +9,7 @@
 import Database from 'better-sqlite3';
 import { existsSync as fsExistsSync } from 'fs';
 import { resolve as pathResolve } from 'path';
+import CONSTANTS from '../constants';
 import { updateDatabaseSchema } from './migrations';
 import {
   createDatabaseStatement,
@@ -22,21 +23,15 @@ import {
 } from './statements';
 import { schemaVersionMismatch, setClientSchemaVersion } from './util';
 
-const isDevelopmentMode = process.env.NODE_ENV === `development`;
-
-// Database Name
-const DATABASE_NAME = `${isDevelopmentMode ? `notes_dev` : `notes`}.sqlite`;
-
-// Path to Database
-const DATABASE_PATH = pathResolve(__dirname);
-
 /**
  * Check if Database already exists on Client's file system.
  *
  * @returns {boolean} Returns status of database file exists or not.
  */
-const checkIfDbExsts = () => {
-  return fsExistsSync(pathResolve(DATABASE_PATH, DATABASE_NAME));
+const checkIfDbExsts = (): boolean => {
+  return fsExistsSync(
+    pathResolve(CONSTANTS.PATH.DATABASE, CONSTANTS.DATABASE_NAME)
+  );
 };
 
 /**
@@ -44,15 +39,15 @@ const checkIfDbExsts = () => {
  *
  * @returns {Database} db Database Object
  */
-const dbInstance = () => {
-  const databaseOptions = isDevelopmentMode
+const dbInstance = (): Database.Database => {
+  const databaseOptions = CONSTANTS.IS_DEVELOPMENT_MODE
     ? {
         verbose: console.log,
       }
     : {};
 
   const db = new Database(
-    pathResolve(DATABASE_PATH, DATABASE_NAME),
+    pathResolve(CONSTANTS.PATH.DATABASE, CONSTANTS.DATABASE_NAME),
     databaseOptions
   );
 
@@ -150,9 +145,9 @@ const updateDatabase = () => {
  * @param value Array of data required.
  * @returns {number} Returns status of new user creation.
  */
-const createNewUser = (value: Array<string | number | unknown>) => {
+const createNewUser = (username: string, password: string): number => {
   const db = dbInstance();
-  const results = db.prepare(createUserStatement()).run(value);
+  const results = db.prepare(createUserStatement()).run([username, password]);
   db.close();
 
   return results.changes;
@@ -163,7 +158,7 @@ const createNewUser = (value: Array<string | number | unknown>) => {
  *
  * @returns {number} results
  */
-const getUsersCount = () => {
+const getUsersCount = (): number => {
   const db = dbInstance();
   const results = db.prepare(getUsersCountStatement()).pluck(true).get();
   db.close();
@@ -176,7 +171,7 @@ const getUsersCount = () => {
  *
  * @returns {object} Returns all users details.
  */
-const getUsers = () => {
+const getUsers = (): UsersTableInteface => {
   const db = dbInstance();
   const results = db.prepare(getUsersStatement()).get();
   db.close();
@@ -199,9 +194,9 @@ const updateUser = (value: Record<string, unknown>, _id: number) => {
  * @param value Array of data required.
  * @returns {number} Returns status of new user creation.
  */
-const createNewSpace = (value: Array<string | number | unknown>) => {
+const createNewSpace = (spaceName: string): number => {
   const db = dbInstance();
-  const results = db.prepare(createSpaceStatement()).run(value);
+  const results = db.prepare(createSpaceStatement()).run([spaceName]);
   db.close();
 
   return results.changes;
@@ -212,7 +207,7 @@ const createNewSpace = (value: Array<string | number | unknown>) => {
  *
  * @returns {object} Returns all users details.
  */
-const getSpaces = (): SpaceInterface[] => {
+const getSpaces = (): SpacesTableInterface[] => {
   const db = dbInstance();
   const results = db.prepare(getSpacesStatement()).all();
   db.close();

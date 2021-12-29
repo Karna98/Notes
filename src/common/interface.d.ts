@@ -14,7 +14,7 @@
 // IPC Communication.
 // ================================================================================
 
-interface contextBridgeAPI {
+interface ContextBridgeInterface {
   send: (channel: string, data: string) => Promise<void>;
   receive: (channel: string, func: unknown) => Promise<void>;
 }
@@ -31,6 +31,26 @@ interface IPCRequestInterface {
 }
 
 interface IPCResponseInterface extends IPCRequestInterface, MessageInterface {}
+
+// ================================================================================
+// Models.
+// ================================================================================
+
+interface UsersTableInteface {
+  _id: number;
+  username: string;
+  created_at: number;
+  last_logged_in: number;
+  password: string;
+  l_pin: string;
+  s_pin: string;
+}
+
+interface SpacesTableInterface {
+  _id: number;
+  space_name: string;
+  created_at: string;
+}
 
 // ================================================================================
 // Elements
@@ -70,25 +90,7 @@ interface FormElementsInterface {
 // Others.
 // ================================================================================
 
-interface AuthCredentialInterface {
-  username: string;
-  password: string;
-}
-
-interface SessionInterface {
-  _id: number;
-  username: string;
-  created_at: number;
-  last_logged_in: number;
-}
-
-interface SpaceInterface {
-  _id?: number;
-  space_name: string;
-  created_at?: string;
-}
-
 interface SpacesInterface {
   metaData: Record<string, unknown>;
-  list: SpaceInterface[];
+  list: SpacesTableInterface[];
 }

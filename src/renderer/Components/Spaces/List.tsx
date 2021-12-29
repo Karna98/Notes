@@ -104,7 +104,7 @@ const List = () => {
           <div> Loading.. </div>
         ) : (
           <>
-            {spacesState.list.map((value: SpaceInterface) => (
+            {spacesState.list.map((value: SpacesTableInterface) => (
               <Link
                 to={`${value._id}`}
                 key={value._id}

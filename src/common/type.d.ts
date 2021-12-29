@@ -6,5 +6,9 @@
  *
  */
 
-// Form Types
-type FormType<T> = T;
+type AuthCredentialType = Pick<UsersTableInteface, 'username' | 'password'>;
+
+type SessionType = Pick<
+  UsersTableInteface,
+  '_id' | 'username' | 'created_at' | 'last_logged_in'
+>;

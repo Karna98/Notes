@@ -9,6 +9,7 @@
 // Modules to control application life and create native browser window
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { join as pathJoin } from 'path';
+import CONSTANTS from './constants';
 import resolveRequest from './resolve';
 import { resolveHtmlPath } from './util';
 
@@ -19,10 +20,6 @@ import { resolveHtmlPath } from './util';
   // be closed automatically when the JavaScript object is garbage collected.
   // let mainWindow: any; 
 */
-
-const isDevelopmentMode = process.env.NODE_ENV === `development`;
-
-const ASSETS_DIRECTORY = pathJoin(__dirname, `..`, `assets`);
 
 class Main {
   private launchWindow: Electron.BrowserWindow | null = null;
@@ -74,7 +71,7 @@ class Main {
         skipTaskbar: true,
         webPreferences: {
           // devTools can work in DEVELOPMENT mode
-          devTools: false || isDevelopmentMode,
+          devTools: false || CONSTANTS.IS_DEVELOPMENT_MODE,
         },
       });
 
@@ -95,13 +92,13 @@ class Main {
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true, // protect against prototype pollution
-        devTools: false || isDevelopmentMode,
+        devTools: false || CONSTANTS.IS_DEVELOPMENT_MODE,
         preload: pathJoin(__dirname, 'preload.js'),
       },
-      icon: pathJoin(ASSETS_DIRECTORY, `logo`, `png`, `256x256.png`),
+      icon: pathJoin(CONSTANTS.PATH.ASSETS, `logo`, `png`, `256x256.png`),
     });
 
-    if (!isDevelopmentMode)
+    if (!CONSTANTS.IS_DEVELOPMENT_MODE)
       // Disable Window menu in PRODUCTION Mode
       this.mainWindow.setMenu(null);
 
@@ -111,7 +108,7 @@ class Main {
     this.mainWindow.loadURL(resolveHtmlPath(`index.html`));
 
     this.mainWindow.once('ready-to-show', () => {
-      if (!isDevelopmentMode) {
+      if (!CONSTANTS.IS_DEVELOPMENT_MODE) {
         // Only PRODUCTION Mode
         launcherWindow();
 

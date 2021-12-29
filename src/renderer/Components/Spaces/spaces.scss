@@ -17,5 +17,8 @@
 .space-card {
   min-width: 300px;
   min-height: 200px;
+  background-color: var(--fluorescent-blue);
+}
+.space-card:hover {
   background-color: var(--turquoise-blue);
 }

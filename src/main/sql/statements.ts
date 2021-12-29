@@ -22,7 +22,7 @@ const insertStatement = (
   table: string,
   columns: string[],
   values: string[]
-) => {
+): string => {
   return `
     INSERT INTO ${table}
     ( ${columns.join(', ')} )
@@ -37,7 +37,7 @@ const insertStatement = (
  * @param columns Name of the column/s.
  * @returns {string} GET Statement with provided params.
  */
-const getStatement = (table: string, columns: string[]) => {
+const getStatement = (table: string, columns: string[]): string => {
   return `
     SELECT ${columns.join(', ')}
     FROM ${table};
@@ -147,7 +147,7 @@ const createUserStatement = (): string => {
   return insertStatement(
     `users`,
     [`username`, `created_at`, `password`],
-    [`?`, `?`, `?`]
+    [`?`, `${Date.now()}`, `?`]
   );
 };
 

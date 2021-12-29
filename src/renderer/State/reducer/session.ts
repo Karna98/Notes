@@ -12,7 +12,7 @@ const SET_SESSION = 'set-session';
 const CLEAR_SESSION = 'clear-session';
 
 // Update Session State.
-export const updateSessionState = (payload: SessionInterface) => ({
+export const updateSessionState = (payload: SessionType) => ({
   type: SET_SESSION,
   payload,
 });
@@ -23,12 +23,11 @@ export const clearSessionState = () => ({
 });
 
 // Initialize Session State.
-const initialState: SessionInterface | null =
-  browserStorage.getValue('session');
+const initialState: SessionType | null = browserStorage.getValue('session');
 
 export default (
   state = initialState,
-  action: { type: string; payload: SessionInterface }
+  action: { type: string; payload: SessionType }
 ) => {
   switch (action.type) {
     case SET_SESSION:

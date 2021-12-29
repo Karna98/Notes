@@ -55,11 +55,11 @@ const Form: React.FC<FormInterface> = (props) => {
   };
 
   /**
-   * Apply class name based on different type of forms.
+   * Get className based on form id.
    *
    * @returns {string} Class Names.
    */
-  const getClassName = () => {
+  const getClassName = (): string => {
     const defaultClassName =
       'd-flex flex-column align-items-center justify-content-evenly';
     switch (id) {
