@@ -8,7 +8,24 @@
 
 import React from 'react';
 import { render } from 'react-dom';
-import Sample from './components/SampleComponent';
+import { Provider } from 'react-redux';
+import { MemoryRouter as Router } from 'react-router-dom';
+import App from './App';
+import store from './State';
 import './style.scss';
 
-render(<Sample />, document.getElementById(`root`));
+render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <Router>
+        <App />
+      </Router>
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById(`root`)
+);
+
+// For HMR Webpack Plugin.
+if (process.env.NODE_ENV === 'development' && module.hot) {
+  module.hot.accept();
+}

@@ -9,12 +9,9 @@
 // Modules to control application life and create native browser window
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { join as pathJoin } from 'path';
-import {
-  createLogs,
-  getLogs,
-  init as initializeDataBase,
-} from './sql/database';
-import { createResponseObject, resolveHtmlPath } from './util';
+import CONSTANTS from './constants';
+import resolveRequest from './resolve';
+import { resolveHtmlPath } from './util';
 
 /*
   @TODO: Find if we still need to keep global reference (read below cooments) when we create window using Class.
@@ -24,18 +21,11 @@ import { createResponseObject, resolveHtmlPath } from './util';
   // let mainWindow: any; 
 */
 
-const isDevelopmentMode = process.env.NODE_ENV === `development`;
-
-const ASSETS_DIRECTORY = pathJoin(__dirname, `..`, `assets`);
-
 class Main {
   private launchWindow: Electron.BrowserWindow | null = null;
   private mainWindow: Electron.BrowserWindow | null = null;
 
   public init() {
-    // Intialize Database.
-    initializeDataBase();
-
     app.on('ready', this.createWindow);
 
     // Emitted when the window is closed.
@@ -81,7 +71,7 @@ class Main {
         skipTaskbar: true,
         webPreferences: {
           // devTools can work in DEVELOPMENT mode
-          devTools: false || isDevelopmentMode,
+          devTools: false || CONSTANTS.IS_DEVELOPMENT_MODE,
         },
       });
 
@@ -102,13 +92,13 @@ class Main {
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true, // protect against prototype pollution
-        devTools: false || isDevelopmentMode,
+        devTools: false || CONSTANTS.IS_DEVELOPMENT_MODE,
         preload: pathJoin(__dirname, 'preload.js'),
       },
-      icon: pathJoin(ASSETS_DIRECTORY, `logo`, `png`, `256x256.png`),
+      icon: pathJoin(CONSTANTS.PATH.ASSETS, `logo`, `png`, `256x256.png`),
     });
 
-    if (!isDevelopmentMode)
+    if (!CONSTANTS.IS_DEVELOPMENT_MODE)
       // Disable Window menu in PRODUCTION Mode
       this.mainWindow.setMenu(null);
 
@@ -118,7 +108,7 @@ class Main {
     this.mainWindow.loadURL(resolveHtmlPath(`index.html`));
 
     this.mainWindow.once('ready-to-show', () => {
-      if (!isDevelopmentMode) {
+      if (!CONSTANTS.IS_DEVELOPMENT_MODE) {
         // Only PRODUCTION Mode
         launcherWindow();
 
@@ -136,42 +126,7 @@ class Main {
     });
 
     ipcMain.on('toMain', (_event: Electron.IpcMainEvent, args: string) => {
-      const requestObject = JSON.parse(args);
-      let responseObject: object | null = null;
-
-      const requestObjectType = requestObject[`requestType`];
-
-      // Split Request Type on ':'
-      const requestType = requestObjectType.split(`:`);
-
-      switch (requestType[0]) {
-        case `LOGS`:
-          // If Request related to logs
-          if (requestType[1] === `CREATE`) {
-            // Sub-Request is to create new log in Database
-            console.log(`[ MAIN ] : ${requestObject}`);
-
-            console.log(`[ MAIN ] : Saving RENDERER's Request ...`);
-
-            // Save the received Request log in Database.
-            createLogs(requestObject[`data`]);
-
-            console.log(`[ MAIN ] : Saving MAIN's Response.`);
-
-            // Save the Received request in Database.
-            createLogs(`[ MAIN ] : Environment - ${process.env.NODE_ENV}`);
-          } else {
-            // Create Response Object to be sent to Renderer Process.
-            responseObject = createResponseObject(
-              requestObject[`requestType`],
-              getLogs()
-            );
-          }
-          break;
-        default:
-          console.log(`Invalid Request`);
-          break;
-      }
+      const responseObject = resolveRequest(JSON.parse(args));
 
       if (responseObject != null) {
         // If Response object is created, send it as response
