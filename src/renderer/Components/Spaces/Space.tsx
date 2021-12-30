@@ -8,7 +8,8 @@
 
 import React from 'react';
 import { RootStateOrAny, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router-dom';
+import Sidebar from '../Sidebar';
 
 const Space = () => {
   // Get spaces value stored in Redux Store.
@@ -22,16 +23,41 @@ const Space = () => {
     ({ _id }: SpacesTableInterface) => _id == Number(space_id)
   )[0];
 
+  const sidebarLinks = [
+    {
+      title: 'Notes',
+      URI: `/spaces/${space_id}/notes`,
+    },
+  ];
+
+  const routeList = [
+    {
+      name: 'Space Welcome Page',
+      path: '/',
+      element: (
+        <>
+          Welcome to <h3>{currentSpace.space_name} Space.</h3>
+        </>
+      ),
+    },
+    {
+      name: 'notes',
+      path: '/notes',
+      element: <>Notes</>,
+    },
+  ];
+
   return (
-    <>
-      <h2>{currentSpace.space_name} Space</h2>
-      <hr />
-      <p>
-        ID :<b>{currentSpace._id}</b>
-        <br />
-        Created on : <b>{new Date(currentSpace.created_at).toLocaleString()}</b>
-      </p>
-    </>
+    <div className="d-flex flex-row space">
+      <Sidebar title={currentSpace.space_name} links={sidebarLinks} />
+      <div className="space-content">
+        <Routes>
+          {routeList.map((route) => (
+            <Route key={route.name} path={route.path} element={route.element} />
+          ))}
+        </Routes>
+      </div>
+    </div>
   );
 };
 
