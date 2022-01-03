@@ -63,6 +63,10 @@ const Form: React.FC<FormInterface> = (props) => {
     const defaultClassName =
       'd-flex flex-column align-items-center justify-content-evenly';
     switch (id) {
+      case 'form-login':
+        return defaultClassName + ' auth-form';
+      case 'form-register':
+        return defaultClassName + ' auth-form';
       case 'form-add-space':
         return defaultClassName + ' space-card';
       default:

@@ -52,17 +52,17 @@ const getStatement = (table: string, columns: string[]): string => {
  * @param condition Conditions to be applied.
  * @returns {string} GET Statement with provided params.
  */
-// const getConditionalStatement = (
-//   table: string,
-//   columns: string[],
-//   condition: string
-// ) => {
-//   return `
-//     SELECT ${columns.join(', ')}
-//     FROM ${table}
-//     WHERE ${condition};
-//   `;
-// };
+const getConditionalStatement = (
+  table: string,
+  columns: string[],
+  condition: string
+) => {
+  return `
+    SELECT ${columns.join(', ')}
+    FROM ${table}
+    WHERE ${condition};
+  `;
+};
 
 /**
  * Generalize UPDATE Statement.
@@ -99,7 +99,7 @@ const createDatabaseStatement = (): string[] => {
   return [
     `
   CREATE TABLE IF NOT EXISTS users (
-    _id INTEGER PRIMARY KEY,
+    _id INTEGER PRIMARY KEY AUTOINCREMENT,
     username VARCHAR(20) UNIQUE NOT NULL,
     created_at datetime NOT NULL,
     last_logged_in datetime,
@@ -110,9 +110,18 @@ const createDatabaseStatement = (): string[] => {
   `,
     `
   CREATE TABLE IF NOT EXISTS spaces (
-    _id INTEGER PRIMARY KEY,
+    _id INTEGER PRIMARY KEY AUTOINCREMENT,
     space_name VARCHAR(60) UNIQUE NOT NULL,
     created_at datetime NOT NULL
+  );
+  `,
+    `
+  CREATE TABLE IF NOT EXISTS notes (
+    _id INTEGER PRIMARY KEY AUTOINCREMENT,
+    space_id INTEGER NOT NULL,
+    note TEXT NOT NULL,
+    updated_at datetime NOT NULL,
+    FOREIGN KEY (space_id) REFERENCES spaces(_id)
   );
   `,
   ];
@@ -150,15 +159,6 @@ const createUserStatement = (): string => {
     [`?`, `${Date.now()}`, `?`]
   );
 };
-
-/**
- * Get User having provided username from Database.
- *
- * @returns {string}
- */
-// const getUserByUsernameStatement = (): string => {
-//   return getConditionalStatement(`users`, [`*`], `username = ?`);
-// };
 
 /**
  * Get Count of Users from Database.
@@ -213,6 +213,32 @@ const getSpacesStatement = (): string => {
   return getStatement(`spaces`, [`*`]);
 };
 
+// ================================================================================
+// Notes Statements.
+// ================================================================================
+
+/**
+ * Insert new note into Database.
+ *
+ * @returns {string}
+ */
+const createNoteStatement = (): string => {
+  return insertStatement(
+    `notes`,
+    [`space_id`, `note`, `updated_at`],
+    [`?`, `?`, `${Date.now()}`]
+  );
+};
+
+/**
+ * Get all Noted from Database for respective Space.
+ *
+ * @returns {string}
+ */
+const getNotesStatement = (): string => {
+  return getConditionalStatement(`notes`, [`*`], `space_id = ?`);
+};
+
 export {
   createDatabaseStatement,
   insertDefaultValueStatement,
@@ -224,4 +250,7 @@ export {
   // Spaces
   createSpaceStatement,
   getSpacesStatement,
+  // Notes
+  createNoteStatement,
+  getNotesStatement,
 };

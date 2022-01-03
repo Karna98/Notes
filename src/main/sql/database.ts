@@ -13,8 +13,10 @@ import CONSTANTS from '../constants';
 import { updateDatabaseSchema } from './migrations';
 import {
   createDatabaseStatement,
+  createNoteStatement,
   createSpaceStatement,
   createUserStatement,
+  getNotesStatement,
   getSpacesStatement,
   getUsersCountStatement,
   getUsersStatement,
@@ -215,6 +217,33 @@ const getSpaces = (): SpacesTableInterface[] => {
   return results;
 };
 
+/**
+ * Create new Note in Database.
+ *
+ * @param value Array of data required.
+ * @returns {number} Returns status of new user creation.
+ */
+const createNewNote = (space_id: number, note: string): number => {
+  const db = dbInstance();
+  const results = db.prepare(createNoteStatement()).run([space_id, note]);
+  db.close();
+
+  return results.changes;
+};
+
+/**
+ * Get all notes from Database for respective Space.
+ *
+ * @returns {object} Returns all users details.
+ */
+const getNotes = (space_id: number) => {
+  const db = dbInstance();
+  const results = db.prepare(getNotesStatement()).all(space_id);
+  db.close();
+
+  return results;
+};
+
 export default {
   // Database
   checkIfDbExsts,
@@ -228,4 +257,7 @@ export default {
   // Spaces
   createNewSpace,
   getSpaces,
+  // Notes
+  createNewNote,
+  getNotes,
 };

@@ -1,0 +1,19 @@
+/**
+ * notes.scss 
+ * 
+ * Description:
+ *    Style file for Notes Component.
+ *
+*/
+
+.note-add form {
+  width: 400px;
+  padding: 5px 0;
+}
+
+.note-card {
+  width: 150px;
+  height: 150px;
+  box-shadow: inset 0 0 2px black;
+  cursor: pointer;
+}

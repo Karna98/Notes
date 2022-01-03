@@ -151,6 +151,52 @@ const spacesRequest = (
 };
 
 /**
+ * Handles Notes related requests.
+ *
+ * @param requestType
+ * @param requestData
+ * @returns {[result, message]} Result and message regarding the request fulfillment.
+ */
+const notesRequest = (
+  requestType: string[],
+  requestData: Pick<NotesTableInterface, 'space_id' | 'note'>
+): [result: unknown, message: MessageInterface] => {
+  let result, message: MessageInterface;
+
+  switch (requestType[1]) {
+    case `GET`:
+      // Get all Notes.
+      result = database.getNotes(requestData.space_id);
+      message = createMessage('success');
+      break;
+
+    case `ADD`:
+      const createStatus = database.createNewNote(
+        requestData.space_id,
+        requestData.note
+      );
+
+      if (createStatus) {
+        // Get all Notes.
+        result = database.getNotes(requestData.space_id);
+
+        message = createMessage('success');
+      } else {
+        // Error while adding spaces.
+        message = createMessage('server-error', `Error while adding Note.`);
+      }
+      break;
+
+    default:
+      // Invalid Sub Request.
+      message = createMessage('client-error', 'Invalid Request');
+      break;
+  }
+
+  return [result, message];
+};
+
+/**
  * This functions resolves all the request received from renderer on main process.
  *
  * @param request
@@ -174,6 +220,13 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
       [data, message] = spacesRequest(
         requestSubURI,
         <Pick<SpacesTableInterface, 'space_name'>>request.data
+      );
+      break;
+
+    case `NOTES`:
+      [data, message] = notesRequest(
+        requestSubURI,
+        <Pick<NotesTableInterface, 'space_id' | 'note'>>request.data
       );
       break;
 
