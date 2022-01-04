@@ -21,6 +21,7 @@ import {
   getUsersCountStatement,
   getUsersStatement,
   insertDefaultValueStatement,
+  updateNoteStatement,
   updateUserStatement,
 } from './statements';
 import { schemaVersionMismatch, setClientSchemaVersion } from './util';
@@ -244,6 +245,15 @@ const getNotes = (space_id: number) => {
   return results;
 };
 
+/**
+ * Update Note in Database.
+ */
+const updateNote = (value: Record<string, unknown>, note_id: number) => {
+  const db = dbInstance();
+  db.prepare(updateNoteStatement(value)).run(note_id);
+  db.close();
+};
+
 export default {
   // Database
   checkIfDbExsts,
@@ -260,4 +270,5 @@ export default {
   // Notes
   createNewNote,
   getNotes,
+  updateNote,
 };

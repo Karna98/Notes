@@ -80,7 +80,12 @@ const updateStatement = (
   return `
     UPDATE ${table}
     SET ${Object.keys(values)
-      .map((key) => `${key} = ${values[key]}`)
+      .map(
+        (key) =>
+          `${key} = ${
+            typeof values[key] === 'string' ? `'${values[key]}'` : values[key]
+          }`
+      )
       .join(', ')}
     WHERE ${condition};
   `;
@@ -239,6 +244,15 @@ const getNotesStatement = (): string => {
   return getConditionalStatement(`notes`, [`*`], `space_id = ?`);
 };
 
+/**
+ * Update Note.
+ *
+ * @returns {string}
+ */
+const updateNoteStatement = (values: Record<string, unknown>): string => {
+  return updateStatement('notes', values, `_id = ?`);
+};
+
 export {
   createDatabaseStatement,
   insertDefaultValueStatement,
@@ -253,4 +267,5 @@ export {
   // Notes
   createNoteStatement,
   getNotesStatement,
+  updateNoteStatement,
 };

@@ -21,7 +21,7 @@ export const clearSpaceState = () => ({
 });
 
 // Initialize Space State.
-const initialState: SpaceInterface | null = null;
+const initialState: (SpaceInterface & { updated_at: number }) | null = null;
 
 export default (
   state = initialState,
@@ -29,7 +29,7 @@ export default (
 ) => {
   switch (action.type) {
     case SET_SPACE:
-      return action.payload;
+      return { ...action.payload, updated_at: Date.now() };
     case CLEAR_SPACE:
       return null;
     default:

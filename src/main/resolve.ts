@@ -159,14 +159,17 @@ const spacesRequest = (
  */
 const notesRequest = (
   requestType: string[],
-  requestData: Pick<NotesTableInterface, 'space_id' | 'note'>
+  requestData: OptionalExceptFor<
+    NotesTableInterface,
+    'space_id' | 'note' | '_id'
+  >
 ): [result: unknown, message: MessageInterface] => {
   let result, message: MessageInterface;
 
   switch (requestType[1]) {
     case `GET`:
       // Get all Notes.
-      result = database.getNotes(requestData.space_id);
+      result = database.getNotes(requestData?.space_id);
       message = createMessage('success');
       break;
 
@@ -185,6 +188,17 @@ const notesRequest = (
         // Error while adding spaces.
         message = createMessage('server-error', `Error while adding Note.`);
       }
+      break;
+
+    case `UPDATE`:
+      // Update Last Login time.
+      database.updateNote(
+        { note: requestData.note, updated_at: requestData.updated_at },
+        requestData._id
+      );
+      // Get all Notes.
+      result = database.getNotes(requestData.space_id);
+      message = createMessage('success');
       break;
 
     default:
@@ -226,7 +240,7 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
     case `NOTES`:
       [data, message] = notesRequest(
         requestSubURI,
-        <Pick<NotesTableInterface, 'space_id' | 'note'>>request.data
+        <Pick<NotesTableInterface, 'space_id' | 'note' | '_id'>>request.data
       );
       break;
 

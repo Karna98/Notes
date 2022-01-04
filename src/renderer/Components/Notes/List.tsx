@@ -112,9 +112,12 @@ const List = () => {
       </div>
       <div className="d-flex flex-row flex-wrap justify-content-evenly">
         {spaceState?.notes.map((note: NotesTableInterface) => (
-          <Link key={note._id} to={`${location.pathname}/${note._id}`}>
-            <div className="note-card">{note.note}</div>
-            <sub>Updated at {note.updated_at}</sub>
+          <Link
+            key={note._id}
+            to={`${location.pathname}/${note._id}`}
+            className="note-card"
+          >
+            <div>{note.note}</div>
           </Link>
         ))}
       </div>
