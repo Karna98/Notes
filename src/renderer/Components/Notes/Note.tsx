@@ -6,11 +6,11 @@
  *
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IPCRequestObject } from '../../../common/util';
-import { updateSpaceState } from '../../State/reducer';
+import { updateMessageState, updateNoteState } from '../../State/reducer';
 import { sendToIpcMain } from '../../util';
 import Button from '../Elements/Button';
 import Form from '../Elements/Form';
@@ -27,9 +27,14 @@ const Note = () => {
   // Get space value stored in Redux Store.
   const spaceState = useSelector((state: RootStateOrAny) => state.space);
 
-  const note = spaceState?.notes.filter(
+  const currentNote: NotesTableInterface = spaceState?.notes.filter(
     ({ _id }: NotesTableInterface) => _id == Number(note_id)
   )[0];
+
+  const [note, setNote] = useState({
+    note: currentNote.note,
+    updated_at: Date.now(),
+  });
 
   const onClose = () => {
     navigate(-1);
@@ -39,7 +44,7 @@ const Note = () => {
   const formElements: FormElementsInterface = {
     input: [
       {
-        id: `note-${note._id}`,
+        id: `note`,
         name: `note`,
         type: 'text',
         required: true,
@@ -48,7 +53,7 @@ const Note = () => {
     ],
     button: [
       {
-        id: `note-update-${note._id}`,
+        id: `note-update`,
         label: 'Update',
       },
     ],
@@ -60,14 +65,20 @@ const Note = () => {
    * @param formData Form fields value.
    */
   const formSubmitAction = (formData: Record<string, unknown>) => {
-    sendToIpcMain(
-      IPCRequestObject(`notes-update`, {
-        _id: note._id,
-        note: formData.note,
-        space_id: note.space_id,
-        updated_at: Date.now(),
-      })
-    );
+    const updatedNote = {
+      note: formData.note as string,
+      updated_at: Date.now(),
+    };
+
+    if (currentNote.note !== formData.note) {
+      setNote(updatedNote);
+      sendToIpcMain(
+        IPCRequestObject(`notes-update`, {
+          _id: currentNote._id,
+          ...updatedNote,
+        })
+      );
+    }
   };
 
   const resolveResponse = () => {
@@ -78,10 +89,14 @@ const Note = () => {
           spaceState?.updated_at < responseState.timestamp
         ) {
           dispatch(
-            updateSpaceState({
-              space_id: note.space_id,
-              notes: responseState.data,
+            updateNoteState({
+              _id: currentNote._id,
+              ...note,
             })
+          );
+        } else if (responseState.status == 500) {
+          dispatch(
+            updateMessageState(responseState.status, responseState.message)
           );
         }
         break;
@@ -96,11 +111,13 @@ const Note = () => {
     <>
       <div>
         <p>
-          <b>Note-ID:</b> {note._id}
+          <b>Note-ID:</b> {currentNote._id}
         </p>
         <p>
           <b>Last Updated at: </b>
-          {new Date(note.updated_at).toLocaleString('en-IN', { hour12: false })}
+          {new Date(currentNote.updated_at).toLocaleString('en-IN', {
+            hour12: false,
+          })}
         </p>
         <Form
           id="form-note-update"

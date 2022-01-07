@@ -250,8 +250,10 @@ const getNotes = (space_id: number) => {
  */
 const updateNote = (value: Record<string, unknown>, note_id: number) => {
   const db = dbInstance();
-  db.prepare(updateNoteStatement(value)).run(note_id);
+  const results = db.prepare(updateNoteStatement(value)).run(note_id);
   db.close();
+
+  return results.changes;
 };
 
 export default {

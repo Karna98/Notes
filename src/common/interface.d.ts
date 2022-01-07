@@ -56,7 +56,7 @@ interface NotesTableInterface {
   _id: number;
   space_id: number;
   note: string;
-  updated_at: string;
+  updated_at: number;
 }
 
 // ================================================================================

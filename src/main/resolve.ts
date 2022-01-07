@@ -191,14 +191,16 @@ const notesRequest = (
       break;
 
     case `UPDATE`:
-      // Update Last Login time.
-      database.updateNote(
+      // Update note.
+      result = database.updateNote(
         { note: requestData.note, updated_at: requestData.updated_at },
         requestData._id
       );
-      // Get all Notes.
-      result = database.getNotes(requestData.space_id);
-      message = createMessage('success');
+
+      message = result
+        ? createMessage('success')
+        : createMessage('server-error', `Error while saving notes.`);
+
       break;
 
     default:
