@@ -10,25 +10,27 @@ import message, { clearMessageState, updateMessageState } from './message';
 import response, { clearResponseState, updateResponseState } from './response';
 import session, { clearSessionState, updateSessionState } from './session';
 import space, {
+  addNoteState,
   clearSpaceState,
-  updateSpaceState,
   updateNoteState,
+  updateSpaceState,
 } from './space';
 import spaces, { clearSpacesState, updateSpacesState } from './spaces';
 
 // Exports to update State.
 export {
+  addNoteState,
   clearMessageState,
-  updateMessageState,
   clearResponseState,
-  updateResponseState,
   clearSessionState,
-  updateSessionState,
-  clearSpacesState,
-  updateSpacesState,
   clearSpaceState,
-  updateSpaceState,
+  clearSpacesState,
+  updateMessageState,
   updateNoteState,
+  updateResponseState,
+  updateSessionState,
+  updateSpaceState,
+  updateSpacesState,
 };
 
 // Default export to view State.

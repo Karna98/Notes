@@ -21,11 +21,19 @@ export const clearSpaceState = () => ({
   type: CLEAR_SPACE,
 });
 
-// Update Space State.
+// Add Note State.
+export const addNoteState = (payload: NotesTableInterface) => ({
+  type: UPDATE_SPACE,
+  subType: 'ADD',
+  payload,
+});
+
+// Update Note State.
 export const updateNoteState = (
   payload: OptionalExceptFor<NotesTableInterface, '_id' | 'note' | 'updated_at'>
 ) => ({
   type: UPDATE_SPACE,
+  subType: 'UPDATE',
   payload,
 });
 
@@ -38,7 +46,11 @@ const initialState: SpaceInterface & { updated_at: number } = {
 
 export default (
   state = initialState,
-  action: { type: string; payload: SpaceInterface | NotesTableInterface }
+  action: {
+    type: string;
+    payload: SpaceInterface | NotesTableInterface;
+    subType?: 'ADD' | 'UPDATE';
+  }
 ) => {
   switch (action.type) {
     case SET_SPACE:
@@ -46,27 +58,37 @@ export default (
     case CLEAR_SPACE:
       return null;
     case UPDATE_SPACE:
-      if (state != null) {
-        const actionPaylaod = <NotesTableInterface>action.payload;
+      switch (action.subType) {
+        case 'ADD':
+          return {
+            ...state,
+            notes: [action.payload, ...state.notes],
+            updated_at: Date.now(),
+          };
+        case 'UPDATE':
+          const actionPaylaod = <NotesTableInterface>action.payload;
 
-        const indexOfNote = state.notes.findIndex(
-          (note: NotesTableInterface) => note._id == actionPaylaod._id
-        );
+          const indexOfNote = state.notes.findIndex(
+            (note: NotesTableInterface) => note._id == actionPaylaod._id
+          );
 
-        const updatedNotes = [...state.notes];
+          const updatedNotes = [...state.notes];
 
-        updatedNotes[indexOfNote] = {
-          ...updatedNotes[indexOfNote],
-          ...actionPaylaod,
-        };
+          updatedNotes[indexOfNote] = {
+            ...updatedNotes[indexOfNote],
+            ...actionPaylaod,
+          };
 
-        return {
-          ...state,
-          notes: updatedNotes,
-          updated_at: Date.now(),
-        };
+          return {
+            ...state,
+            notes: updatedNotes,
+            updated_at: Date.now(),
+          };
+
+        default:
+          return state;
       }
-      return state;
+
     default:
       return state;
   }

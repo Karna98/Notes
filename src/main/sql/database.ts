@@ -17,6 +17,7 @@ import {
   createSpaceStatement,
   createUserStatement,
   getNotesStatement,
+  getNoteWithIdStatement,
   getSpacesStatement,
   getUsersCountStatement,
   getUsersStatement,
@@ -222,24 +223,37 @@ const getSpaces = (): SpacesTableInterface[] => {
  * Create new Note in Database.
  *
  * @param value Array of data required.
- * @returns {number} Returns status of new user creation.
+ * @returns {object} { changes, lastInsertRowid } Returns status of new note created.
  */
-const createNewNote = (space_id: number, note: string): number => {
+const createNewNote = (space_id: number, note: string) => {
   const db = dbInstance();
   const results = db.prepare(createNoteStatement()).run([space_id, note]);
   db.close();
 
-  return results.changes;
+  return results;
 };
 
 /**
  * Get all notes from Database for respective Space.
  *
- * @returns {object} Returns all users details.
+ * @returns {object} Returns all notes.
  */
 const getNotes = (space_id: number) => {
   const db = dbInstance();
   const results = db.prepare(getNotesStatement()).all(space_id);
+  db.close();
+
+  return results;
+};
+
+/**
+ * Get note with id.
+ *
+ * @returns {object} Returns note.
+ */
+const getNoteWithId = (note_id: number | bigint) => {
+  const db = dbInstance();
+  const results = db.prepare(getNoteWithIdStatement()).get(note_id);
   db.close();
 
   return results;
@@ -272,5 +286,6 @@ export default {
   // Notes
   createNewNote,
   getNotes,
+  getNoteWithId,
   updateNote,
 };

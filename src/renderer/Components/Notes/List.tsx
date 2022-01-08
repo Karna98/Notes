@@ -10,7 +10,11 @@ import React, { useEffect } from 'react';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { IPCRequestObject } from '../../../common/util';
-import { updateMessageState, updateSpaceState } from '../../State/reducer';
+import {
+  addNoteState,
+  updateMessageState,
+  updateSpaceState,
+} from '../../State/reducer';
 import { sendToIpcMain } from '../../util';
 import Form from '../Elements/Form';
 
@@ -79,14 +83,9 @@ const List = () => {
       case 'notes-add':
         if (
           responseState.status == 200 &&
-          spaceState?.notes.length != responseState.data.length
+          spaceState?.updated_at < responseState.timestamp
         ) {
-          dispatch(
-            updateSpaceState({
-              space_id: Number(space_id),
-              notes: responseState.data,
-            })
-          );
+          dispatch(addNoteState(responseState.data));
         } else if (responseState.status == 500) {
           // If Space was not added successfully.
           dispatchMessage(responseState.status, responseState.message);

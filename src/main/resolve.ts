@@ -179,14 +179,13 @@ const notesRequest = (
         requestData.note
       );
 
-      if (createStatus) {
-        // Get all Notes.
-        result = database.getNotes(requestData.space_id);
+      message = createStatus.changes
+        ? createMessage('success')
+        : createMessage('server-error', `Error while adding Note.`);
 
-        message = createMessage('success');
-      } else {
-        // Error while adding spaces.
-        message = createMessage('server-error', `Error while adding Note.`);
+      if (createStatus.changes) {
+        // Get all Notes.
+        result = database.getNoteWithId(createStatus.lastInsertRowid);
       }
       break;
 

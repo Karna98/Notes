@@ -236,12 +236,21 @@ const createNoteStatement = (): string => {
 };
 
 /**
- * Get all Noted from Database for respective Space.
+ * Get all Notes from Database for respective Space.
  *
  * @returns {string}
  */
 const getNotesStatement = (): string => {
   return getConditionalStatement(`notes`, [`*`], `space_id = ?`);
+};
+
+/**
+ * Get Note with id from Database.
+ *
+ * @returns {string}
+ */
+const getNoteWithIdStatement = (): string => {
+  return getConditionalStatement(`notes`, [`*`], `_id = ?`);
 };
 
 /**
@@ -267,5 +276,6 @@ export {
   // Notes
   createNoteStatement,
   getNotesStatement,
+  getNoteWithIdStatement,
   updateNoteStatement,
 };
