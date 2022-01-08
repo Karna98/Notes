@@ -6,6 +6,9 @@
  *
  */
 
+type OptionalExceptFor<T, TRequired extends keyof T> = Partial<T> &
+  Pick<T, TRequired>;
+
 type AuthCredentialType = Pick<UsersTableInteface, 'username' | 'password'>;
 
 type SessionType = Pick<

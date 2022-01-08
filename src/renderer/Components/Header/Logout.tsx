@@ -12,6 +12,7 @@ import {
   clearResponseState,
   clearSessionState,
   clearSpacesState,
+  clearSpaceState,
 } from '../../State/reducer';
 import Form from '../Elements/Form';
 
@@ -35,6 +36,7 @@ const Logout = () => {
     // Clear all redux stores on logout.
     dispatch(clearSessionState());
     dispatch(clearSpacesState());
+    dispatch(clearSpaceState());
     // @TODO: Verify if we need to clear response state. On auth page, the page requests for auth status and overrides previous response state.
     dispatch(clearResponseState());
   };
