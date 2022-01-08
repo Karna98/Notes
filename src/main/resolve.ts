@@ -151,6 +151,67 @@ const spacesRequest = (
 };
 
 /**
+ * Handles Notes related requests.
+ *
+ * @param requestType
+ * @param requestData
+ * @returns {[result, message]} Result and message regarding the request fulfillment.
+ */
+const notesRequest = (
+  requestType: string[],
+  requestData: OptionalExceptFor<
+    NotesTableInterface,
+    'space_id' | 'note' | '_id'
+  >
+): [result: unknown, message: MessageInterface] => {
+  let result, message: MessageInterface;
+
+  switch (requestType[1]) {
+    case `GET`:
+      // Get all Notes.
+      result = database.getNotes(requestData?.space_id);
+      message = createMessage('success');
+      break;
+
+    case `ADD`:
+      const createStatus = database.createNewNote(
+        requestData.space_id,
+        requestData.note
+      );
+
+      message = createStatus.changes
+        ? createMessage('success')
+        : createMessage('server-error', `Error while adding Note.`);
+
+      if (createStatus.changes) {
+        // Get all Notes.
+        result = database.getNoteWithId(createStatus.lastInsertRowid);
+      }
+      break;
+
+    case `UPDATE`:
+      // Update note.
+      result = database.updateNote(
+        { note: requestData.note, updated_at: requestData.updated_at },
+        requestData._id
+      );
+
+      message = result
+        ? createMessage('success')
+        : createMessage('server-error', `Error while saving notes.`);
+
+      break;
+
+    default:
+      // Invalid Sub Request.
+      message = createMessage('client-error', 'Invalid Request');
+      break;
+  }
+
+  return [result, message];
+};
+
+/**
  * This functions resolves all the request received from renderer on main process.
  *
  * @param request
@@ -174,6 +235,13 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
       [data, message] = spacesRequest(
         requestSubURI,
         <Pick<SpacesTableInterface, 'space_name'>>request.data
+      );
+      break;
+
+    case `NOTES`:
+      [data, message] = notesRequest(
+        requestSubURI,
+        <Pick<NotesTableInterface, 'space_id' | 'note' | '_id'>>request.data
       );
       break;
 

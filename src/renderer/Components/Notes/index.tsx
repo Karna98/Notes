@@ -2,32 +2,32 @@
  * index.tsx
  *
  * Description:
- *    Spaces Component.
+ *    Notes Component.
  *
  */
 
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import List from './List';
-import Space from './Space';
-import './spaces.scss';
+import Note from './Note';
+import './notes.scss';
 
 const routeList = [
   {
-    name: 'Spaces Page',
+    name: 'Notes',
     path: '/',
     element: <List />,
   },
   {
-    name: 'Space Page',
-    path: `:space_id/*`,
-    element: <Space />,
+    name: 'Note',
+    path: `:note_id`,
+    element: <Note />,
   },
 ];
 
-const Spaces = () => {
+const Notes = () => {
   return (
-    <div className="spaces-body">
+    <div className="d-flex flex-row flex-wrap justify-content-evenly notes-body">
       <Routes>
         {routeList.map((route) => (
           <Route key={route.name} path={route.path} element={route.element} />
@@ -37,4 +37,4 @@ const Spaces = () => {
   );
 };
 
-export default Spaces;
+export default Notes;

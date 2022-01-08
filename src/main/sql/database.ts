@@ -13,12 +13,16 @@ import CONSTANTS from '../constants';
 import { updateDatabaseSchema } from './migrations';
 import {
   createDatabaseStatement,
+  createNoteStatement,
   createSpaceStatement,
   createUserStatement,
+  getNotesStatement,
+  getNoteWithIdStatement,
   getSpacesStatement,
   getUsersCountStatement,
   getUsersStatement,
   insertDefaultValueStatement,
+  updateNoteStatement,
   updateUserStatement,
 } from './statements';
 import { schemaVersionMismatch, setClientSchemaVersion } from './util';
@@ -215,6 +219,57 @@ const getSpaces = (): SpacesTableInterface[] => {
   return results;
 };
 
+/**
+ * Create new Note in Database.
+ *
+ * @param value Array of data required.
+ * @returns {object} { changes, lastInsertRowid } Returns status of new note created.
+ */
+const createNewNote = (space_id: number, note: string) => {
+  const db = dbInstance();
+  const results = db.prepare(createNoteStatement()).run([space_id, note]);
+  db.close();
+
+  return results;
+};
+
+/**
+ * Get all notes from Database for respective Space.
+ *
+ * @returns {object} Returns all notes.
+ */
+const getNotes = (space_id: number) => {
+  const db = dbInstance();
+  const results = db.prepare(getNotesStatement()).all(space_id);
+  db.close();
+
+  return results;
+};
+
+/**
+ * Get note with id.
+ *
+ * @returns {object} Returns note.
+ */
+const getNoteWithId = (note_id: number | bigint) => {
+  const db = dbInstance();
+  const results = db.prepare(getNoteWithIdStatement()).get(note_id);
+  db.close();
+
+  return results;
+};
+
+/**
+ * Update Note in Database.
+ */
+const updateNote = (value: Record<string, unknown>, note_id: number) => {
+  const db = dbInstance();
+  const results = db.prepare(updateNoteStatement(value)).run(note_id);
+  db.close();
+
+  return results.changes;
+};
+
 export default {
   // Database
   checkIfDbExsts,
@@ -228,4 +283,9 @@ export default {
   // Spaces
   createNewSpace,
   getSpaces,
+  // Notes
+  createNewNote,
+  getNotes,
+  getNoteWithId,
+  updateNote,
 };

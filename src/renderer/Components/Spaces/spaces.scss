@@ -2,9 +2,13 @@
  * spaces.scss 
  * 
  * Description:
- *    style file for Spaces Component.
+ *    Style file for Spaces Component.
  *
 */
+
+.spaces-body {
+  height: 100%;
+}
 
 .spaces-content {
   height: 100%;
@@ -21,4 +25,13 @@
 }
 .space-card:hover {
   background-color: var(--turquoise-blue);
+}
+
+.space {
+  height: 100%;
+}
+
+.space-content {
+  width: calc(100%);
+  overflow-y: auto;
 }

@@ -9,5 +9,9 @@
 form {
   width: fit-content;
   height: inherit;
+}
+
+.auth-form,
+.space-card form {
   background-color: var(--fluorescent-blue);
 }

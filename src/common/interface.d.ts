@@ -52,6 +52,13 @@ interface SpacesTableInterface {
   created_at: string;
 }
 
+interface NotesTableInterface {
+  _id: number;
+  space_id: number;
+  note: string;
+  updated_at: number;
+}
+
 // ================================================================================
 // Elements
 // ================================================================================
@@ -93,4 +100,9 @@ interface FormElementsInterface {
 interface SpacesInterface {
   metaData: Record<string, unknown>;
   list: SpacesTableInterface[];
+}
+
+interface SpaceInterface {
+  space_id: number;
+  notes: NotesTableInterface[];
 }
