@@ -124,20 +124,19 @@ const spacesRequest = (
     case `ADD`:
       const createStatus = database.createNewSpace(requestData.space_name);
 
-      if (createStatus) {
-        // Get all spaces.
-        result.list = database.getSpaces();
+      message = createStatus.changes
+        ? createMessage(
+            'success',
+            `${requestData.space_name} Space added successfully.`
+          )
+        : (message = createMessage(
+            'server-error',
+            `Error while adding ${requestData.space_name} Space.`
+          ));
 
-        message = createMessage(
-          'success',
-          `${requestData.space_name} Space added successfully.`
-        );
-      } else {
-        // Error while adding spaces.
-        message = createMessage(
-          'server-error',
-          `Error while adding ${requestData.space_name} Space.`
-        );
+      if (createStatus.changes) {
+        // Get newly inserted Space.
+        result.list = [database.getSpaceWithId(createStatus.lastInsertRowid)];
       }
       break;
 
@@ -169,7 +168,10 @@ const notesRequest = (
   switch (requestType[1]) {
     case `GET`:
       // Get all Notes.
-      result = database.getNotes(requestData?.space_id);
+      result = {
+        space_id: requestData?.space_id,
+        notes: database.getNotes(requestData?.space_id),
+      };
       message = createMessage('success');
       break;
 
@@ -184,7 +186,7 @@ const notesRequest = (
         : createMessage('server-error', `Error while adding Note.`);
 
       if (createStatus.changes) {
-        // Get all Notes.
+        // Get newly inserted Note.
         result = database.getNoteWithId(createStatus.lastInsertRowid);
       }
       break;
@@ -199,6 +201,13 @@ const notesRequest = (
       message = result
         ? createMessage('success')
         : createMessage('server-error', `Error while saving notes.`);
+
+      if (result)
+        result = {
+          _id: requestData._id,
+          note: requestData.note,
+          updated_at: requestData.updated_at,
+        };
 
       break;
 

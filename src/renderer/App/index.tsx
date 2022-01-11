@@ -6,19 +6,22 @@
  */
 
 import React, { useEffect } from 'react';
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import { RootStateOrAny, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { reactRoutes } from '../../common/routes';
+import { IPCRequestObject } from '../../common/util';
 import Message from '../Components/Elements/Message';
 import Header from '../Components/Header';
 import Spaces from '../Components/Spaces';
-import { updateResponseState } from '../State/reducer';
+import useResponse from '../Hooks/useResponse';
+import { sendToIpcMain } from '../util';
 import Auth from './Auth';
 import Profile from './Profile';
 import ProtectedRoute from './ProtectedRoutes';
 
 const App = () => {
-  const dispatch = useDispatch();
+  // Resolve Response Hook.
+  useResponse();
 
   // Get message value stored in Redux Store.
   const messageState = useSelector((state: RootStateOrAny) => state.message);
@@ -55,11 +58,21 @@ const App = () => {
     );
   };
 
+  useEffect(() => {
+    // Get Auth Status.
+    sendToIpcMain(IPCRequestObject(`auth-status`));
+  }, []);
+
   // List of Routes.
   const RouteList = [
     {
+      name: 'Startup Page',
+      path: `${reactRoutes.home}`,
+      element: <div> Loading.. </div>,
+    },
+    {
       name: 'Auth Page',
-      path: reactRoutes.auth,
+      path: `${reactRoutes.auth}/*`,
       element: getProtectedRoutes(
         <Auth />,
         reactRoutes.spaces,
@@ -77,13 +90,6 @@ const App = () => {
       element: getProtectedRoutes(<Profile />),
     },
   ];
-
-  useEffect(() => {
-    window.NotesAPI.receive(`fromMain`, (responseData: string) => {
-      // Update response in Redux Store
-      dispatch(updateResponseState(JSON.parse(responseData)));
-    });
-  }, []);
 
   return (
     <>

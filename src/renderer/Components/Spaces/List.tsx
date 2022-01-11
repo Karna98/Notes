@@ -6,21 +6,17 @@
  *
  */
 
-import React, { useEffect } from 'react';
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { RootStateOrAny, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { IPCRequestObject } from '../../../common/util';
-import { updateMessageState, updateSpacesState } from '../../State/reducer';
 import { sendToIpcMain } from '../../util';
 import Form from '../Elements/Form';
 
 const List = () => {
-  const dispatch = useDispatch();
-
   // Get session value stored in Redux Store.
   const sessionState = useSelector((state: RootStateOrAny) => state.session);
-  // Get response value stored in Redux Store.
-  const responseState = useSelector((state: RootStateOrAny) => state.response);
+
   // Get spaces value stored in Redux Store.
   const spacesState = useSelector((state: RootStateOrAny) => state.spaces);
 
@@ -52,45 +48,6 @@ const List = () => {
   const formSubmitAction = (formData: Record<string, unknown>) => {
     sendToIpcMain(IPCRequestObject(`spaces-add`, formData));
   };
-
-  /**
-   * Displays Message.
-   *
-   * @param status Message Status.
-   * @param message Message.
-   */
-  const dispatchMessage = (status: number, message: string) => {
-    dispatch(updateMessageState(status, message));
-  };
-
-  /**
-   * Resolves Response received.
-   */
-  const resolveResponse = () => {
-    switch (responseState.URI) {
-      case 'spaces-get':
-        if (responseState.status == 200 && spacesState == null)
-          dispatch(updateSpacesState(responseState.data));
-        break;
-
-      case 'spaces-add':
-        if (
-          responseState.status == 200 &&
-          spacesState.list.length != responseState.data.list.length
-        ) {
-          dispatchMessage(responseState.status, responseState.message);
-          dispatch(updateSpacesState(responseState.data));
-        } else if (responseState.status == 500) {
-          // If Space was not added successfully.
-          dispatchMessage(responseState.status, responseState.message);
-        }
-        break;
-    }
-  };
-
-  useEffect(() => {
-    responseState != null && resolveResponse();
-  }, [responseState]);
 
   return (
     <>

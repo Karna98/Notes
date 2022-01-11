@@ -8,8 +8,9 @@
 
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { reactRoutes } from '../../../common/routes';
 import {
-  clearResponseState,
   clearSessionState,
   clearSpacesState,
   clearSpaceState,
@@ -18,6 +19,7 @@ import Form from '../Elements/Form';
 
 const Logout = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // Form Elements.
   const formElements: FormElementsInterface = {
@@ -37,8 +39,9 @@ const Logout = () => {
     dispatch(clearSessionState());
     dispatch(clearSpacesState());
     dispatch(clearSpaceState());
-    // @TODO: Verify if we need to clear response state. On auth page, the page requests for auth status and overrides previous response state.
-    dispatch(clearResponseState());
+
+    // Navigate to Login Page.
+    navigate(reactRoutes.auth_login);
   };
 
   return (
