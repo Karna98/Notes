@@ -6,24 +6,21 @@
  *
  */
 
-import React, { useEffect, useState } from 'react';
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { RootStateOrAny, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IPCRequestObject } from '../../../common/util';
-import { updateMessageState, updateNoteState } from '../../State/reducer';
 import { sendToIpcMain } from '../../util';
 import Button from '../Elements/Button';
 import Form from '../Elements/Form';
 
 const Note = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // Infer note_id passed in URL.
   const { note_id } = useParams();
 
-  // Get response value stored in Redux Store.
-  const responseState = useSelector((state: RootStateOrAny) => state.response);
   // Get space value stored in Redux Store.
   const spaceState = useSelector((state: RootStateOrAny) => state.space);
 
@@ -80,32 +77,6 @@ const Note = () => {
       );
     }
   };
-
-  const resolveResponse = () => {
-    switch (responseState.URI) {
-      case 'notes-update':
-        if (
-          responseState.status == 200 &&
-          spaceState?.updated_at < responseState.timestamp
-        ) {
-          dispatch(
-            updateNoteState({
-              _id: currentNote._id,
-              ...note,
-            })
-          );
-        } else if (responseState.status == 500) {
-          dispatch(
-            updateMessageState(responseState.status, responseState.message)
-          );
-        }
-        break;
-    }
-  };
-
-  useEffect(() => {
-    resolveResponse();
-  }, [responseState]);
 
   return (
     <>

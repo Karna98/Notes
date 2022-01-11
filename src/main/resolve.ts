@@ -203,6 +203,13 @@ const notesRequest = (
         ? createMessage('success')
         : createMessage('server-error', `Error while saving notes.`);
 
+      if (result)
+        result = {
+          _id: requestData._id,
+          note: requestData.note,
+          updated_at: requestData.updated_at,
+        };
+
       break;
 
     default:

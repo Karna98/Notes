@@ -13,7 +13,9 @@ import { Dispatch } from 'redux';
 import { reactRoutes } from '../../common/routes';
 import { IPCRequestObject } from '../../common/util';
 import {
+  addNoteState,
   updateMessageState,
+  updateNoteState,
   updateSessionState,
   updateSpacesState,
   updateSpaceState,
@@ -97,6 +99,30 @@ const useResponse = () => {
       case 'notes-get':
         if (responseData.status == 200)
           dispatch(updateSpaceState(responseData.data as SpaceInterface));
+        break;
+
+      case 'notes-add':
+        if (responseData.status == 200) {
+          dispatch(addNoteState(responseData.data as NotesTableInterface));
+        } else if (responseData.status == 500) {
+          // If Space was not added successfully.
+          dispatchMessage(dispatch, responseData.status, responseData.message);
+        }
+        break;
+
+      case 'notes-update':
+        if (responseData.status == 200) {
+          dispatch(
+            updateNoteState(
+              responseData.data as Pick<
+                NotesTableInterface,
+                '_id' | 'note' | 'updated_at'
+              >
+            )
+          );
+        } else if (responseData.status == 500) {
+          dispatchMessage(dispatch, responseData.status, responseData.message);
+        }
         break;
     }
   };
