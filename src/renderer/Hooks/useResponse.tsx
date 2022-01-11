@@ -16,6 +16,7 @@ import {
   updateMessageState,
   updateSessionState,
   updateSpacesState,
+  updateSpaceState,
 } from '../State/reducer';
 import { sendToIpcMain } from '../util';
 
@@ -91,6 +92,11 @@ const useResponse = () => {
           // If Space was not added successfully.
           dispatchMessage(dispatch, responseData.status, responseData.message);
         }
+        break;
+
+      case 'notes-get':
+        if (responseData.status == 200)
+          dispatch(updateSpaceState(responseData.data as SpaceInterface));
         break;
     }
   };

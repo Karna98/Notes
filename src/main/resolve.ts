@@ -169,7 +169,10 @@ const notesRequest = (
   switch (requestType[1]) {
     case `GET`:
       // Get all Notes.
-      result = database.getNotes(requestData?.space_id);
+      result = {
+        space_id: requestData?.space_id,
+        notes: database.getNotes(requestData?.space_id),
+      };
       message = createMessage('success');
       break;
 
