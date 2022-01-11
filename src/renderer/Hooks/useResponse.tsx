@@ -12,7 +12,11 @@ import { useNavigate } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import { reactRoutes } from '../../common/routes';
 import { IPCRequestObject } from '../../common/util';
-import { updateMessageState, updateSessionState } from '../State/reducer';
+import {
+  updateMessageState,
+  updateSessionState,
+  updateSpacesState,
+} from '../State/reducer';
 import { sendToIpcMain } from '../util';
 
 /**
@@ -71,6 +75,21 @@ const useResponse = () => {
 
           // Redirect to Home page.
           navigate(reactRoutes.spaces);
+        }
+        break;
+
+      case 'spaces-get':
+        if (responseData.status == 200)
+          dispatch(updateSpacesState(responseData.data as SpacesInterface));
+        break;
+
+      case 'spaces-add':
+        if (responseData.status == 200) {
+          dispatchMessage(dispatch, responseData.status, responseData.message);
+          dispatch(updateSpacesState(responseData.data as SpacesInterface));
+        } else if (responseData.status == 500) {
+          // If Space was not added successfully.
+          dispatchMessage(dispatch, responseData.status, responseData.message);
         }
         break;
     }

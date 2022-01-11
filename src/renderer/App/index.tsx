@@ -15,7 +15,6 @@ import Header from '../Components/Header';
 import Spaces from '../Components/Spaces';
 import useResponse from '../Hooks/useResponse';
 import { sendToIpcMain } from '../util';
-// import { updateResponseState } from '../State/reducer';
 import Auth from './Auth';
 import Profile from './Profile';
 import ProtectedRoute from './ProtectedRoutes';
