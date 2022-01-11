@@ -124,20 +124,19 @@ const spacesRequest = (
     case `ADD`:
       const createStatus = database.createNewSpace(requestData.space_name);
 
-      if (createStatus) {
-        // Get all spaces.
-        result.list = database.getSpaces();
+      message = createStatus.changes
+        ? createMessage(
+            'success',
+            `${requestData.space_name} Space added successfully.`
+          )
+        : (message = createMessage(
+            'server-error',
+            `Error while adding ${requestData.space_name} Space.`
+          ));
 
-        message = createMessage(
-          'success',
-          `${requestData.space_name} Space added successfully.`
-        );
-      } else {
-        // Error while adding spaces.
-        message = createMessage(
-          'server-error',
-          `Error while adding ${requestData.space_name} Space.`
-        );
+      if (createStatus.changes) {
+        // Get newly inserted Space.
+        result.list = [database.getSpaceWithId(createStatus.lastInsertRowid)];
       }
       break;
 
@@ -187,7 +186,7 @@ const notesRequest = (
         : createMessage('server-error', `Error while adding Note.`);
 
       if (createStatus.changes) {
-        // Get all Notes.
+        // Get newly inserted Note.
         result = database.getNoteWithId(createStatus.lastInsertRowid);
       }
       break;

@@ -218,6 +218,15 @@ const getSpacesStatement = (): string => {
   return getStatement(`spaces`, [`*`]);
 };
 
+/**
+ * Get Space with id from Database.
+ *
+ * @returns {string}
+ */
+const getSpaceWithIdStatement = (): string => {
+  return getConditionalStatement(`spaces`, [`*`], `_id = ?`);
+};
+
 // ================================================================================
 // Notes Statements.
 // ================================================================================
@@ -273,6 +282,7 @@ export {
   // Spaces
   createSpaceStatement,
   getSpacesStatement,
+  getSpaceWithIdStatement,
   // Notes
   createNoteStatement,
   getNotesStatement,

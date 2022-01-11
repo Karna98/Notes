@@ -14,6 +14,7 @@ import { reactRoutes } from '../../common/routes';
 import { IPCRequestObject } from '../../common/util';
 import {
   addNoteState,
+  addSpacesState,
   updateMessageState,
   updateNoteState,
   updateSessionState,
@@ -89,7 +90,9 @@ const useResponse = () => {
       case 'spaces-add':
         if (responseData.status == 200) {
           dispatchMessage(dispatch, responseData.status, responseData.message);
-          dispatch(updateSpacesState(responseData.data as SpacesInterface));
+
+          const newSpace = (responseData.data as SpacesInterface).list[0];
+          dispatch(addSpacesState(newSpace));
         } else if (responseData.status == 500) {
           // If Space was not added successfully.
           dispatchMessage(dispatch, responseData.status, responseData.message);

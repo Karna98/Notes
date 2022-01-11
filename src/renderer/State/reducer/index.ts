@@ -15,11 +15,16 @@ import space, {
   updateNoteState,
   updateSpaceState,
 } from './space';
-import spaces, { clearSpacesState, updateSpacesState } from './spaces';
+import spaces, {
+  addSpacesState,
+  clearSpacesState,
+  updateSpacesState,
+} from './spaces';
 
 // Exports to update State.
 export {
   addNoteState,
+  addSpacesState,
   clearMessageState,
   clearResponseState,
   clearSessionState,

@@ -19,6 +19,7 @@ import {
   getNotesStatement,
   getNoteWithIdStatement,
   getSpacesStatement,
+  getSpaceWithIdStatement,
   getUsersCountStatement,
   getUsersStatement,
   insertDefaultValueStatement,
@@ -198,12 +199,12 @@ const updateUser = (value: Record<string, unknown>, _id: number) => {
  * @param value Array of data required.
  * @returns {number} Returns status of new user creation.
  */
-const createNewSpace = (spaceName: string): number => {
+const createNewSpace = (spaceName: string): Database.RunResult => {
   const db = dbInstance();
   const results = db.prepare(createSpaceStatement()).run([spaceName]);
   db.close();
 
-  return results.changes;
+  return results;
 };
 
 /**
@@ -220,12 +221,25 @@ const getSpaces = (): SpacesTableInterface[] => {
 };
 
 /**
+ * Get Space with id.
+ *
+ * @returns {object} Returns note.
+ */
+const getSpaceWithId = (space_id: number | bigint) => {
+  const db = dbInstance();
+  const results = db.prepare(getSpaceWithIdStatement()).get(space_id);
+  db.close();
+
+  return results;
+};
+
+/**
  * Create new Note in Database.
  *
  * @param value Array of data required.
  * @returns {object} { changes, lastInsertRowid } Returns status of new note created.
  */
-const createNewNote = (space_id: number, note: string) => {
+const createNewNote = (space_id: number, note: string): Database.RunResult => {
   const db = dbInstance();
   const results = db.prepare(createNoteStatement()).run([space_id, note]);
   db.close();
@@ -283,6 +297,7 @@ export default {
   // Spaces
   createNewSpace,
   getSpaces,
+  getSpaceWithId,
   // Notes
   createNewNote,
   getNotes,
