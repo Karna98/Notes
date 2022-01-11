@@ -26,6 +26,7 @@ import { sendToIpcMain } from '../util';
 /**
  * Displays Message.
  *
+ * @param dispatch Dispatch Hook.
  * @param status Message Status.
  * @param message Message.
  */
@@ -108,7 +109,7 @@ const useResponse = () => {
         if (responseData.status == 200) {
           dispatch(addNoteState(responseData.data as NotesTableInterface));
         } else if (responseData.status == 500) {
-          // If Space was not added successfully.
+          // If Note was not added successfully.
           dispatchMessage(dispatch, responseData.status, responseData.message);
         }
         break;
