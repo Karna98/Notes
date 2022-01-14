@@ -44,7 +44,7 @@ const authRequest = (
 
     case `REGISTER`:
       // Intialize Database.
-      database.init();
+      !database.checkIfDbExsts() && database.init();
 
       result = database.createNewUser(
         cryptBcryptHash(requestData.username),

@@ -152,7 +152,7 @@ const updateDatabase = () => {
  */
 const createNewUser = (username: string, password: string): number => {
   const db = dbInstance();
-  const results = db.prepare(createUserStatement()).run([username, password]);
+  const results = db.prepare(createUserStatement()).run({ username, password });
   db.close();
 
   return results.changes;
@@ -187,9 +187,9 @@ const getUsers = (): UsersTableInteface => {
 /**
  * Update user details in Database.
  */
-const updateUser = (value: Record<string, unknown>, _id: number) => {
+const updateUser = (value: Record<string, unknown>, id: number) => {
   const db = dbInstance();
-  db.prepare(updateUserStatement(value)).run(_id);
+  db.prepare(updateUserStatement(value)).run({ id });
   db.close();
 };
 
@@ -201,7 +201,7 @@ const updateUser = (value: Record<string, unknown>, _id: number) => {
  */
 const createNewSpace = (spaceName: string): Database.RunResult => {
   const db = dbInstance();
-  const results = db.prepare(createSpaceStatement()).run([spaceName]);
+  const results = db.prepare(createSpaceStatement()).run({ spaceName });
   db.close();
 
   return results;
@@ -225,9 +225,9 @@ const getSpaces = (): SpacesTableInterface[] => {
  *
  * @returns {object} Returns note.
  */
-const getSpaceWithId = (space_id: number | bigint) => {
+const getSpaceWithId = (spaceId: number | bigint) => {
   const db = dbInstance();
-  const results = db.prepare(getSpaceWithIdStatement()).get(space_id);
+  const results = db.prepare(getSpaceWithIdStatement()).get({ spaceId });
   db.close();
 
   return results;
@@ -239,9 +239,9 @@ const getSpaceWithId = (space_id: number | bigint) => {
  * @param value Array of data required.
  * @returns {object} { changes, lastInsertRowid } Returns status of new note created.
  */
-const createNewNote = (space_id: number, note: string): Database.RunResult => {
+const createNewNote = (spaceId: number, note: string): Database.RunResult => {
   const db = dbInstance();
-  const results = db.prepare(createNoteStatement()).run([space_id, note]);
+  const results = db.prepare(createNoteStatement()).run({ spaceId, note });
   db.close();
 
   return results;
@@ -252,9 +252,9 @@ const createNewNote = (space_id: number, note: string): Database.RunResult => {
  *
  * @returns {object} Returns all notes.
  */
-const getNotes = (space_id: number) => {
+const getNotes = (spaceId: number) => {
   const db = dbInstance();
-  const results = db.prepare(getNotesStatement()).all(space_id);
+  const results = db.prepare(getNotesStatement()).all({ spaceId });
   db.close();
 
   return results;
@@ -265,9 +265,9 @@ const getNotes = (space_id: number) => {
  *
  * @returns {object} Returns note.
  */
-const getNoteWithId = (note_id: number | bigint) => {
+const getNoteWithId = (noteId: number | bigint) => {
   const db = dbInstance();
-  const results = db.prepare(getNoteWithIdStatement()).get(note_id);
+  const results = db.prepare(getNoteWithIdStatement()).get({ noteId });
   db.close();
 
   return results;
@@ -276,9 +276,9 @@ const getNoteWithId = (note_id: number | bigint) => {
 /**
  * Update Note in Database.
  */
-const updateNote = (value: Record<string, unknown>, note_id: number) => {
+const updateNote = (value: Record<string, unknown>, noteId: number) => {
   const db = dbInstance();
-  const results = db.prepare(updateNoteStatement(value)).run(note_id);
+  const results = db.prepare(updateNoteStatement(value)).run({ noteId });
   db.close();
 
   return results.changes;

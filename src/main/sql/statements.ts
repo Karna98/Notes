@@ -161,7 +161,7 @@ const createUserStatement = (): string => {
   return insertStatement(
     `users`,
     [`username`, `created_at`, `password`],
-    [`?`, `${Date.now()}`, `?`]
+    [`$username`, `${Date.now()}`, `$password`]
   );
 };
 
@@ -189,7 +189,7 @@ const getUsersStatement = (): string => {
  * @returns {string}
  */
 const updateUserStatement = (values: Record<string, unknown>): string => {
-  return updateStatement('users', values, `_id = ?`);
+  return updateStatement('users', values, `_id = $id`);
 };
 
 // ================================================================================
@@ -205,7 +205,7 @@ const createSpaceStatement = (): string => {
   return insertStatement(
     `spaces`,
     [`space_name`, `created_at`],
-    [`?`, `${Date.now()}`]
+    [`$spaceName`, `${Date.now()}`]
   );
 };
 
@@ -224,7 +224,7 @@ const getSpacesStatement = (): string => {
  * @returns {string}
  */
 const getSpaceWithIdStatement = (): string => {
-  return getConditionalStatement(`spaces`, [`*`], `_id = ?`);
+  return getConditionalStatement(`spaces`, [`*`], `_id = $spaceId`);
 };
 
 // ================================================================================
@@ -240,7 +240,7 @@ const createNoteStatement = (): string => {
   return insertStatement(
     `notes`,
     [`space_id`, `note`, `updated_at`],
-    [`?`, `?`, `${Date.now()}`]
+    [`$spaceId`, `$note`, `${Date.now()}`]
   );
 };
 
@@ -250,7 +250,7 @@ const createNoteStatement = (): string => {
  * @returns {string}
  */
 const getNotesStatement = (): string => {
-  return getConditionalStatement(`notes`, [`*`], `space_id = ?`);
+  return getConditionalStatement(`notes`, [`*`], `space_id = $spaceId`);
 };
 
 /**
@@ -259,7 +259,7 @@ const getNotesStatement = (): string => {
  * @returns {string}
  */
 const getNoteWithIdStatement = (): string => {
-  return getConditionalStatement(`notes`, [`*`], `_id = ?`);
+  return getConditionalStatement(`notes`, [`*`], `_id = $noteId`);
 };
 
 /**
@@ -268,7 +268,7 @@ const getNoteWithIdStatement = (): string => {
  * @returns {string}
  */
 const updateNoteStatement = (values: Record<string, unknown>): string => {
-  return updateStatement('notes', values, `_id = ?`);
+  return updateStatement('notes', values, `_id = $noteId`);
 };
 
 export {

@@ -43,11 +43,11 @@ const useResponse = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const resolveResponse = (responseData: IPCResponseInterface) => {
-    switch (responseData.URI) {
+  const resolveResponse = (response: IPCResponseInterface) => {
+    switch (response.URI) {
       case 'auth-status':
         // Based on auth-status, Login or Register Page will be displayed.
-        responseData.status == 200 && responseData.data == 0
+        response.status == 200 && response.data == 0
           ? // Register Page
             navigate(reactRoutes.auth_register)
           : // Login Page
@@ -56,26 +56,18 @@ const useResponse = () => {
 
       case 'auth-register':
         // Display response message.
-        dispatchMessage(
-          dispatch,
-          responseData.status as number,
-          responseData.message
-        );
+        dispatchMessage(dispatch, response.status as number, response.message);
 
         // Set Registration status to true.
-        responseData.status == 200 && navigate(reactRoutes.auth_login);
+        response.status == 200 && navigate(reactRoutes.auth_login);
         break;
 
       case 'auth-login':
         // Set Message to be displayed.
-        dispatchMessage(
-          dispatch,
-          responseData.status as number,
-          responseData.message
-        );
+        dispatchMessage(dispatch, response.status as number, response.message);
 
-        if (responseData.status == 200) {
-          dispatch(updateSessionState(responseData.data as SessionType));
+        if (response.status == 200) {
+          dispatch(updateSessionState(response.data as SessionType));
           sendToIpcMain(IPCRequestObject(`spaces-get`));
 
           // Redirect to Home page.
@@ -84,56 +76,56 @@ const useResponse = () => {
         break;
 
       case 'spaces-get':
-        if (responseData.status == 200)
-          dispatch(updateSpacesState(responseData.data as SpacesInterface));
+        if (response.status == 200)
+          dispatch(updateSpacesState(response.data as SpacesInterface));
         break;
 
       case 'spaces-add':
-        if (responseData.status == 200) {
-          dispatchMessage(dispatch, responseData.status, responseData.message);
+        if (response.status == 200) {
+          dispatchMessage(dispatch, response.status, response.message);
 
-          const newSpace = (responseData.data as SpacesInterface).list[0];
+          const newSpace = (response.data as SpacesInterface).list[0];
           dispatch(addSpacesState(newSpace));
-        } else if (responseData.status == 500) {
+        } else if (response.status == 500) {
           // If Space was not added successfully.
-          dispatchMessage(dispatch, responseData.status, responseData.message);
+          dispatchMessage(dispatch, response.status, response.message);
         }
         break;
 
       case 'notes-get':
-        if (responseData.status == 200)
-          dispatch(updateSpaceState(responseData.data as SpaceInterface));
+        if (response.status == 200)
+          dispatch(updateSpaceState(response.data as SpaceInterface));
         break;
 
       case 'notes-add':
-        if (responseData.status == 200) {
-          dispatch(addNoteState(responseData.data as NotesTableInterface));
-        } else if (responseData.status == 500) {
+        if (response.status == 200) {
+          dispatch(addNoteState(response.data as NotesTableInterface));
+        } else if (response.status == 500) {
           // If Note was not added successfully.
-          dispatchMessage(dispatch, responseData.status, responseData.message);
+          dispatchMessage(dispatch, response.status, response.message);
         }
         break;
 
       case 'notes-update':
-        if (responseData.status == 200) {
+        if (response.status == 200) {
           dispatch(
             updateNoteState(
-              responseData.data as Pick<
+              response.data as Pick<
                 NotesTableInterface,
                 '_id' | 'note' | 'updated_at'
               >
             )
           );
-        } else if (responseData.status == 500) {
-          dispatchMessage(dispatch, responseData.status, responseData.message);
+        } else if (response.status == 500) {
+          dispatchMessage(dispatch, response.status, response.message);
         }
         break;
     }
   };
 
   useEffect(() => {
-    window.NotesAPI.receive(`fromMain`, (responseData: string) => {
-      resolveResponse(JSON.parse(responseData));
+    window.NotesAPI.receive(`fromMain`, (response: string) => {
+      resolveResponse(JSON.parse(response));
     });
   }, []);
 };
