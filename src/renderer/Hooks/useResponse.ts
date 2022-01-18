@@ -1,5 +1,5 @@
 /**
- * useResponse.tsx
+ * useResponse.ts
  *
  * Description:
  *    Response Hook to reolve received response .
