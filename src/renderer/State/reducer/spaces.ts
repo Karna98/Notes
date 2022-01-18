@@ -31,8 +31,8 @@ export const clearSpacesState = () => ({
 
 // Initialize Spaces State.
 const initialState: SpacesInterface | null = browserStorage.getValue(
-  'session',
-  'spaces'
+  `session`,
+  `SPACES`
 );
 
 export default (
@@ -41,7 +41,7 @@ export default (
 ) => {
   switch (action.type) {
     case SET_SPACES:
-      browserStorage.setValue('session', action.payload, 'spaces');
+      browserStorage.setValue(`session`, `SPACES`, action.payload);
       return action.payload;
 
     case UPDATE_SPACES:
@@ -55,12 +55,12 @@ export default (
         list: newList,
       };
 
-      browserStorage.setValue('session', updatedState, 'spaces');
+      browserStorage.setValue(`session`, `SPACES`, updatedState);
 
       return updatedState;
 
     case CLEAR_SPACES:
-      browserStorage.removeItem('session', 'spaces');
+      browserStorage.removeItem(`session`, `SPACES`);
       return null;
     default:
       return state;

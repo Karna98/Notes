@@ -16,8 +16,8 @@ import {
   addNoteState,
   addSpacesState,
   setMessageState,
+  setSessionState,
   updateNoteState,
-  updateSessionState,
   updateSpacesState,
   updateSpaceState,
 } from '../State/reducer';
@@ -67,7 +67,7 @@ const useResponse = () => {
         dispatchMessage(dispatch, response.status as number, response.message);
 
         if (response.status == 200) {
-          dispatch(updateSessionState(response.data as SessionType));
+          dispatch(setSessionState(response.data as SessionType));
           sendToIpcMain(IPCRequestObject(`spaces-get`));
 
           // Redirect to Home page.

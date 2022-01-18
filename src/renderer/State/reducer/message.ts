@@ -17,12 +17,12 @@ const messageSlice = createSlice({
   name: 'message',
   initialState,
   reducers: {
+    // Set Message.
     setMessageState: (state, action: PayloadAction<MessageInterface>) => {
-      // Set Message.
       Object.assign(state, action.payload);
     },
+    // Clear Message.
     clearMessageState: () => {
-      // Clear Message.
       return initialState;
     },
   },
