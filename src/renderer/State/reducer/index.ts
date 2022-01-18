@@ -6,7 +6,7 @@
  *
  */
 
-import message, { clearMessageState, updateMessageState } from './message';
+import message, { clearMessageState, setMessageState } from './message';
 import session, { clearSessionState, updateSessionState } from './session';
 import space, {
   addNoteState,
@@ -28,7 +28,7 @@ export {
   clearSessionState,
   clearSpaceState,
   clearSpacesState,
-  updateMessageState,
+  setMessageState,
   updateNoteState,
   updateSessionState,
   updateSpaceState,

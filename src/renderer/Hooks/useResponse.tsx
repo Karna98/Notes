@@ -11,11 +11,11 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import { reactRoutes } from '../../common/routes';
-import { IPCRequestObject } from '../../common/util';
+import { createMessage, IPCRequestObject } from '../../common/util';
 import {
   addNoteState,
   addSpacesState,
-  updateMessageState,
+  setMessageState,
   updateNoteState,
   updateSessionState,
   updateSpacesState,
@@ -36,7 +36,7 @@ const dispatchMessage = (
   message: string | undefined
 ) => {
   // Update Message in Redux Store..
-  message && dispatch(updateMessageState(status, message));
+  message && dispatch(setMessageState(createMessage(status, message)));
 };
 
 const useResponse = () => {

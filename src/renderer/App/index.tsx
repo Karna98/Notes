@@ -13,7 +13,7 @@ import { IPCRequestObject } from '../../common/util';
 import Message from '../Components/Elements/Message';
 import Header from '../Components/Header';
 import Spaces from '../Components/Spaces';
-import useResponse from '../Hooks/useResponse';
+import { useResponse } from '../Hooks';
 import { sendToIpcMain } from '../util';
 import Auth from './Auth';
 import Profile from './Profile';
@@ -23,8 +23,6 @@ const App = () => {
   // Resolve Response Hook.
   useResponse();
 
-  // Get message value stored in Redux Store.
-  const messageState = useSelector((state: RootStateOrAny) => state.message);
   // Get session value stored in Redux Store.
   const sessionState = useSelector((state: RootStateOrAny) => state.session);
 
@@ -95,9 +93,7 @@ const App = () => {
     <>
       <Header />
       <main className="d-flex flex-column">
-        {messageState != null && (
-          <Message messageState={messageState} autoDisappear={true} />
-        )}
+        <Message />
         <Routes>
           {RouteList.map((route) => (
             <Route key={route.name} path={route.path} element={route.element} />
