@@ -6,28 +6,8 @@
  *
  */
 
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { browserStorage } from '../../util';
-
-const SET_SPACES = 'set-spaces';
-const CLEAR_SPACES = 'clear-spaces';
-const UPDATE_SPACES = 'update-spaces';
-
-// Update Spaces State.
-export const updateSpacesState = (payload: SpacesInterface) => ({
-  type: SET_SPACES,
-  payload,
-});
-
-// Add Space State.
-export const addSpacesState = (payload: SpacesTableInterface) => ({
-  type: UPDATE_SPACES,
-  payload,
-});
-
-// Clear Spaces State.
-export const clearSpacesState = () => ({
-  type: CLEAR_SPACES,
-});
 
 // Initialize Spaces State.
 const initialState: SpacesInterface | null = browserStorage.getValue(
@@ -35,34 +15,43 @@ const initialState: SpacesInterface | null = browserStorage.getValue(
   `SPACES`
 );
 
-export default (
-  state = initialState,
-  action: { type: string; payload: SpacesInterface | SpacesTableInterface }
-) => {
-  switch (action.type) {
-    case SET_SPACES:
+const spacesSlice = createSlice({
+  name: 'spaces',
+  initialState,
+  reducers: {
+    // Set Spaces.
+    setSpacesState: (_state, action: PayloadAction<SpacesInterface>) => {
+      // Save in browser's session storage.
       browserStorage.setValue(`session`, `SPACES`, action.payload);
       return action.payload;
+    },
+    // Add new Space.
+    addSpaceState: (state, action: PayloadAction<SpacesTableInterface>) => {
+      if (state != null) {
+        const updatedSpacesList: SpacesTableInterface[] = [
+          ...state.list,
+          action.payload,
+        ];
 
-    case UPDATE_SPACES:
-      let newList: SpacesTableInterface[] = [];
+        state.list = updatedSpacesList;
 
-      if (state != null)
-        newList = [...state?.list, <SpacesTableInterface>action.payload];
-
-      const updatedState = {
-        ...state,
-        list: newList,
-      };
-
-      browserStorage.setValue(`session`, `SPACES`, updatedState);
-
-      return updatedState;
-
-    case CLEAR_SPACES:
+        // Save in browser's session storage.
+        browserStorage.setValue(`session`, `SPACES`, {
+          ...state,
+          list: updatedSpacesList,
+        });
+      }
+    },
+    // Clear Spaces.
+    clearSpacesState: () => {
+      // Remove from browser's session storage.
       browserStorage.removeItem(`session`, `SPACES`);
-      return null;
-    default:
-      return state;
-  }
-};
+      return initialState;
+    },
+  },
+});
+
+export const { addSpaceState, clearSpacesState, setSpacesState } =
+  spacesSlice.actions;
+
+export default spacesSlice.reducer;

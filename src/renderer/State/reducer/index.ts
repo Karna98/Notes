@@ -15,15 +15,15 @@ import space, {
   updateSpaceState,
 } from './space';
 import spaces, {
-  addSpacesState,
+  addSpaceState,
   clearSpacesState,
-  updateSpacesState,
+  setSpacesState,
 } from './spaces';
 
 // Exports to update State.
 export {
   addNoteState,
-  addSpacesState,
+  addSpaceState,
   clearMessageState,
   clearSessionState,
   clearSpaceState,
@@ -31,8 +31,8 @@ export {
   setMessageState,
   updateNoteState,
   setSessionState,
+  setSpacesState,
   updateSpaceState,
-  updateSpacesState,
 };
 
 // Default export to view State.

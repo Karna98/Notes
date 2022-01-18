@@ -7,18 +7,18 @@
  */
 
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Dispatch } from 'redux';
+import { useAppDispatch } from '.';
 import { reactRoutes } from '../../common/routes';
 import { createMessage, IPCRequestObject } from '../../common/util';
 import {
   addNoteState,
-  addSpacesState,
+  addSpaceState,
   setMessageState,
   setSessionState,
+  setSpacesState,
   updateNoteState,
-  updateSpacesState,
   updateSpaceState,
 } from '../State/reducer';
 import { sendToIpcMain } from '../util';
@@ -40,7 +40,7 @@ const dispatchMessage = (
 };
 
 const useResponse = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const resolveResponse = (response: IPCResponseInterface) => {
@@ -77,7 +77,7 @@ const useResponse = () => {
 
       case 'spaces-get':
         if (response.status == 200)
-          dispatch(updateSpacesState(response.data as SpacesInterface));
+          dispatch(setSpacesState(response.data as SpacesInterface));
         break;
 
       case 'spaces-add':
@@ -85,7 +85,7 @@ const useResponse = () => {
           dispatchMessage(dispatch, response.status, response.message);
 
           const newSpace = (response.data as SpacesInterface).list[0];
-          dispatch(addSpacesState(newSpace));
+          dispatch(addSpaceState(newSpace));
         } else if (response.status == 500) {
           // If Space was not added successfully.
           dispatchMessage(dispatch, response.status, response.message);
