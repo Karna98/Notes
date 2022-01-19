@@ -20,7 +20,9 @@ const List = () => {
   const { space_id } = useParams();
 
   // Get space value stored in Redux Store.
-  const spaceState = useSelector((state: RootStateOrAny) => state.space);
+  const currentSpaceState = useSelector(
+    (state: RootStateOrAny) => state.spaces.currentSpace
+  );
 
   // Form Elements.
   const formElements: FormElementsInterface = {
@@ -60,7 +62,7 @@ const List = () => {
         />
       </div>
       <div className="d-flex flex-row flex-wrap justify-content-evenly">
-        {spaceState?.notes.map((note: NotesTableInterface) => (
+        {currentSpaceState?.notes.map((note: NotesTableInterface) => (
           <Link
             key={note._id}
             to={`${location.pathname}/${note._id}`}

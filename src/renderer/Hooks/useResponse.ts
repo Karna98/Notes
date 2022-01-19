@@ -15,11 +15,11 @@ import { createMessage, IPCRequestObject } from '../../common/util';
 import {
   addNoteState,
   addSpaceState,
+  setCurrentSpaceState,
   setMessageState,
   setSessionState,
   setSpacesState,
   updateNoteState,
-  updateSpaceState,
 } from '../State/reducer';
 import { sendToIpcMain } from '../util';
 
@@ -94,7 +94,7 @@ const useResponse = () => {
 
       case 'notes-get':
         if (response.status == 200)
-          dispatch(updateSpaceState(response.data as SpaceInterface));
+          dispatch(setCurrentSpaceState(response.data as SpaceInterface));
         break;
 
       case 'notes-add':
@@ -108,14 +108,7 @@ const useResponse = () => {
 
       case 'notes-update':
         if (response.status == 200) {
-          dispatch(
-            updateNoteState(
-              response.data as Pick<
-                NotesTableInterface,
-                '_id' | 'note' | 'updated_at'
-              >
-            )
-          );
+          dispatch(updateNoteState(response.data as NotesTableInterface));
         } else if (response.status == 500) {
           dispatchMessage(dispatch, response.status, response.message);
         }
