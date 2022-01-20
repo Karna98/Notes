@@ -47,7 +47,7 @@ const App = () => {
   ) => {
     return (
       <ProtectedRoute
-        redirectTo={redirect === undefined ? reactRoutes.auth : redirect}
+        redirectTo={redirect === undefined ? reactRoutes.auth_login : redirect}
         condition={condition === undefined ? isAuthenticated() : condition}
       >
         {element}
