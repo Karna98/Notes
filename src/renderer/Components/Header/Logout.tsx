@@ -7,14 +7,14 @@
  */
 
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { reactRoutes } from '../../../common/routes';
+import { useAppDispatch } from '../../Hooks';
 import { clearSessionState, clearSpacesState } from '../../State/reducer';
 import Form from '../Elements/Form';
 
 const Logout = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   // Form Elements.

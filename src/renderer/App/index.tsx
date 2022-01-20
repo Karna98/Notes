@@ -6,14 +6,13 @@
  */
 
 import React, { useEffect } from 'react';
-import { RootStateOrAny, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { reactRoutes } from '../../common/routes';
 import { IPCRequestObject } from '../../common/util';
 import Message from '../Components/Elements/Message';
 import Header from '../Components/Header';
 import Spaces from '../Components/Spaces';
-import { useResponse } from '../Hooks';
+import { useAppSelector, useResponse } from '../Hooks';
 import { sendToIpcMain } from '../util';
 import Auth from './Auth';
 import Profile from './Profile';
@@ -24,7 +23,7 @@ const App = () => {
   useResponse();
 
   // Get session value stored in Redux Store.
-  const sessionState = useSelector((state: RootStateOrAny) => state.session);
+  const sessionState = useAppSelector((state) => state.session);
 
   /**
    * User is authenticated if session is created.

@@ -7,9 +7,9 @@
  */
 
 import React from 'react';
-import { RootStateOrAny, useSelector } from 'react-redux';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { IPCRequestObject } from '../../../common/util';
+import { useAppSelector } from '../../Hooks';
 import { sendToIpcMain } from '../../util';
 import Form from '../Elements/Form';
 
@@ -20,8 +20,8 @@ const List = () => {
   const { space_id } = useParams();
 
   // Get space value stored in Redux Store.
-  const currentSpaceState = useSelector(
-    (state: RootStateOrAny) => state.spaces.currentSpace
+  const currentSpaceState = useAppSelector(
+    (state) => state.spaces?.currentSpace
   );
 
   // Form Elements.
