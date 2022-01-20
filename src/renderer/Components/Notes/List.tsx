@@ -45,9 +45,16 @@ const List = () => {
   };
 
   const formSubmitAction = (formData: Record<string, unknown>) => {
-    sendToIpcMain(
-      IPCRequestObject(`notes-add`, { ...formData, space_id: Number(space_id) })
-    );
+    // Check if note is empty.
+    const isNoteEmpty = (formData.note as string).trim().length == 0;
+
+    !isNoteEmpty &&
+      sendToIpcMain(
+        IPCRequestObject(`notes-add`, {
+          ...formData,
+          space_id: Number(space_id),
+        })
+      );
   };
 
   return (
