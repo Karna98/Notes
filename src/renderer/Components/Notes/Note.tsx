@@ -21,9 +21,11 @@ const Note = () => {
   const { note_id } = useParams();
 
   // Get space value stored in Redux Store.
-  const spaceState = useAppSelector((state) => state.spaces?.currentSpace);
+  const notesListState = useAppSelector(
+    (state) => state.spaces?.currentSpace?.notes
+  );
 
-  const currentNote = spaceState?.notes.filter(
+  const currentNote = notesListState?.filter(
     ({ _id }: NotesTableInterface) => _id == Number(note_id)
   )[0];
 
