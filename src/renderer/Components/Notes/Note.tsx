@@ -89,7 +89,7 @@ const Note = () => {
           <b>Last Updated at: </b>
           {currentNote &&
             new Date(currentNote.updated_at).toLocaleString('en-IN', {
-              hour12: false,
+              hourCycle: 'h23',
             })}
         </p>
         <Form
