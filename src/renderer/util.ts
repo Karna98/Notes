@@ -26,25 +26,23 @@ const sendToIpcMain = (data: IPCRequestInterface) => {
   1. On page refresh, react states do not persists. So to make session store persists, we will be storing session in browser's session storage.
 */
 
-const BROWSER_STORE = `NOTES`;
-
 /**
  * Get value from browser storage.
  *
  * @param type Type of Browser storage: session Storge or local storage.
  * @returns {null | object} Value stored in browser storage.
- * @param STORE_NAME Custom key name to be stored in browser storage.
+ * @param STORE_KEY Custom key name to be stored in browser storage.
  */
-const getValue = (type: 'local' | 'session', STORE_NAME = BROWSER_STORE) => {
+const getValue = (type: 'local' | 'session', STORE_KEY: string) => {
   let value: string | null = null;
 
   if (process.env.NODE_ENV === 'development')
     switch (type) {
       case 'local':
-        value = window.localStorage.getItem(STORE_NAME);
+        value = window.localStorage.getItem(STORE_KEY);
         break;
       case 'session':
-        value = window.sessionStorage.getItem(STORE_NAME);
+        value = window.sessionStorage.getItem(STORE_KEY);
         break;
     }
   return value == null ? null : JSON.parse(value);
@@ -55,20 +53,20 @@ const getValue = (type: 'local' | 'session', STORE_NAME = BROWSER_STORE) => {
  *
  * @param type Type of Browser Storage: session storge or local storage.
  * @param value Value to be stored in BrowserStorage.
- * @param STORE_NAME Custom key name to be stored in browser storage.
+ * @param STORE_KEY Custom key name to be stored in browser storage.
  */
 const setValue = (
   type: 'local' | 'session',
-  value: object,
-  STORE_NAME = BROWSER_STORE
+  STORE_KEY: string,
+  value: object
 ) => {
   if (process.env.NODE_ENV === 'development')
     switch (type) {
       case 'local':
-        window.localStorage.setItem(STORE_NAME, JSON.stringify(value));
+        window.localStorage.setItem(STORE_KEY, JSON.stringify(value));
         break;
       case 'session':
-        window.sessionStorage.setItem(STORE_NAME, JSON.stringify(value));
+        window.sessionStorage.setItem(STORE_KEY, JSON.stringify(value));
         break;
     }
 };
@@ -77,16 +75,16 @@ const setValue = (
  * Remove item from browser storage.
  *
  * @param type Type of Browser Storage: session storge or local storage.
- * @param STORE_NAME Custom key name to be stored in browser storage.
+ * @param STORE_KEY Custom key name to be stored in browser storage.
  */
-const removeItem = (type: 'local' | 'session', STORE_NAME = BROWSER_STORE) => {
+const removeItem = (type: 'local' | 'session', STORE_KEY: string) => {
   if (process.env.NODE_ENV === 'development')
     switch (type) {
       case 'local':
-        window.localStorage.removeItem(STORE_NAME);
+        window.localStorage.removeItem(STORE_KEY);
         break;
       case 'session':
-        window.sessionStorage.removeItem(STORE_NAME);
+        window.sessionStorage.removeItem(STORE_KEY);
         break;
     }
 };

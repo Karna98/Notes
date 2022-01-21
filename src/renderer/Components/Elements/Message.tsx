@@ -6,31 +6,33 @@
  *
  */
 
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../Hooks';
 import { clearMessageState } from '../../State/reducer';
 import './message.scss';
 
-type PropType = {
-  messageState: MessageInterface;
-  autoDisappear: boolean;
-};
+const Message = () => {
+  // Get message value stored in Redux Store.
+  const messageState = useAppSelector((state) => state.message);
 
-const Message = (props: PropType) => {
-  const { messageState, autoDisappear } = props;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  if (autoDisappear) {
-    // Clears Message after 3 seconds.
-    setTimeout(() => {
-      dispatch(clearMessageState());
-    }, 3000);
-  }
+  useEffect(() => {
+    messageState?.message &&
+      // Clears Message after 3 seconds.
+      setTimeout(() => {
+        dispatch(clearMessageState());
+      }, 3000);
+  }, [messageState]);
 
   return (
-    <div className="text-align-center message-card">
-      Message : [{messageState.status}] - {messageState.message}
-    </div>
+    <>
+      {messageState.message && (
+        <div className="text-align-center message-card">
+          Message : [{messageState.status}] - {messageState.message}
+        </div>
+      )}
+    </>
   );
 };
 

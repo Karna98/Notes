@@ -7,18 +7,18 @@
  */
 
 import React from 'react';
-import { RootStateOrAny, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { IPCRequestObject } from '../../../common/util';
+import { useAppSelector } from '../../Hooks';
 import { sendToIpcMain } from '../../util';
 import Form from '../Elements/Form';
 
 const List = () => {
   // Get session value stored in Redux Store.
-  const sessionState = useSelector((state: RootStateOrAny) => state.session);
+  const sessionState = useAppSelector((state) => state.session);
 
   // Get spaces value stored in Redux Store.
-  const spacesState = useSelector((state: RootStateOrAny) => state.spaces);
+  const spacesState = useAppSelector((state) => state.spaces);
 
   // Form Elements.
   const formElements: FormElementsInterface = {
@@ -52,7 +52,7 @@ const List = () => {
   return (
     <>
       <div className="spaces-top">
-        <h4>Hey, {sessionState.username}</h4>
+        <h4>Hey, {sessionState?.username}</h4>
         <b>Which space you want to dive in ?</b>
       </div>
 
@@ -72,7 +72,7 @@ const List = () => {
               </Link>
             ))}
             {spacesState.list.length <
-              spacesState.metaData.SPACES_MAX_COUNT_ALLOWED && (
+              (spacesState.metaData.SPACES_MAX_COUNT_ALLOWED as number) && (
               <div>
                 <Form
                   id="form-add-space"

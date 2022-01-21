@@ -7,9 +7,9 @@
  */
 
 import React from 'react';
-import { RootStateOrAny, useSelector } from 'react-redux';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { IPCRequestObject } from '../../../common/util';
+import { useAppSelector } from '../../Hooks';
 import { sendToIpcMain } from '../../util';
 import Form from '../Elements/Form';
 
@@ -20,7 +20,9 @@ const List = () => {
   const { space_id } = useParams();
 
   // Get space value stored in Redux Store.
-  const spaceState = useSelector((state: RootStateOrAny) => state.space);
+  const currentSpaceState = useAppSelector(
+    (state) => state.spaces?.currentSpace
+  );
 
   // Form Elements.
   const formElements: FormElementsInterface = {
@@ -67,7 +69,7 @@ const List = () => {
         />
       </div>
       <div className="d-flex flex-row flex-wrap justify-content-evenly">
-        {spaceState?.notes.map((note: NotesTableInterface) => (
+        {currentSpaceState?.notes.map((note: NoteStoreType) => (
           <Link
             key={note._id}
             to={`${location.pathname}/${note._id}`}

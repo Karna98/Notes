@@ -6,33 +6,28 @@
  *
  */
 
-const SET_MESSAGE = 'set-message';
-const CLEAR_MESSAGE = 'clear-message';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-// Update Message State.
-export const updateMessageState = (status: number, message: string) => ({
-  type: SET_MESSAGE,
-  payload: { status, message },
-});
-
-// Clear Message State.
-export const clearMessageState = () => ({
-  type: CLEAR_MESSAGE,
-});
-
-// Initialize Response State.
-const initialState: MessageInterface | null = null;
-
-export default (
-  state = initialState,
-  action: { type: string; payload: MessageInterface }
-) => {
-  switch (action.type) {
-    case SET_MESSAGE:
-      return action.payload;
-    case CLEAR_MESSAGE:
-      return null;
-    default:
-      return state;
-  }
+// Initialize Message State.
+const initialState: MessageInterface = {
+  status: '',
 };
+
+const messageSlice = createSlice({
+  name: 'message',
+  initialState,
+  reducers: {
+    // Set Message.
+    setMessageState: (state, action: PayloadAction<MessageInterface>) => {
+      Object.assign(state, action.payload);
+    },
+    // Clear Message.
+    clearMessageState: () => {
+      return initialState;
+    },
+  },
+});
+
+export const { setMessageState, clearMessageState } = messageSlice.actions;
+
+export default messageSlice.reducer;

@@ -7,19 +7,12 @@
  */
 
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { reactRoutes } from '../../../common/routes';
-import {
-  clearSessionState,
-  clearSpacesState,
-  clearSpaceState,
-} from '../../State/reducer';
+import { useAppDispatch } from '../../Hooks';
+import { clearSessionState, clearSpacesState } from '../../State/reducer';
 import Form from '../Elements/Form';
 
 const Logout = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   // Form Elements.
   const formElements: FormElementsInterface = {
@@ -38,10 +31,6 @@ const Logout = () => {
     // Clear all redux stores on logout.
     dispatch(clearSessionState());
     dispatch(clearSpacesState());
-    dispatch(clearSpaceState());
-
-    // Navigate to Login Page.
-    navigate(reactRoutes.auth_login);
   };
 
   return (

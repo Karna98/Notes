@@ -100,9 +100,10 @@ interface FormElementsInterface {
 interface SpacesInterface {
   metaData: Record<string, unknown>;
   list: SpacesTableInterface[];
+  currentSpace?: SpaceInterface;
 }
 
 interface SpaceInterface {
   space_id: number;
-  notes: NotesTableInterface[];
+  notes: NoteStoreType[];
 }

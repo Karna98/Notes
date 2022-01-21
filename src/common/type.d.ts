@@ -15,3 +15,5 @@ type SessionType = Pick<
   UsersTableInteface,
   '_id' | 'username' | 'created_at' | 'last_logged_in'
 >;
+
+type NoteStoreType = Pick<NotesTableInterface, '_id' | 'note' | 'updated_at'>;

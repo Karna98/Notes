@@ -8,14 +8,14 @@
 
 // Mapped Routes. { Simple-Route : Normalized-Route}
 const definedRoutes: Record<string, string> = {
-  'auth-status': 'AUTH:STATUS',
-  'auth-register': 'AUTH:REGISTER',
   'auth-login': 'AUTH:LOGIN',
-  'spaces-get': 'SPACES:GET',
-  'spaces-add': 'SPACES:ADD',
-  'notes-get': 'NOTES:GET',
+  'auth-register': 'AUTH:REGISTER',
+  'auth-status': 'AUTH:STATUS',
   'notes-add': 'NOTES:ADD',
   'notes-update': 'NOTES:UPDATE',
+  'spaces-add': 'SPACES:ADD',
+  'spaces-get': 'SPACES:GET',
+  'spaces-get-space': 'SPACES:GET_SPACE',
 };
 
 // Mapped React Routes

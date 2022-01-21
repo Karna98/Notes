@@ -6,34 +6,30 @@
  *
  */
 
-import message, { clearMessageState, updateMessageState } from './message';
-import session, { clearSessionState, updateSessionState } from './session';
-import space, {
-  addNoteState,
-  clearSpaceState,
-  updateNoteState,
-  updateSpaceState,
-} from './space';
+import message, { clearMessageState, setMessageState } from './message';
+import session, { clearSessionState, setSessionState } from './session';
 import spaces, {
-  addSpacesState,
+  addNoteState,
+  addSpaceState,
   clearSpacesState,
-  updateSpacesState,
+  setCurrentSpaceState,
+  setSpacesState,
+  updateNoteState,
 } from './spaces';
 
 // Exports to update State.
 export {
   addNoteState,
-  addSpacesState,
+  addSpaceState,
   clearMessageState,
   clearSessionState,
-  clearSpaceState,
   clearSpacesState,
-  updateMessageState,
+  setMessageState,
+  setCurrentSpaceState,
+  setSessionState,
+  setSpacesState,
   updateNoteState,
-  updateSessionState,
-  updateSpaceState,
-  updateSpacesState,
 };
 
 // Default export to view State.
-export default { message, session, spaces, space };
+export default { message, session, spaces };

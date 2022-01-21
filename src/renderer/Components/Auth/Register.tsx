@@ -7,14 +7,14 @@
  */
 
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { IPCRequestObject } from '../../../common/util';
-import { updateMessageState } from '../../State/reducer';
+import { createMessage, IPCRequestObject } from '../../../common/util';
+import { useAppDispatch } from '../../Hooks';
+import { setMessageState } from '../../State/reducer';
 import { sendToIpcMain } from '../../util';
 import Form from '../Elements/Form';
 
 const Register = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // Register Form Elements.
   const formElements: FormElementsInterface = {
@@ -62,7 +62,7 @@ const Register = () => {
    */
   const formSubmitAction = (formData: Record<string, unknown>): void => {
     if (formData?.password === formData?.retypePassword) {
-      dispatch(updateMessageState(0, `Registering User...`));
+      dispatch(setMessageState(createMessage(0, `Registering User...`)));
 
       sendToIpcMain(
         IPCRequestObject(`auth-register`, {
@@ -72,7 +72,7 @@ const Register = () => {
       );
     } else {
       // Passored & Retype Password Mismatch.
-      dispatch(updateMessageState(-1, `Password Mismatch.`));
+      dispatch(setMessageState(createMessage(-1, `Password Mismatch.`)));
     }
   };
 

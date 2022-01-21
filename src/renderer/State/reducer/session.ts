@@ -6,37 +6,34 @@
  *
  */
 
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { browserStorage } from '../../util';
 
-const SET_SESSION = 'set-session';
-const CLEAR_SESSION = 'clear-session';
-
-// Update Session State.
-export const updateSessionState = (payload: SessionType) => ({
-  type: SET_SESSION,
-  payload,
-});
-
-// Clear Session State.
-export const clearSessionState = () => ({
-  type: CLEAR_SESSION,
-});
-
 // Initialize Session State.
-const initialState: SessionType | null = browserStorage.getValue('session');
+const initialState: SessionType | null = browserStorage.getValue(
+  `session`,
+  `SESSION`
+);
 
-export default (
-  state = initialState,
-  action: { type: string; payload: SessionType }
-) => {
-  switch (action.type) {
-    case SET_SESSION:
-      browserStorage.setValue('session', action.payload);
+const sessionSlice = createSlice({
+  name: 'session',
+  initialState,
+  reducers: {
+    // Set Session.
+    setSessionState: (_state, action: PayloadAction<SessionType>) => {
+      // Save in browser's session storage.
+      browserStorage.setValue(`session`, `SESSION`, action.payload);
       return action.payload;
-    case CLEAR_SESSION:
-      browserStorage.removeItem('session');
-      return null;
-    default:
-      return state;
-  }
-};
+    },
+    // Clear Session.
+    clearSessionState: () => {
+      // Remove from browser's session storage.
+      browserStorage.removeItem(`session`, `SESSION`);
+      return initialState;
+    },
+  },
+});
+
+export const { setSessionState, clearSessionState } = sessionSlice.actions;
+
+export default sessionSlice.reducer;

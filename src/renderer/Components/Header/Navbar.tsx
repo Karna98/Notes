@@ -7,15 +7,15 @@
  */
 
 import React from 'react';
-import { RootStateOrAny, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import IMAGE from '../../../assets/logo/png/256x256.png';
 import { reactRoutes } from '../../../common/routes';
+import { useAppSelector } from '../../Hooks';
 import Logout from './Logout';
 
 const Navbar = () => {
   // Get session value stored in Redux Store.
-  const sessionState = useSelector((state: RootStateOrAny) => state.session);
+  const sessionState = useAppSelector((state) => state.session);
 
   return (
     <div className="d-flex flex-row align-items-center justify-content-between navbar">
