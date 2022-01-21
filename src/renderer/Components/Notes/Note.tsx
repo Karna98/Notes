@@ -26,7 +26,7 @@ const Note = () => {
   );
 
   const currentNote = notesListState?.filter(
-    ({ _id }: NotesTableInterface) => _id == Number(note_id)
+    ({ _id }: NoteStoreType) => _id == Number(note_id)
   )[0];
 
   const [note, setNote] = useState({

@@ -69,7 +69,7 @@ const List = () => {
         />
       </div>
       <div className="d-flex flex-row flex-wrap justify-content-evenly">
-        {currentSpaceState?.notes.map((note: NotesTableInterface) => (
+        {currentSpaceState?.notes.map((note: NoteStoreType) => (
           <Link
             key={note._id}
             to={`${location.pathname}/${note._id}`}

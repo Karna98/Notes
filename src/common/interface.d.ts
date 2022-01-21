@@ -105,5 +105,5 @@ interface SpacesInterface {
 
 interface SpaceInterface {
   space_id: number;
-  notes: NotesTableInterface[];
+  notes: NoteStoreType[];
 }

@@ -70,9 +70,15 @@ const spacesSlice = createSlice({
     },
     // Add new Note.
     addNoteState: (state, action: PayloadAction<NotesTableInterface>) => {
-      if (state != null && state.currentSpace !== undefined) {
-        const updatedNotesList: NotesTableInterface[] = [
-          action.payload,
+      const { space_id, ...newNote } = action.payload;
+
+      if (
+        state != null &&
+        state.currentSpace !== undefined &&
+        state.currentSpace.space_id == space_id
+      ) {
+        const updatedNotesList: NoteStoreType[] = [
+          newNote,
           ...state.currentSpace.notes,
         ];
 
@@ -88,10 +94,10 @@ const spacesSlice = createSlice({
       }
     },
     // Update Note.
-    updateNoteState: (state, action: PayloadAction<NotesTableInterface>) => {
+    updateNoteState: (state, action: PayloadAction<NoteStoreType>) => {
       if (state != null && state.currentSpace !== undefined) {
         const indexOfNote = state.currentSpace.notes.findIndex(
-          (note: NotesTableInterface) => note._id == action.payload._id
+          (note: NoteStoreType) => note._id == action.payload._id
         );
 
         if (indexOfNote != -1) {

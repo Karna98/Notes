@@ -56,7 +56,7 @@ const Space = () => {
       spacesState.currentSpace.space_id != Number(space_id)
     )
       sendToIpcMain(
-        IPCRequestObject(`notes-get`, { space_id: Number(space_id) })
+        IPCRequestObject(`spaces-get-space`, { _id: Number(space_id) })
       );
   }, []);
 

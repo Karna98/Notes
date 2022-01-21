@@ -83,16 +83,14 @@ const useResponse = () => {
       case 'spaces-add':
         if (response.status == 200) {
           dispatchMessage(dispatch, response.status, response.message);
-
-          const newSpace = (response.data as SpacesInterface).list[0];
-          dispatch(addSpaceState(newSpace));
+          dispatch(addSpaceState(response.data as SpacesTableInterface));
         } else if (response.status == 500) {
           // If Space was not added successfully.
           dispatchMessage(dispatch, response.status, response.message);
         }
         break;
 
-      case 'notes-get':
+      case 'spaces-get-space':
         if (response.status == 200)
           dispatch(setCurrentSpaceState(response.data as SpaceInterface));
         break;
@@ -108,7 +106,7 @@ const useResponse = () => {
 
       case 'notes-update':
         if (response.status == 200) {
-          dispatch(updateNoteState(response.data as NotesTableInterface));
+          dispatch(updateNoteState(response.data as NoteStoreType));
         } else if (response.status == 500) {
           dispatchMessage(dispatch, response.status, response.message);
         }
