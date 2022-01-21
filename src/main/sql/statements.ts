@@ -50,17 +50,20 @@ const getStatement = (table: string, columns: string[]): string => {
  * @param table Name of the table.
  * @param columns Name of the column/s.
  * @param condition Conditions to be applied.
+ * @param extraConditions Additional Conditions to be applied (Optional).
  * @returns {string} GET Statement with provided params.
  */
 const getConditionalStatement = (
   table: string,
   columns: string[],
-  condition: string
+  condition: string,
+  extraConditions?: string
 ) => {
   return `
     SELECT ${columns.join(', ')}
     FROM ${table}
-    WHERE ${condition};
+    WHERE ${condition}
+    ${extraConditions !== undefined ? extraConditions : ''};
   `;
 };
 
@@ -250,7 +253,12 @@ const createNoteStatement = (): string => {
  * @returns {string}
  */
 const getNotesStatement = (): string => {
-  return getConditionalStatement(`notes`, [`*`], `space_id = $spaceId`);
+  return getConditionalStatement(
+    `notes`,
+    [`*`],
+    `space_id = $spaceId`,
+    `ORDER BY _id DESC`
+  );
 };
 
 /**
