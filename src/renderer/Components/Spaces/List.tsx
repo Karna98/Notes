@@ -6,12 +6,12 @@
  *
  */
 
+import { IPCRequestObject } from 'common/util';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { IPCRequestObject } from '../../../common/util';
-import { useAppSelector } from '../../Hooks';
-import { sendToIpcMain } from '../../util';
-import Form from '../Elements/Form';
+import { Form } from 'renderer/Components';
+import { useAppSelector } from 'renderer/Hooks';
+import { sendToIpcMain } from 'renderer/util';
 
 const List = () => {
   // Get session value stored in Redux Store.

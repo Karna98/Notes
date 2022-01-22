@@ -6,12 +6,11 @@
  *
  */
 
+import { reactRoutes } from 'common/routes';
+import { createMessage, IPCRequestObject } from 'common/util';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dispatch } from 'redux';
-import { useAppDispatch } from '.';
-import { reactRoutes } from '../../common/routes';
-import { createMessage, IPCRequestObject } from '../../common/util';
 import {
   addNoteState,
   addSpaceState,
@@ -20,8 +19,9 @@ import {
   setSessionState,
   setSpacesState,
   updateNoteState,
-} from '../State/reducer';
-import { sendToIpcMain } from '../util';
+} from 'renderer/State';
+import { sendToIpcMain } from 'renderer/util';
+import { useAppDispatch } from '.';
 
 /**
  * Displays Message.

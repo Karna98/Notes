@@ -6,11 +6,10 @@
  *
  */
 
-import { resolveRoute } from '../common/routes';
-import { createMessage, IPCResponseObject } from '../common/util';
+import { createMessage, IPCResponseObject, resolveRoute } from '../common';
 import CONSTANTS from './constants';
 import { cryptBcryptCompare, cryptBcryptHash } from './secure-util';
-import database from './sql/database';
+import database from './sql';
 
 // Temporary Types.
 type SpacesRequestDataType =

@@ -1,5 +1,5 @@
 /**
- * database.ts
+ * index.ts
  *
  * Description:
  *    Function related to database objects.

@@ -1,5 +1,5 @@
 /**
- * Form.tsx
+ * index.tsx
  *
  * Description:
  *    Form Component similar to HTML Form.
@@ -7,9 +7,9 @@
  */
 
 import React, { useState } from 'react';
-import Button from './Button';
+import Button from '../Button';
+import Input from '../Input';
 import './form.scss';
-import Input from './Input';
 
 const Form: React.FC<FormInterface> = (props) => {
   const { id, method, elements, submitAction, reset } = props;

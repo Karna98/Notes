@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import { useAppSelector } from '../Hooks';
+import { useAppSelector } from 'renderer/Hooks';
 
 const Profile = () => {
   // Get session value stored in Redux Store.

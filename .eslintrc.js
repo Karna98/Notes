@@ -46,7 +46,9 @@ module.exports = {
     },
     'import/resolver': {
       // See https://github.com/benmosher/eslint-plugin-import/issues/1396#issuecomment-575727774 for line below
-      node: {},
+      node: {
+        moduleDirectory: ['node_modules', 'src/'],
+      },
       webpack: {
         config: require.resolve('./.config/webpack/webpack.config.eslint.ts'),
       },

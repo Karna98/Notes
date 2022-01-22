@@ -6,13 +6,12 @@
  *
  */
 
+import { IPCRequestObject } from 'common/util';
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { IPCRequestObject } from '../../../common/util';
-import { useAppSelector } from '../../Hooks';
-import { sendToIpcMain } from '../../util';
-import Button from '../Elements/Button';
-import Form from '../Elements/Form';
+import { Button, Form } from 'renderer/Components';
+import { useAppSelector } from 'renderer/Hooks';
+import { sendToIpcMain } from 'renderer/util';
 
 const Note = () => {
   const navigate = useNavigate();

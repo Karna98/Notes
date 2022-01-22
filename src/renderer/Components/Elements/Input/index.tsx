@@ -1,5 +1,5 @@
 /**
- * Input.tsx
+ * index.tsx
  *
  * Description:
  *    Input Component similar to HTML Input.

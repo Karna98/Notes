@@ -8,8 +8,7 @@
 
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import Login from '../Components/Auth/Login';
-import Register from '../Components/Auth/Register';
+import { Login, Register } from 'renderer/Components';
 import './auth.scss';
 
 const Auth = () => {

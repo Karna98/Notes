@@ -6,12 +6,12 @@
  *
  */
 
+import { createMessage, IPCRequestObject } from 'common/util';
 import React from 'react';
-import { createMessage, IPCRequestObject } from '../../../common/util';
-import { useAppDispatch } from '../../Hooks';
-import { setMessageState } from '../../State/reducer';
-import { sendToIpcMain } from '../../util';
-import Form from '../Elements/Form';
+import { Form } from 'renderer/Components';
+import { useAppDispatch } from 'renderer/Hooks';
+import { setMessageState } from 'renderer/State';
+import { sendToIpcMain } from 'renderer/util';
 
 const Register = () => {
   const dispatch = useAppDispatch();

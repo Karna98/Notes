@@ -1,5 +1,5 @@
 /**
- * Button.tsx
+ * index.tsx
  *
  * Description:
  *    Button Component similar to HTML Button.

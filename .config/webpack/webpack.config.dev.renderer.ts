@@ -64,7 +64,7 @@ export default webpackMergeConfig(baseConfig, {
       'webpack/hot/only-dev-server',
       pathJoin(webpackPaths.srcRendererPath, `index.tsx`),
     ],
-    launch: pathJoin(webpackPaths.srcRendererPath, `launch`, `launch.tsx`),
+    launch: pathJoin(webpackPaths.srcRendererPath, `launch`, `index.tsx`),
   },
 
   output: {

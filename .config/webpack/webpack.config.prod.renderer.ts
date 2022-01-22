@@ -6,13 +6,13 @@
  *
  */
 
-import webpackPaths from './webpack.paths';
-import baseConfig from './webpack.config.base';
-import { merge as webpackMergeConfig } from 'webpack-merge';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { join as pathJoin } from 'path';
 import { EnvironmentPlugin } from 'webpack';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { merge as webpackMergeConfig } from 'webpack-merge';
 import checkNodeEnv from '../script/check-node-env';
+import baseConfig from './webpack.config.base';
+import webpackPaths from './webpack.paths';
 
 checkNodeEnv('production');
 
@@ -34,7 +34,7 @@ export default webpackMergeConfig(baseConfig, {
 
   entry: {
     renderer: pathJoin(webpackPaths.srcRendererPath, `index.tsx`),
-    launch: pathJoin(webpackPaths.srcRendererPath, `launch`, `launch.tsx`),
+    launch: pathJoin(webpackPaths.srcRendererPath, `launch`, `index.tsx`),
   },
 
   output: {
