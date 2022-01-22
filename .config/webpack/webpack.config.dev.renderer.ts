@@ -6,21 +6,21 @@
  *
  */
 
-import webpackPaths from './webpack.paths';
-import baseConfig from './webpack.config.base';
-import { merge as webpackMergeConfig } from 'webpack-merge';
+import { black as chalkBlack } from 'chalk';
+import { execSync, spawn } from 'child_process';
+import { existsSync as fsExistsSync } from 'fs';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { join as pathJoin, resolve as pathResolve } from 'path';
 import {
   DllReferencePlugin,
   EnvironmentPlugin,
-  LoaderOptionsPlugin,
   HotModuleReplacementPlugin,
+  LoaderOptionsPlugin,
 } from 'webpack';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { merge as webpackMergeConfig } from 'webpack-merge';
 import checkNodeEnv from '../script/check-node-env';
-import { spawn, execSync } from 'child_process';
-import { existsSync as fsExistsSync } from 'fs';
-import chalk from 'chalk';
+import baseConfig from './webpack.config.base';
+import webpackPaths from './webpack.paths';
 
 const isDevelopmentMode = process.env.NODE_ENV === `development`;
 
@@ -44,7 +44,7 @@ if (
   !(fsExistsSync(webpackPaths.dllPath) && fsExistsSync(manifest))
 ) {
   console.log(
-    chalk.black.bgYellow.bold(
+    chalkBlack.bgYellow.bold(
       'The DLL files are missing. Sit back while we build them for you with "npm run build-dll"'
     )
   );
