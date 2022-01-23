@@ -6,6 +6,7 @@
  *
  */
 
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import { black as chalkBlack } from 'chalk';
 import { execSync, spawn } from 'child_process';
 import { existsSync as fsExistsSync } from 'fs';
@@ -14,7 +15,6 @@ import { join as pathJoin, resolve as pathResolve } from 'path';
 import {
   DllReferencePlugin,
   EnvironmentPlugin,
-  HotModuleReplacementPlugin,
   LoaderOptionsPlugin,
 } from 'webpack';
 import { merge as webpackMergeConfig } from 'webpack-merge';
@@ -120,6 +120,8 @@ export default webpackMergeConfig(baseConfig, {
       debug: true,
     }),
 
+    new ReactRefreshWebpackPlugin(),
+
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: pathJoin(webpackPaths.srcRendererPath, 'index.html'),
@@ -145,8 +147,6 @@ export default webpackMergeConfig(baseConfig, {
         removeComments: true,
       },
     }),
-
-    new HotModuleReplacementPlugin(),
   ],
 
   node: {
