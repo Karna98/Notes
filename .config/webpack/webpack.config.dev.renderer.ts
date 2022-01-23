@@ -32,7 +32,7 @@ if (!isDevelopmentMode) {
 
 const port = process.env.PORT || 1234;
 const manifest = pathResolve(webpackPaths.dllPath, 'renderer.json');
-const requiredByDLLConfig = module.parent.filename.includes(
+const requiredByDLLConfig = require.main.filename.includes(
   'webpack.config.dev.renderer.dll'
 );
 
@@ -93,13 +93,15 @@ export default webpackMergeConfig(baseConfig, {
     ],
   },
   plugins: [
-    requiredByDLLConfig
-      ? null
-      : new DllReferencePlugin({
-          context: webpackPaths.dllPath,
-          manifest: require(manifest),
-          sourceType: 'var',
-        }),
+    ...(requiredByDLLConfig
+      ? []
+      : [
+          new DllReferencePlugin({
+            context: webpackPaths.dllPath,
+            manifest: require(manifest),
+            sourceType: 'var',
+          }),
+        ]),
 
     /**
      * Create global constants which can be configured at compile time.
@@ -162,17 +164,19 @@ export default webpackMergeConfig(baseConfig, {
     },
     historyApiFallback: {
       verbose: true,
-      disableDotRule: false,
     },
-    onBeforeSetupMiddleware() {
+    setupMiddlewares(middlewares) {
       console.log('Starting Main Process...');
+
       spawn('npm', ['run', 'dev:main'], {
         shell: true,
         env: process.env,
         stdio: 'inherit',
       })
-        .on('close', (code) => process.exit(code))
+        .on('close', (code: number) => process.exit(code!))
         .on('error', (spawnError) => console.error(spawnError));
+
+      return middlewares;
     },
   },
 });

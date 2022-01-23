@@ -10,27 +10,30 @@
 module.exports = {
   extends: [
     // @TODO : The plugins defined below needs to be removed if not used.
+    'plugin:@typescript-eslint/recommended',
+    'plugin:eslint-comments/recommended',
+    'plugin:import/errors',
+    'plugin:import/typescript',
+    'plugin:import/warnings',
+    'plugin:jsx-a11y/recommended',
+    'plugin:prettier/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:import/errors',
-    'plugin:import/warnings',
-    'plugin:import/typescript',
-    'plugin:jsx-a11y/recommended',
-    'plugin:eslint-comments/recommended',
     'prettier',
-    'plugin:prettier/recommended',
   ],
   rules: {
     // @TODO : The rules defined below needs to be removed if not used.
-    'import/no-extraneous-dependencies': 'off',
-    'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
-    'react/prop-types': 'off',
+    // A temporary hack related to IDE not resolving correct package.json
+    'import/no-extraneous-dependencies': 'off',
+    'import/no-unresolved': 'error',
+    'no-unused-vars': 'off',
     'react/jsx-uses-react': 'off',
+    'react/prop-types': 'off',
+    // Since React 17 and typescript 4.1 you can safely disable the rule
     'react/react-in-jsx-scope': 'off',
   },
   parserOptions: {

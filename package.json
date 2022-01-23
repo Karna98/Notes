@@ -71,7 +71,7 @@
     "dev": "npm run dev:renderer",
     "dev:main": "cross-env NODE_ENV=development electron -r ts-node/register/transpile-only ./src/main/main.ts",
     "dev:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.config/webpack/webpack.config.dev.renderer.ts",
-    "lint": "cross-env NODE_ENV=development eslint . --cache --ext .js,.jsx,.ts,.tsx,.json",
+    "lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx,.json",
     "format": "prettier --config .prettierrc.js --write \"./**/*.{html,css,scss,json,js,jsx,ts,tsx,md}\"",
     "postinstall": "ts-node ./.config/script/check-native-dep.js && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.config/webpack/webpack.config.dev.renderer.dll.ts",
     "install-native-dep": "npm install better-sqlite3 --prefix release/app",
@@ -96,5 +96,19 @@
     "*.{html,md,yml}": [
       "prettier --ignore-path .eslintignore --single-quote --write"
     ]
+  },
+  "prettier": {
+    "overrides": [
+      {
+        "files": [
+          ".prettierrc",
+          ".eslintrc"
+        ],
+        "options": {
+          "parser": "json"
+        }
+      }
+    ],
+    "singleQuote": true
   }
 }
