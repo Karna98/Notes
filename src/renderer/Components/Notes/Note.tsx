@@ -6,8 +6,8 @@
  *
  */
 
-import { IPCRequestObject } from 'common/util';
-import React, { useState } from 'react';
+import { IPCRequestObject } from 'common';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Form } from 'renderer/Components';
 import { useAppSelector } from 'renderer/Hooks';

@@ -6,7 +6,7 @@
  *    attached to `index.html`.
  */
 
-import React from 'react';
+import { StrictMode } from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { MemoryRouter as Router } from 'react-router-dom';
@@ -15,12 +15,12 @@ import { store } from './State';
 import './style.scss';
 
 render(
-  <React.StrictMode>
+  <StrictMode>
     <Provider store={store}>
       <Router>
         <App />
       </Router>
     </Provider>
-  </React.StrictMode>,
+  </StrictMode>,
   document.getElementById(`root`)
 );

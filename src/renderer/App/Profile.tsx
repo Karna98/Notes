@@ -6,7 +6,6 @@
  *
  */
 
-import React from 'react';
 import { useAppSelector } from 'renderer/Hooks';
 
 const Profile = () => {

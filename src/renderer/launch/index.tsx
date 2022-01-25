@@ -7,7 +7,6 @@
  */
 
 import IMAGE from 'assets/logo/png/256x256.png';
-import React from 'react';
 import { render } from 'react-dom';
 import './launch.scss';
 

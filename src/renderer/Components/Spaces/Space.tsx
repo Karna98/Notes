@@ -6,8 +6,8 @@
  *
  */
 
-import { IPCRequestObject } from 'common/util';
-import React, { useEffect } from 'react';
+import { IPCRequestObject } from 'common';
+import { useEffect } from 'react';
 import { Route, Routes, useParams } from 'react-router-dom';
 import { Notes, Sidebar } from 'renderer/Components';
 import { useAppSelector } from 'renderer/Hooks';

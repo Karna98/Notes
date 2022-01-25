@@ -6,8 +6,7 @@
  *
  */
 
-import { createMessage, IPCRequestObject } from 'common/util';
-import React from 'react';
+import { createMessage, IPCRequestObject } from 'common';
 import { Form } from 'renderer/Components';
 import { useAppDispatch } from 'renderer/Hooks';
 import { setMessageState } from 'renderer/State';

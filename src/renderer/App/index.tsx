@@ -5,8 +5,7 @@
  *    Base file for all the pages to be rendered.
  */
 
-import { reactRoutes } from 'common/routes';
-import { IPCRequestObject } from 'common/util';
+import { IPCRequestObject, reactRoutes } from 'common';
 import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Header, Message, Spaces } from 'renderer/Components';

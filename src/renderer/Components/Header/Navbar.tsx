@@ -7,8 +7,7 @@
  */
 
 import IMAGE from 'assets/logo/png/256x256.png';
-import { reactRoutes } from 'common/routes';
-import React from 'react';
+import { reactRoutes } from 'common';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from 'renderer/Hooks';
 import Logout from './Logout';

@@ -6,7 +6,7 @@
  *
  */
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from 'renderer/Hooks';
 import { clearMessageState } from 'renderer/State';
 import './message.scss';

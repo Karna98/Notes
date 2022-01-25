@@ -6,8 +6,7 @@
  *
  */
 
-import { reactRoutes } from 'common/routes';
-import { createMessage, IPCRequestObject } from 'common/util';
+import { createMessage, IPCRequestObject, reactRoutes } from 'common';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dispatch } from 'redux';

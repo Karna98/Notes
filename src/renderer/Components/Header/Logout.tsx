@@ -6,7 +6,6 @@
  *
  */
 
-import React from 'react';
 import { Form } from 'renderer/Components';
 import { useAppDispatch } from 'renderer/Hooks';
 import { clearSessionState, clearSpacesState } from 'renderer/State';

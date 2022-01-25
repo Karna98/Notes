@@ -6,7 +6,6 @@
  *
  */
 
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Login, Register } from 'renderer/Components';
 import './auth.scss';

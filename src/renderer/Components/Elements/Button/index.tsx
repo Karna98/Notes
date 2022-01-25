@@ -6,7 +6,6 @@
  *
  */
 
-import React from 'react';
 import './button.scss';
 
 const Button: React.FC<ButtonInterface> = (props) => {
