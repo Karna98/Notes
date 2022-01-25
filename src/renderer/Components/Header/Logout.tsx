@@ -6,10 +6,9 @@
  *
  */
 
-import React from 'react';
-import { useAppDispatch } from '../../Hooks';
-import { clearSessionState, clearSpacesState } from '../../State/reducer';
-import Form from '../Elements/Form';
+import { Form } from 'renderer/Components';
+import { useAppDispatch } from 'renderer/Hooks';
+import { clearSessionState, clearSpacesState } from 'renderer/State';
 
 const Logout = () => {
   const dispatch = useAppDispatch();

@@ -6,12 +6,11 @@
  *
  */
 
-import React from 'react';
+import { IPCRequestObject } from 'common';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { IPCRequestObject } from '../../../common/util';
-import { useAppSelector } from '../../Hooks';
-import { sendToIpcMain } from '../../util';
-import Form from '../Elements/Form';
+import { Form } from 'renderer/Components';
+import { useAppSelector } from 'renderer/Hooks';
+import { sendToIpcMain } from 'renderer/util';
 
 const List = () => {
   const location = useLocation();

@@ -1,12 +1,11 @@
 /**
- * Button.tsx
+ * index.tsx
  *
  * Description:
  *    Button Component similar to HTML Button.
  *
  */
 
-import React from 'react';
 import './button.scss';
 
 const Button: React.FC<ButtonInterface> = (props) => {

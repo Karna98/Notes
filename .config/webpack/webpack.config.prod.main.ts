@@ -6,16 +6,21 @@
  *
  */
 
-import webpackPaths from './webpack.paths';
-import baseConfig from './webpack.config.base';
-import { merge as webpackMergeConfig } from 'webpack-merge';
 import { join as pathJoin } from 'path';
 import { EnvironmentPlugin } from 'webpack';
+import { merge as webpackMergeConfig } from 'webpack-merge';
 import checkNodeEnv from '../script/check-node-env';
+import deleteSourceMaps from '../script/delete-source-maps';
 import { copyAssetsFolder } from '../script/temp-fix';
+import baseConfig from './webpack.config.base';
+import webpackPaths from './webpack.paths';
 
 checkNodeEnv('production');
-(process.env.NODE_ENV === `production`) && copyAssetsFolder();
+
+deleteSourceMaps();
+
+// Copy assets from 'src' to 'release/app/dist'.
+process.env.NODE_ENV === `production` && copyAssetsFolder();
 
 const devtoolsConfig =
   process.env.DEBUG_PROD === `true`

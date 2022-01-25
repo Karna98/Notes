@@ -29,7 +29,7 @@ const sessionSlice = createSlice({
     clearSessionState: () => {
       // Remove from browser's session storage.
       browserStorage.removeItem(`session`, `SESSION`);
-      return initialState;
+      return null;
     },
   },
 });

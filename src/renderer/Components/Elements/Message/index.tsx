@@ -6,9 +6,9 @@
  *
  */
 
-import React, { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../Hooks';
-import { clearMessageState } from '../../State/reducer';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from 'renderer/Hooks';
+import { clearMessageState } from 'renderer/State';
 import './message.scss';
 
 const Message = () => {

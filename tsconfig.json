@@ -12,11 +12,11 @@
     // -- Language and Environment --
 
     // Set the JavaScript language version for emitted JavaScript and include compatible library declarations.
-    "target": "ES2020",
+    "target": "ES2021",
     // Specify a set of bundled library declaration files that describe the target runtime environment.
     "lib": ["dom", "esnext"],
     // Specify what JSX code is generated.
-    "jsx": "react",
+    "jsx": "react-jsx",
 
     // -- Modules --
 
@@ -69,5 +69,5 @@
     // Enable error reporting for fallthrough cases in switch statements.
     "noFallthroughCasesInSwitch": true
   },
-  "exclude": ["release/build", "release/app/dist"]
+  "exclude": ["release/build", "release/app/dist", ".config/dll"]
 }

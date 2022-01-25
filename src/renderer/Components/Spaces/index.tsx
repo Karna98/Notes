@@ -6,7 +6,6 @@
  *
  */
 
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import List from './List';
 import Space from './Space';

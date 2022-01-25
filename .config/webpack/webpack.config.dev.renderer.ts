@@ -6,21 +6,21 @@
  *
  */
 
-import webpackPaths from './webpack.paths';
-import baseConfig from './webpack.config.base';
-import { merge as webpackMergeConfig } from 'webpack-merge';
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import { black as chalkBlack } from 'chalk';
+import { execSync, spawn } from 'child_process';
+import { existsSync as fsExistsSync } from 'fs';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { join as pathJoin, resolve as pathResolve } from 'path';
 import {
   DllReferencePlugin,
   EnvironmentPlugin,
   LoaderOptionsPlugin,
-  HotModuleReplacementPlugin,
 } from 'webpack';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { merge as webpackMergeConfig } from 'webpack-merge';
 import checkNodeEnv from '../script/check-node-env';
-import { spawn, execSync } from 'child_process';
-import { existsSync as fsExistsSync } from 'fs';
-import chalk from 'chalk';
+import baseConfig from './webpack.config.base';
+import webpackPaths from './webpack.paths';
 
 const isDevelopmentMode = process.env.NODE_ENV === `development`;
 
@@ -32,7 +32,8 @@ if (!isDevelopmentMode) {
 
 const port = process.env.PORT || 1234;
 const manifest = pathResolve(webpackPaths.dllPath, 'renderer.json');
-const requiredByDLLConfig = module.parent.filename.includes(
+// Note: 'module.parent' is deprecated but when replaced by 'require.main', it breaks the DLL build.
+const requiredByDLLConfig = module.parent!.filename.includes(
   'webpack.config.dev.renderer.dll'
 );
 
@@ -44,7 +45,7 @@ if (
   !(fsExistsSync(webpackPaths.dllPath) && fsExistsSync(manifest))
 ) {
   console.log(
-    chalk.black.bgYellow.bold(
+    chalkBlack.bgYellow.bold(
       'The DLL files are missing. Sit back while we build them for you with "npm run build-dll"'
     )
   );
@@ -64,7 +65,7 @@ export default webpackMergeConfig(baseConfig, {
       'webpack/hot/only-dev-server',
       pathJoin(webpackPaths.srcRendererPath, `index.tsx`),
     ],
-    launch: pathJoin(webpackPaths.srcRendererPath, `launch`, `launch.tsx`),
+    launch: pathJoin(webpackPaths.srcRendererPath, `launch`, `index.tsx`),
   },
 
   output: {
@@ -93,13 +94,15 @@ export default webpackMergeConfig(baseConfig, {
     ],
   },
   plugins: [
-    requiredByDLLConfig
-      ? null
-      : new DllReferencePlugin({
-          context: webpackPaths.dllPath,
-          manifest: require(manifest),
-          sourceType: 'var',
-        }),
+    ...(requiredByDLLConfig
+      ? []
+      : [
+          new DllReferencePlugin({
+            context: webpackPaths.dllPath,
+            manifest: require(manifest),
+            sourceType: 'var',
+          }),
+        ]),
 
     /**
      * Create global constants which can be configured at compile time.
@@ -117,6 +120,8 @@ export default webpackMergeConfig(baseConfig, {
     new LoaderOptionsPlugin({
       debug: true,
     }),
+
+    new ReactRefreshWebpackPlugin(),
 
     new HtmlWebpackPlugin({
       filename: 'index.html',
@@ -143,8 +148,6 @@ export default webpackMergeConfig(baseConfig, {
         removeComments: true,
       },
     }),
-
-    new HotModuleReplacementPlugin(),
   ],
 
   node: {
@@ -162,17 +165,19 @@ export default webpackMergeConfig(baseConfig, {
     },
     historyApiFallback: {
       verbose: true,
-      disableDotRule: false,
     },
-    onBeforeSetupMiddleware() {
+    setupMiddlewares(middlewares) {
       console.log('Starting Main Process...');
+
       spawn('npm', ['run', 'dev:main'], {
         shell: true,
         env: process.env,
         stdio: 'inherit',
       })
-        .on('close', (code) => process.exit(code))
+        .on('close', (code: number) => process.exit(code!))
         .on('error', (spawnError) => console.error(spawnError));
+
+      return middlewares;
     },
   },
 });

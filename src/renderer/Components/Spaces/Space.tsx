@@ -6,13 +6,12 @@
  *
  */
 
-import React, { useEffect } from 'react';
+import { IPCRequestObject } from 'common';
+import { useEffect } from 'react';
 import { Route, Routes, useParams } from 'react-router-dom';
-import { IPCRequestObject } from '../../../common/util';
-import { useAppSelector } from '../../Hooks';
-import { sendToIpcMain } from '../../util';
-import Notes from '../Notes';
-import Sidebar from '../Sidebar';
+import { Notes, Sidebar } from 'renderer/Components';
+import { useAppSelector } from 'renderer/Hooks';
+import { sendToIpcMain } from 'renderer/util';
 
 const Space = () => {
   // Get spaces value stored in Redux Store.

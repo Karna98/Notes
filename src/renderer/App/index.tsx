@@ -5,15 +5,12 @@
  *    Base file for all the pages to be rendered.
  */
 
+import { IPCRequestObject, reactRoutes } from 'common';
 import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { reactRoutes } from '../../common/routes';
-import { IPCRequestObject } from '../../common/util';
-import Message from '../Components/Elements/Message';
-import Header from '../Components/Header';
-import Spaces from '../Components/Spaces';
-import { useAppSelector, useResponse } from '../Hooks';
-import { sendToIpcMain } from '../util';
+import { Header, Message, Spaces } from 'renderer/Components';
+import { useAppSelector, useResponse } from 'renderer/Hooks';
+import { sendToIpcMain } from 'renderer/util';
 import Auth from './Auth';
 import Profile from './Profile';
 import ProtectedRoute from './ProtectedRoutes';

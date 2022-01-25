@@ -53,7 +53,7 @@ const spacesSlice = createSlice({
     // Clear Spaces.
     clearSpacesState: () => {
       clearBrowserStorage();
-      return initialState;
+      return null;
     },
     // Set Spaces.
     setCurrentSpaceState: (state, action: PayloadAction<SpaceInterface>) => {

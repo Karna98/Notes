@@ -6,8 +6,8 @@
  *
  */
 
+import { resolve as pathResolve } from 'path';
 import { URL } from 'url';
-import path from 'path';
 
 /**
  * Returns URL to be displayed in Electron's Window.
@@ -27,7 +27,7 @@ const resolveHtmlPath = (htmlFileName: string): string => {
     return url.href;
   } else {
     // In PRODUCTION MODE
-    return `file://${path.resolve(__dirname, '../renderer/', htmlFileName)}`;
+    return `file://${pathResolve(__dirname, '../renderer/', htmlFileName)}`;
   }
 };
 
