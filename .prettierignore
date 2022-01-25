@@ -3,3 +3,6 @@ release/app/dist
 
 # Third-party files
 node_modules
+
+# Github files
+.github

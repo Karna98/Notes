@@ -8,9 +8,15 @@
  */
 
 import { existsSync as fsExistsSync, symlinkSync as fsSymlinkSync } from 'fs';
-
 import webpackPath from '../webpack/webpack.paths';
 
-if (!fsExistsSync(webpackPath.srcNodeModulesPath) && fsExistsSync(webpackPath.appNodeModulesPath)) {
-  fsSymlinkSync(webpackPath.appNodeModulesPath, webpackPath.srcNodeModulesPath, 'junction');
+if (
+  !fsExistsSync(webpackPath.srcNodeModulesPath) &&
+  fsExistsSync(webpackPath.appNodeModulesPath)
+) {
+  fsSymlinkSync(
+    webpackPath.appNodeModulesPath,
+    webpackPath.srcNodeModulesPath,
+    'junction'
+  );
 }
