@@ -9,20 +9,18 @@
 
 module.exports = {
   extends: [
-    // @TODO : The plugins defined below needs to be removed if not used.
-    'plugin:@typescript-eslint/recommended',
-    'plugin:eslint-comments/recommended',
-    'plugin:import/errors',
-    'plugin:import/typescript',
-    'plugin:import/warnings',
-    'plugin:jsx-a11y/recommended',
-    'plugin:prettier/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:import/typescript',
+    'plugin:jsx-a11y/recommended',
+    'plugin:eslint-comments/recommended',
     'prettier',
+    'plugin:prettier/recommended',
   ],
   rules: {
-    // @TODO : The rules defined below needs to be removed if not used.
     '@typescript-eslint/no-unused-vars': ['error'],
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
