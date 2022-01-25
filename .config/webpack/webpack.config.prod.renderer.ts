@@ -33,7 +33,7 @@ export default webpackMergeConfig(baseConfig, {
 
   mode: `production`,
 
-  target: `electron-renderer`,
+  target: ['web', 'electron-renderer'],
 
   entry: {
     renderer: pathJoin(webpackPaths.srcRendererPath, `index.tsx`),

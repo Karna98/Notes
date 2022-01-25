@@ -32,7 +32,8 @@ if (!isDevelopmentMode) {
 
 const port = process.env.PORT || 1234;
 const manifest = pathResolve(webpackPaths.dllPath, 'renderer.json');
-const requiredByDLLConfig = require.main.filename.includes(
+// Note: 'module.parent' is deprecated but when replaced by 'require.main', it breaks the DLL build.
+const requiredByDLLConfig = module.parent!.filename.includes(
   'webpack.config.dev.renderer.dll'
 );
 
