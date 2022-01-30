@@ -17,3 +17,8 @@ type SessionType = Pick<
 >;
 
 type NoteStoreType = Pick<NotesTableInterface, '_id' | 'note' | 'updated_at'>;
+
+type ElementType<T> = {
+  element: 'input' | 'textarea' | 'button';
+  attributes: T;
+};

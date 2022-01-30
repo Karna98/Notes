@@ -6,10 +6,10 @@
  *
  */
 
-import { IPCRequestObject } from 'common';
+import { IPCRequestObject, resolveReactRoutes } from 'common';
 import { useEffect } from 'react';
 import { Route, Routes, useParams } from 'react-router-dom';
-import { Notes, Sidebar } from 'renderer/Components';
+import { Credentials, Notes, Sidebar } from 'renderer/Components';
 import { useAppSelector } from 'renderer/Hooks';
 import { sendToIpcMain } from 'renderer/util';
 
@@ -28,14 +28,18 @@ const Space = () => {
   const sidebarLinks = [
     {
       title: 'Notes',
-      URI: `/spaces/${space_id}/notes`,
+      URI: resolveReactRoutes('notes', { space_id: Number(space_id) }),
+    },
+    {
+      title: 'Credentials',
+      URI: resolveReactRoutes('credentials', { space_id: Number(space_id) }),
     },
   ];
 
   const routeList = [
     {
       name: 'Space Welcome Page',
-      path: '/',
+      path: resolveReactRoutes('root'),
       element: (
         <>
           Welcome to <h3>{currentSpaceDetails?.space_name} Space.</h3>
@@ -46,6 +50,11 @@ const Space = () => {
       name: 'notes',
       path: '/notes/*',
       element: <Notes />,
+    },
+    {
+      name: 'credentials',
+      path: '/credentials/*',
+      element: <Credentials />,
     },
   ];
 

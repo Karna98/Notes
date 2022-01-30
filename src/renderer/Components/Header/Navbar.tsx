@@ -7,7 +7,7 @@
  */
 
 import IMAGE from 'assets/logo/png/256x256.png';
-import { reactRoutes } from 'common';
+import { resolveReactRoutes } from 'common';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from 'renderer/Hooks';
 import Logout from './Logout';
@@ -25,8 +25,8 @@ const Navbar = () => {
 
       {sessionState != null && (
         <div className="d-flex flex-row align-items-center navbar-links">
-          <Link to={reactRoutes.spaces}>Spaces</Link>
-          <Link to={reactRoutes.profile}>Profile</Link>
+          <Link to={resolveReactRoutes('spaces')}>Spaces</Link>
+          <Link to={resolveReactRoutes('profile')}>Profile</Link>
           <Logout />
         </div>
       )}

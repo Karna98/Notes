@@ -1,0 +1,22 @@
+/**
+ * textarea.scss 
+ * 
+ * Description:
+ *    Styles for TextArea Input Element.
+ *
+*/
+
+.input-textarea-element {
+  padding: 8px;
+}
+.input-textarea-element label {
+  min-width: 150px;
+}
+
+.input-textarea-element textarea {
+  margin: 4px 0;
+  resize: none;
+  width: 250px;
+  height: 80px;
+  padding: 2px;
+}

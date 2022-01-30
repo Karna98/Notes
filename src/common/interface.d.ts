@@ -59,24 +59,42 @@ interface NotesTableInterface {
   updated_at: number;
 }
 
+interface CredentialsTableInterface {
+  _id: number;
+  space_id: number;
+  title: string;
+  data: string;
+  updated_at: number;
+}
+
 // ================================================================================
 // Elements
 // ================================================================================
 
-interface InputInterface {
+interface ElementInterface {
   id: string;
   name: string;
-  type: React.HTMLInputTypeAttribute | undefined;
   label?: string;
+  value?: string | number | readonly string[] | undefined;
+}
+
+interface InputInterface extends ElementInterface {
+  type?: React.HTMLInputTypeAttribute | undefined;
   placeholder?: string;
   required?: boolean;
-  value?: string | number | readonly string[] | undefined;
   onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
 }
 
-interface ButtonInterface {
-  id: string;
-  label?: string;
+interface TextAreaInputInterface extends ElementInterface {
+  placeholder?: string;
+  required?: boolean;
+  onChange?: React.ChangeEventHandler<HTMLTextAreaElement> | undefined;
+}
+
+interface ButtonInterface extends Omit<ElementInterface, 'name' | 'value'> {
+  name?: string;
+  type?: 'submit' | 'button' | 'reset';
+  disabled?: boolean;
   onClick?: () => void;
 }
 
