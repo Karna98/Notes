@@ -62,8 +62,7 @@ interface NotesTableInterface {
 interface CredentialsTableInterface {
   _id: number;
   space_id: number;
-  title: string;
-  data: string;
+  credential: string;
   updated_at: number;
 }
 
@@ -124,4 +123,11 @@ interface SpacesInterface {
 interface SpaceInterface {
   space_id: number;
   notes: NoteStoreType[];
+  credentials: CredentialStoreType[];
+}
+
+interface ElementObjectInterface {
+  name: string;
+  element: string;
+  value: string | number | readonly string[] | undefined;
 }

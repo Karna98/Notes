@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import {
+  addCredentialState,
   addNoteState,
   addSpaceState,
   setCurrentSpaceState,
@@ -107,6 +108,17 @@ const useResponse = () => {
         if (response.status == 200) {
           dispatch(updateNoteState(response.data as NoteStoreType));
         } else if (response.status == 500) {
+          dispatchMessage(dispatch, response.status, response.message);
+        }
+        break;
+
+      case 'credentials-add':
+        if (response.status == 200) {
+          dispatch(
+            addCredentialState(response.data as CredentialsTableInterface)
+          );
+        } else if (response.status == 500) {
+          // If Note was not added successfully.
           dispatchMessage(dispatch, response.status, response.message);
         }
         break;

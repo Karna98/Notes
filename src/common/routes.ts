@@ -11,6 +11,7 @@ const definedRoutes: Record<string, string> = {
   'auth-login': 'AUTH:LOGIN',
   'auth-register': 'AUTH:REGISTER',
   'auth-status': 'AUTH:STATUS',
+  'credentials-add': 'CREDENTIALS:ADD',
   'notes-add': 'NOTES:ADD',
   'notes-update': 'NOTES:UPDATE',
   'spaces-add': 'SPACES:ADD',
@@ -42,6 +43,12 @@ const resolveRoute = (route: string): string[] => {
   else throw new Error('Invalid Route Request.');
 };
 
+/**
+ * Gets React Route with parameters replaced (if any).
+ *
+ * @param route Simple React Route
+ * @returns {string} Route string with passed parameter.
+ */
 const resolveReactRoutes = (
   route: string,
   params?: Record<string, string | number>
@@ -57,4 +64,4 @@ const resolveReactRoutes = (
   } else throw new Error('Invalid Route Request.');
 };
 
-export { resolveReactRoutes, resolveRoute, reactRoutes };
+export { resolveReactRoutes, resolveRoute };
