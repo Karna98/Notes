@@ -5,7 +5,7 @@
  *    Base file for all the pages to be rendered.
  */
 
-import { IPCRequestObject, reactRoutes } from 'common';
+import { IPCRequestObject, resolveReactRoutes } from 'common';
 import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Header, Message, Spaces } from 'renderer/Components';
@@ -44,7 +44,9 @@ const App = () => {
   ) => {
     return (
       <ProtectedRoute
-        redirectTo={redirect === undefined ? reactRoutes.auth_login : redirect}
+        redirectTo={
+          redirect === undefined ? resolveReactRoutes('auth_login') : redirect
+        }
         condition={condition === undefined ? isAuthenticated() : condition}
       >
         {element}
@@ -61,26 +63,26 @@ const App = () => {
   const RouteList = [
     {
       name: 'Startup Page',
-      path: `${reactRoutes.home}`,
+      path: resolveReactRoutes('root'),
       element: <div> Loading.. </div>,
     },
     {
       name: 'Auth Page',
-      path: `${reactRoutes.auth}/*`,
+      path: resolveReactRoutes('auth') + `/*`,
       element: getProtectedRoutes(
         <Auth />,
-        reactRoutes.spaces,
+        resolveReactRoutes('spaces'),
         !isAuthenticated()
       ),
     },
     {
       name: 'Spaces Page',
-      path: `${reactRoutes.spaces}/*`,
+      path: resolveReactRoutes('spaces') + `/*`,
       element: getProtectedRoutes(<Spaces />),
     },
     {
       name: 'Profile Page',
-      path: reactRoutes.profile,
+      path: resolveReactRoutes('profile'),
       element: getProtectedRoutes(<Profile />),
     },
   ];

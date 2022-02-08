@@ -58,14 +58,14 @@ const spacesSlice = createSlice({
     // Set Spaces.
     setCurrentSpaceState: (state, action: PayloadAction<SpaceInterface>) => {
       if (state != null) {
-        const currentSpace: SpaceInterface = action.payload;
-
-        setBrowserStorage({
+        const updatedCurrentSpaceState = {
           ...state,
-          currentSpace,
-        });
+          currentSpace: action.payload,
+        };
 
-        state.currentSpace = currentSpace;
+        setBrowserStorage(updatedCurrentSpaceState);
+
+        Object.assign(state, updatedCurrentSpaceState);
       }
     },
     // Add new Note.
@@ -117,10 +117,44 @@ const spacesSlice = createSlice({
         }
       }
     },
+    // Add new Credential.
+    addCredentialState: (
+      state,
+      action: PayloadAction<CredentialsTableInterface>
+    ) => {
+      const { space_id, ...newCredential } = action.payload;
+
+      if (
+        state != null &&
+        state.currentSpace !== undefined &&
+        state.currentSpace.space_id == space_id
+      ) {
+        const newCredentialObject: CredentialStoreType = {
+          ...newCredential,
+          credential: JSON.parse(newCredential.credential),
+        };
+
+        const updatedCredentialsList: CredentialStoreType[] = [
+          newCredentialObject,
+          ...state.currentSpace.credentials,
+        ];
+
+        setBrowserStorage({
+          ...state,
+          currentSpace: {
+            ...state.currentSpace,
+            credentials: updatedCredentialsList,
+          },
+        });
+
+        Object.assign(state?.currentSpace?.credentials, updatedCredentialsList);
+      }
+    },
   },
 });
 
 export const {
+  addCredentialState,
   addNoteState,
   addSpaceState,
   clearSpacesState,

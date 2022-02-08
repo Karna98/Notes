@@ -17,3 +17,13 @@ type SessionType = Pick<
 >;
 
 type NoteStoreType = Pick<NotesTableInterface, '_id' | 'note' | 'updated_at'>;
+
+type CredentialStoreType = Omit<
+  CredentialsTableInterface,
+  'space_id' | 'credential'
+> & {
+  credential: {
+    title: string;
+    secure: ElementObjectInterface[];
+  };
+};

@@ -13,6 +13,7 @@ import spaces from './spaces';
 export { clearMessageState, setMessageState } from './message';
 export { clearSessionState, setSessionState } from './session';
 export {
+  addCredentialState,
   addNoteState,
   addSpaceState,
   clearSpacesState,

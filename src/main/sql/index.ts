@@ -12,10 +12,13 @@ import { resolve as pathResolve } from 'path';
 import CONSTANTS from '../constants';
 import { updateDatabaseSchema } from './migrations';
 import {
+  createCredentialStatement,
   createDatabaseStatement,
   createNoteStatement,
   createSpaceStatement,
   createUserStatement,
+  getCredentialsStatement,
+  getCredentialWithIdStatement,
   getNotesStatement,
   getNoteWithIdStatement,
   getSpacesStatement,
@@ -284,6 +287,53 @@ const updateNote = (value: Record<string, unknown>, noteId: number) => {
   return results.changes;
 };
 
+/**
+ * Create new Credential in Database.
+ *
+ * @param value Array of data required.
+ * @returns {object} { changes, lastInsertRowid } Returns status of new credential created.
+ */
+const createNewCredential = (
+  spaceId: number,
+  credential: string
+): Database.RunResult => {
+  const db = dbInstance();
+  const results = db
+    .prepare(createCredentialStatement())
+    .run({ spaceId, credential });
+  db.close();
+
+  return results;
+};
+
+/**
+ * Get all Credentials from Database for respective Space.
+ *
+ * @returns {object} Returns all Credentials.
+ */
+const getCredentials = (spaceId: number) => {
+  const db = dbInstance();
+  const results = db.prepare(getCredentialsStatement()).all({ spaceId });
+  db.close();
+
+  return results;
+};
+
+/**
+ * Get Credential with id.
+ *
+ * @returns {object} Returns Credential.
+ */
+const getCredentialWithId = (credentialId: number | bigint) => {
+  const db = dbInstance();
+  const results = db
+    .prepare(getCredentialWithIdStatement())
+    .get({ credentialId });
+  db.close();
+
+  return results;
+};
+
 export default {
   // Database
   checkIfDbExsts,
@@ -303,4 +353,8 @@ export default {
   getNotes,
   getNoteWithId,
   updateNote,
+  // Credentials
+  createNewCredential,
+  getCredentials,
+  getCredentialWithId,
 };

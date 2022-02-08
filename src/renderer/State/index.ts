@@ -8,6 +8,7 @@
 
 // Import actions and reducers from 'reducer';
 import reducer, {
+  addCredentialState,
   addNoteState,
   addSpaceState,
   clearMessageState,
@@ -31,6 +32,7 @@ export {
   RootStateType,
   AppDispatchType,
   // Actions
+  addCredentialState,
   addNoteState,
   addSpaceState,
   clearMessageState,

@@ -132,6 +132,15 @@ const createDatabaseStatement = (): string[] => {
     FOREIGN KEY (space_id) REFERENCES spaces(_id)
   );
   `,
+    `
+  CREATE TABLE IF NOT EXISTS credentials (
+    _id INTEGER PRIMARY KEY AUTOINCREMENT,
+    space_id INTEGER NOT NULL,
+    credential TEXT NOT NULL,
+    updated_at datetime NOT NULL,
+    FOREIGN KEY (space_id) REFERENCES spaces(_id)
+  );
+  `,
   ];
 };
 
@@ -279,6 +288,46 @@ const updateNoteStatement = (values: Record<string, unknown>): string => {
   return updateStatement('notes', values, `_id = $noteId`);
 };
 
+// ================================================================================
+// Credentials Statements.
+// ================================================================================
+
+/**
+ * Insert new credential into Database.
+ *
+ * @returns {string}
+ */
+const createCredentialStatement = (): string => {
+  return insertStatement(
+    `credentials`,
+    [`space_id`, `credential`, `updated_at`],
+    [`$spaceId`, `$credential`, `${Date.now()}`]
+  );
+};
+
+/**
+ * Get all Credentials from Database for respective Space.
+ *
+ * @returns {string}
+ */
+const getCredentialsStatement = (): string => {
+  return getConditionalStatement(
+    `credentials`,
+    [`*`],
+    `space_id = $spaceId`,
+    `ORDER BY _id DESC`
+  );
+};
+
+/**
+ * Get Credential with id from Database.
+ *
+ * @returns {string}
+ */
+const getCredentialWithIdStatement = (): string => {
+  return getConditionalStatement(`credentials`, [`*`], `_id = $credentialId`);
+};
+
 export {
   createDatabaseStatement,
   insertDefaultValueStatement,
@@ -296,4 +345,8 @@ export {
   getNotesStatement,
   getNoteWithIdStatement,
   updateNoteStatement,
+  // Credentials
+  createCredentialStatement,
+  getCredentialsStatement,
+  getCredentialWithIdStatement,
 };

@@ -57,7 +57,7 @@ const Note = () => {
   };
 
   /**
-   * Adds new space.
+   * Update note.
    *
    * @param formData Form fields value.
    */

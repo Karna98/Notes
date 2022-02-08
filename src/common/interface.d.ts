@@ -59,32 +59,50 @@ interface NotesTableInterface {
   updated_at: number;
 }
 
+interface CredentialsTableInterface {
+  _id: number;
+  space_id: number;
+  credential: string;
+  updated_at: number;
+}
+
 // ================================================================================
 // Elements
 // ================================================================================
 
-interface InputInterface {
+interface ElementInterface {
   id: string;
   name: string;
-  type: React.HTMLInputTypeAttribute | undefined;
   label?: string;
+  value?: string | number | readonly string[] | undefined;
+}
+
+interface InputInterface extends ElementInterface {
+  type?: React.HTMLInputTypeAttribute | undefined;
   placeholder?: string;
   required?: boolean;
-  value?: string | number | readonly string[] | undefined;
   onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
 }
 
-interface ButtonInterface {
-  id: string;
-  label?: string;
+interface TextAreaInputInterface extends ElementInterface {
+  placeholder?: string;
+  required?: boolean;
+  onChange?: React.ChangeEventHandler<HTMLTextAreaElement> | undefined;
+}
+
+interface ButtonInterface extends Omit<ElementInterface, 'name' | 'value'> {
+  name?: string;
+  type?: 'submit' | 'button' | 'reset';
+  disabled?: boolean;
   onClick?: () => void;
 }
 
 interface FormInterface {
   id: string;
-  method: string;
   elements: FormElementsInterface;
   submitAction: (form: Record<string, unknown>) => void;
+  method?: 'POST' | 'GET';
+  formValues?: Record<string, unknown>;
   reset?: boolean;
 }
 
@@ -106,4 +124,11 @@ interface SpacesInterface {
 interface SpaceInterface {
   space_id: number;
   notes: NoteStoreType[];
+  credentials: CredentialStoreType[];
+}
+
+interface ElementObjectInterface {
+  name: string;
+  element: string;
+  value: string | number | readonly string[] | undefined;
 }

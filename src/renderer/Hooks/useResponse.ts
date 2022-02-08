@@ -6,11 +6,12 @@
  *
  */
 
-import { createMessage, IPCRequestObject, reactRoutes } from 'common';
+import { createMessage, IPCRequestObject, resolveReactRoutes } from 'common';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import {
+  addCredentialState,
   addNoteState,
   addSpaceState,
   setCurrentSpaceState,
@@ -48,9 +49,9 @@ const useResponse = () => {
         // Based on auth-status, Login or Register Page will be displayed.
         response.status == 200 && response.data == 0
           ? // Register Page
-            navigate(reactRoutes.auth_register)
+            navigate(resolveReactRoutes('auth_register'))
           : // Login Page
-            navigate(reactRoutes.auth_login);
+            navigate(resolveReactRoutes('auth_login'));
         break;
 
       case 'auth-register':
@@ -58,7 +59,7 @@ const useResponse = () => {
         dispatchMessage(dispatch, response.status as number, response.message);
 
         // Set Registration status to true.
-        response.status == 200 && navigate(reactRoutes.auth_login);
+        response.status == 200 && navigate(resolveReactRoutes('auth_login'));
         break;
 
       case 'auth-login':
@@ -69,8 +70,8 @@ const useResponse = () => {
           dispatch(setSessionState(response.data as SessionType));
           sendToIpcMain(IPCRequestObject(`spaces-get`));
 
-          // Redirect to Home page.
-          navigate(reactRoutes.spaces);
+          // Redirect to Spaces page.
+          navigate(resolveReactRoutes('spaces'));
         }
         break;
 
@@ -107,6 +108,17 @@ const useResponse = () => {
         if (response.status == 200) {
           dispatch(updateNoteState(response.data as NoteStoreType));
         } else if (response.status == 500) {
+          dispatchMessage(dispatch, response.status, response.message);
+        }
+        break;
+
+      case 'credentials-add':
+        if (response.status == 200) {
+          dispatch(
+            addCredentialState(response.data as CredentialsTableInterface)
+          );
+        } else if (response.status == 500) {
+          // If Credential is not added successfully.
           dispatchMessage(dispatch, response.status, response.message);
         }
         break;

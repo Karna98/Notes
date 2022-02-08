@@ -18,8 +18,15 @@ type SpacesRequestDataType =
 
 type NotesRequestDataType = OptionalExceptFor<
   NotesTableInterface,
-  'space_id' | 'note' | '_id'
+  '_id' | 'space_id' | 'note'
 >;
+
+type CredentialsRequestDataType = OptionalExceptFor<
+  CredentialsTableInterface,
+  '_id' | 'space_id' | 'credential'
+>;
+
+type resolvedSubRequestType = { data: unknown; message: MessageInterface };
 
 /**
  * Handles Authentication related requests.
@@ -31,7 +38,7 @@ type NotesRequestDataType = OptionalExceptFor<
 const authRequest = (
   requestType: string[],
   requestData: AuthCredentialType
-): { data: unknown; message: MessageInterface } => {
+): resolvedSubRequestType => {
   let result: unknown, message: MessageInterface;
 
   switch (requestType[1]) {
@@ -116,7 +123,7 @@ const authRequest = (
 const spacesRequest = (
   requestType: string[],
   requestData: SpacesRequestDataType
-): { data: unknown; message: MessageInterface } => {
+): resolvedSubRequestType => {
   let result: unknown, message: MessageInterface;
 
   switch (requestType[1]) {
@@ -163,6 +170,10 @@ const spacesRequest = (
         requestData._id
       );
 
+      // Get all Credentials.
+      const credentialsList: CredentialsTableInterface[] =
+        database.getCredentials(requestData._id);
+
       // Converting to type of NoteStoreType[] from NotesTableInterface[].
       const notesListMapped: NoteStoreType[] = notesList.map(
         ({ _id, note, updated_at }: NotesTableInterface) => ({
@@ -172,10 +183,20 @@ const spacesRequest = (
         })
       );
 
+      // Converting to type of CredentialStoreType[] from CredentialsTableInterface[].
+      const credentialsListMapped: CredentialStoreType[] = credentialsList.map(
+        ({ _id, credential, updated_at }: CredentialsTableInterface) => ({
+          _id,
+          credential: JSON.parse(credential),
+          updated_at,
+        })
+      );
+
       // Get all data related to Space ID.
       result = {
         space_id: requestData._id,
         notes: notesListMapped,
+        credentials: credentialsListMapped,
       };
 
       message = createMessage('success');
@@ -200,7 +221,7 @@ const spacesRequest = (
 const notesRequest = (
   requestType: string[],
   requestData: NotesRequestDataType
-): { data: unknown; message: MessageInterface } => {
+): resolvedSubRequestType => {
   let result: unknown, message: MessageInterface;
 
   switch (requestType[1]) {
@@ -254,41 +275,89 @@ const notesRequest = (
 };
 
 /**
+ * Handles Credentials related requests.
+ *
+ * @param requestType
+ * @param requestData
+ * @returns {{data, message}} Data/Result and message regarding the request fulfillment.
+ */
+const credentialsRequest = (
+  requestType: string[],
+  requestData: CredentialsRequestDataType
+): resolvedSubRequestType => {
+  let result: unknown, message: MessageInterface;
+
+  switch (requestType[1]) {
+    case `ADD`:
+      const createStatus = database.createNewCredential(
+        requestData.space_id,
+        JSON.stringify(requestData.credential)
+      );
+
+      message = createStatus.changes
+        ? // Credential Added Successfully.
+          createMessage('success')
+        : // Error while adding Credential.
+          createMessage('server-error', `Error while adding Credential.`);
+
+      if (createStatus.changes) {
+        // Get newly inserted Credential.
+        result = database.getCredentialWithId(createStatus.lastInsertRowid);
+      }
+      break;
+
+    default:
+      // Invalid Sub Request.
+      message = createMessage('client-error', 'Invalid Request');
+      break;
+  }
+
+  return { data: result, message };
+};
+
+/**
  * This functions resolves all the request received from renderer on main process.
  *
  * @param request
  * @returns {IPCResponseObject} IPC Response Object to be sent to renderer process.
  */
 const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
-  let resolvedRequest: { data: unknown; message: MessageInterface };
+  let resolvedSubRequest: resolvedSubRequestType;
 
   // Resolve Request URI
   const requestSubURI = resolveRoute(request.URI);
 
   switch (requestSubURI[0]) {
     case `AUTH`:
-      resolvedRequest = authRequest(
+      resolvedSubRequest = authRequest(
         requestSubURI,
         <AuthCredentialType>request.data
       );
       break;
 
     case `SPACES`:
-      resolvedRequest = spacesRequest(
+      resolvedSubRequest = spacesRequest(
         requestSubURI,
         <SpacesRequestDataType>request.data
       );
       break;
 
     case `NOTES`:
-      resolvedRequest = notesRequest(
+      resolvedSubRequest = notesRequest(
         requestSubURI,
         <NotesRequestDataType>request.data
       );
       break;
 
+    case `CREDENTIALS`:
+      resolvedSubRequest = credentialsRequest(
+        requestSubURI,
+        <CredentialsRequestDataType>request.data
+      );
+      break;
+
     default:
-      resolvedRequest = {
+      resolvedSubRequest = {
         data: -1,
         message: createMessage('client-error', 'Invalid Request'),
       };
@@ -299,8 +368,8 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
   return IPCResponseObject(
     request.URI,
     request.timestamp,
-    resolvedRequest.message,
-    resolvedRequest.data
+    resolvedSubRequest.message,
+    resolvedSubRequest.data
   );
 };
 
