@@ -118,7 +118,7 @@ const useResponse = () => {
             addCredentialState(response.data as CredentialsTableInterface)
           );
         } else if (response.status == 500) {
-          // If Note was not added successfully.
+          // If Credential is not added successfully.
           dispatchMessage(dispatch, response.status, response.message);
         }
         break;

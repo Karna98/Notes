@@ -99,9 +99,10 @@ interface ButtonInterface extends Omit<ElementInterface, 'name' | 'value'> {
 
 interface FormInterface {
   id: string;
-  method: string;
   elements: FormElementsInterface;
   submitAction: (form: Record<string, unknown>) => void;
+  method?: 'POST' | 'GET';
+  formValues?: Record<string, unknown>;
   reset?: boolean;
 }
 

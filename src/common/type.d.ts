@@ -27,8 +27,3 @@ type CredentialStoreType = Omit<
     secure: ElementObjectInterface[];
   };
 };
-
-type ElementType<T> = {
-  element: 'input' | 'textarea' | 'button';
-  attributes: T;
-};

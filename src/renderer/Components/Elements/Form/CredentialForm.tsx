@@ -6,137 +6,71 @@
  *
  */
 
-import React, { useState } from 'react';
-import Button from '../Button';
-import Input from '../Input';
-import TextArea from '../TextArea';
-
-type formFieldsType = Record<
-  string,
-  string | number | readonly string[] | undefined
->;
+import React, { useEffect, useState } from 'react';
+import { Button, Input, TextArea } from '..';
 
 type InputsInterface = InputInterface | TextAreaInputInterface;
 
-const getBasicAttributes = (elementName: string) => {
+const getElementBasicAttributes = (elementName: string) => {
   return {
     id: `credential-${elementName}`,
-    name: `${elementName}`,
+    name: elementName,
   };
 };
 
-const formElements: ElementType<InputsInterface>[] = [
+const defaultFormInputs: InputsInterface[] = [
   {
-    element: 'input',
-    attributes: {
-      ...getBasicAttributes('title'),
-      label: `Title`,
-      placeholder: 'Title or Website name',
-      required: true,
-      value: '',
-    },
+    ...getElementBasicAttributes('title'),
+    label: 'Title',
+    placeholder: 'Title or Website name',
+    required: true,
+    value: '',
   },
   {
-    element: 'textarea',
-    attributes: {
-      ...getBasicAttributes('description'),
-      label: `Note`,
-      placeholder: 'Description',
-      value: '',
-    },
+    ...getElementBasicAttributes('description'),
+    label: 'Description',
+    placeholder: 'Description',
+    value: '',
   },
 ];
 
-const addSecureFieldInput: ElementType<InputInterface> = {
-  element: 'input',
-  attributes: {
-    ...getBasicAttributes('newSecureField'),
-    placeholder: 'New Field',
-    value: '',
-  },
+const addFieldInput: InputInterface = {
+  ...getElementBasicAttributes('newField'),
+  label: '',
+  placeholder: 'New Field',
+  value: '',
 };
 
 const formButtons: Record<string, ButtonInterface> = {
   save: {
-    ...getBasicAttributes('saveButton'),
+    ...getElementBasicAttributes('button-save'),
     label: 'Save',
     type: 'submit',
   },
   add: {
-    ...getBasicAttributes('addButton'),
+    ...getElementBasicAttributes('button-add'),
     label: 'Add Field',
     type: 'button',
-    disabled: true,
   },
 };
 
-const formFields: formFieldsType = {};
+const CredentialForm: React.FC<
+  Pick<FormInterface, 'id' | 'submitAction' | 'formValues'>
+> = ({ id, submitAction, formValues }) => {
+  // Default input value for Form Elements.
+  const defaultFormValues: Record<string, string> = {
+    title: '',
+    description: '',
+    newField: '',
+    ...formValues,
+  };
 
-formElements.map((elementObject: ElementType<InputsInterface>) => {
-  formFields[elementObject.attributes.name] = elementObject.attributes?.value;
-});
-
-formFields[addSecureFieldInput.attributes.name] = '';
-
-const getElement = (
-  type: string,
-  attributes: InputsInterface | ButtonInterface,
-  elementValue?: string | number | readonly string[] | undefined,
-  onChange?:
-    | React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
-    | (() => void)
-) => {
-  switch (type) {
-    case 'input':
-      attributes = attributes as InputInterface;
-      return (
-        <div className="d-flex flex-row">
-          <Input
-            key={attributes.name}
-            {...attributes}
-            value={elementValue}
-            onChange={onChange}
-          />
-        </div>
-      );
-    case 'textarea':
-      return (
-        <div className="d-flex flex-row">
-          <TextArea
-            key={attributes.name as string}
-            {...(attributes as TextAreaInputInterface)}
-            value={elementValue as string}
-            onChange={onChange as React.ChangeEventHandler<HTMLTextAreaElement>}
-          />
-        </div>
-      );
-    case 'button':
-      attributes = attributes as ButtonInterface;
-      return (
-        <Button
-          key={attributes.id}
-          {...attributes}
-          onClick={onChange as () => void}
-        />
-      );
-  }
-  return;
-};
-
-const checkIfKeyExists = (key: string, object: Record<string, unknown>) => {
-  return object[key] === undefined ? false : true;
-};
-
-const CredentialForm: React.FC<Pick<FormInterface, 'submitAction'>> = (
-  props
-) => {
-  const { submitAction } = props;
-  // Form Elements.
-  const [formElementsState, setFormElementsState] = useState(formElements);
-  // Foem Elements Value.
-  const [formElementsValue, setFormElementsValue] = useState(formFields);
-  // Add new fields button.
-  const [addFieldButton, setAddFieldButton] = useState(formButtons.add);
+  // Form Elements List.
+  const [formElementsState, setFormElementsState] = useState(defaultFormInputs);
+  // Form Elements Value.
+  const [formElementsValue, setFormElementsValue] = useState(defaultFormValues);
+  // Add Field button disabled status.
+  const [addFieldButtonDisabled, setAddFieldButtonDisabled] = useState(true);
 
   /**
    * Handle Form Input changes.
@@ -152,49 +86,51 @@ const CredentialForm: React.FC<Pick<FormInterface, 'submitAction'>> = (
     };
 
     // Enable 'Add' Button when input is empty or field with same name already present.
-    event.target.name === addSecureFieldInput.attributes.name &&
-      setAddFieldButton({
-        ...addFieldButton,
-        disabled:
-          !checkIfKeyExists(event.target.value, formElementsValue) &&
-          (updatedForm[addSecureFieldInput.attributes.name] as string).trim()
-            .length != 0
-            ? false
-            : true,
-      });
+    event.target.name === addFieldInput.name &&
+      setAddFieldButtonDisabled(
+        // Empty Input.
+        updatedForm.newField.trim().length == 0 ||
+          // Field Name already exists.
+          Object.prototype.hasOwnProperty.call(
+            formElementsValue,
+            event.target.value
+          )
+      );
 
     setFormElementsValue(updatedForm);
   };
 
-  const handleOnClick = () => {
-    const newInputElementName = `${
-      formElementsValue[addSecureFieldInput.attributes.name]
-    }`;
-
-    const newInputElement: ElementType<InputInterface> = {
-      element: 'input',
-      attributes: {
-        ...getBasicAttributes(`${newInputElementName}`),
-        type: 'text',
-        label: `${newInputElementName}`,
-        placeholder: `${newInputElementName}`,
-        value: '',
-      },
+  const createNewInputElement = (
+    name: string,
+    value?: string
+  ): InputInterface => {
+    return {
+      ...getElementBasicAttributes(name),
+      type: 'text',
+      label: name,
+      placeholder: name,
+      value: value === undefined ? '' : value,
     };
+  };
 
-    const updatedFormElementsValue = { ...formElementsValue };
+  const handleOnClick = () => {
+    const newFieldName = formElementsValue.newField;
 
-    updatedFormElementsValue[newInputElement.attributes.name] = '';
-    updatedFormElementsValue[addSecureFieldInput.attributes.name] = '';
+    const updatedFormElementsValue: typeof defaultFormValues = {
+      ...formElementsValue,
+      newField: '',
+    };
+    // Add new entry to 'formElementsValue' object.
+    updatedFormElementsValue[newFieldName] = '';
 
-    setFormElementsState([...formElementsState, newInputElement]);
+    setFormElementsState([
+      ...formElementsState,
+      createNewInputElement(newFieldName),
+    ]);
 
     setFormElementsValue(updatedFormElementsValue);
 
-    setAddFieldButton({
-      ...addFieldButton,
-      disabled: true,
-    });
+    setAddFieldButtonDisabled(true);
   };
 
   /**
@@ -210,31 +146,41 @@ const CredentialForm: React.FC<Pick<FormInterface, 'submitAction'>> = (
       title: string;
       secure: Record<string, unknown>[];
     } = {
-      title: formElementsValue['title'] as string,
+      title: formElementsValue.title,
       secure: [],
     };
 
-    formElementsState.map(
-      (formElement: ElementType<InputsInterface | ButtonInterface>) => {
-        if (
-          formElement.attributes !== undefined &&
-          formElement.attributes.name !== `title`
-        ) {
-          finalformValues.secure.push({
-            name: formElement.attributes.name,
-            value: formElementsValue[formElement.attributes.name as string],
-            element: formElement.element,
-          });
-        }
+    formElementsState.map((formElement: InputsInterface | ButtonInterface) => {
+      if (formElement !== undefined && formElement.name !== `title`) {
+        finalformValues.secure.push({
+          name: formElement.name,
+          value: formElementsValue[formElement.name as string],
+        });
       }
-    );
+    });
 
     submitAction(finalformValues);
 
     // Reset Form Field Values.
-    setFormElementsState(formElements);
-    setFormElementsValue(formFields);
+    setFormElementsState(defaultFormInputs);
+    setFormElementsValue(defaultFormValues);
   };
+
+  useEffect(() => {
+    if (formValues !== undefined) {
+      const secureCredentialList = [];
+
+      for (const key in formValues) {
+        if (!(key === `title` || key === `description`)) {
+          secureCredentialList.push(
+            createNewInputElement(key, formValues[key] as string)
+          );
+        }
+      }
+
+      setFormElementsState([...formElementsState, ...secureCredentialList]);
+    }
+  }, []);
 
   return (
     <form
@@ -243,39 +189,45 @@ const CredentialForm: React.FC<Pick<FormInterface, 'submitAction'>> = (
       className="d-flex flex-column align-items-center justify-content-evenly"
     >
       {formElementsState.map(
-        (
-          elementObject: ElementType<InputInterface | TextAreaInputInterface>
-        ) => (
-          <div key={elementObject.attributes.id}>
-            {getElement(
-              elementObject.element,
-              elementObject.attributes,
-              formElementsValue[elementObject.attributes.name],
-              handleInputChange
+        (elementObject: InputInterface | TextAreaInputInterface) => (
+          <div key={elementObject.id}>
+            {elementObject.name === 'description' ? (
+              <TextArea
+                {...elementObject}
+                value={formElementsValue[elementObject.name]}
+                onChange={handleInputChange}
+              />
+            ) : (
+              <Input
+                {...elementObject}
+                value={formElementsValue[elementObject.name]}
+                onChange={handleInputChange}
+              />
             )}
           </div>
         )
       )}
 
-      <div className="d-flex flex-row align-items-center justify-content-evenly">
-        {getElement(
-          addSecureFieldInput.element,
-          addSecureFieldInput.attributes,
-          formElementsValue[addSecureFieldInput.attributes.name],
-          handleInputChange
-        )}
-        {
-          getElement(
-            'button',
-            addFieldButton,
-            '',
-            handleOnClick
-          ) as unknown as ButtonInterface
-        }
-      </div>
-      <div className="d-flex flex-row justify-content-evenly">
-        {getElement('button', formButtons['save'])}
-      </div>
+      {/* Temporary hides Form edit for Update.*/}
+      {id === `form-credential-add` && (
+        <>
+          <div className="d-flex flex-row align-items-center justify-content-evenly">
+            <Input
+              {...addFieldInput}
+              value={formElementsValue[addFieldInput.name]}
+              onChange={handleInputChange}
+            />
+            <Button
+              {...formButtons['add']}
+              onClick={handleOnClick}
+              disabled={addFieldButtonDisabled}
+            />
+          </div>
+          <div className="d-flex flex-row justify-content-evenly">
+            <Button {...formButtons['save']} />
+          </div>
+        </>
+      )}
     </form>
   );
 };

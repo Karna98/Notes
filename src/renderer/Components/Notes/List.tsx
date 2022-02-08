@@ -43,6 +43,11 @@ const List = () => {
     ],
   };
 
+  /**
+   * Add new note.
+   *
+   * @param formData Form fields value.
+   */
   const formSubmitAction = (formData: Record<string, unknown>) => {
     // Check if note is empty.
     const isNoteEmpty = (formData.note as string).trim().length == 0;
