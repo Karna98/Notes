@@ -6,23 +6,39 @@
  *
  */
 
-import { resolveRoute } from '../common/routes';
-import { createMessage, IPCResponseObject } from '../common/util';
+import { createMessage, IPCResponseObject, resolveRoute } from '../common';
 import CONSTANTS from './constants';
 import { cryptBcryptCompare, cryptBcryptHash } from './secure-util';
-import database from './sql/database';
+import database from './sql';
+
+// Temporary Types.
+type SpacesRequestDataType =
+  | Pick<SpacesTableInterface, 'space_name'>
+  | Pick<SpacesTableInterface, '_id'>;
+
+type NotesRequestDataType = OptionalExceptFor<
+  NotesTableInterface,
+  '_id' | 'space_id' | 'note'
+>;
+
+type CredentialsRequestDataType = OptionalExceptFor<
+  CredentialsTableInterface,
+  '_id' | 'space_id' | 'credential'
+>;
+
+type resolvedSubRequestType = { data: unknown; message: MessageInterface };
 
 /**
  * Handles Authentication related requests.
  *
  * @param requestType
  * @param requestData
- * @returns {[result, message]} Result and message regarding the request fulfillment.
+ * @returns {{data, message}} Data/Result and message regarding the request fulfillment.
  */
 const authRequest = (
   requestType: string[],
   requestData: AuthCredentialType
-): [result: unknown, message: MessageInterface] => {
+): resolvedSubRequestType => {
   let result: unknown, message: MessageInterface;
 
   switch (requestType[1]) {
@@ -44,20 +60,19 @@ const authRequest = (
 
     case `REGISTER`:
       // Intialize Database.
-      database.init();
+      !database.checkIfDbExsts() && database.init();
 
       result = database.createNewUser(
         cryptBcryptHash(requestData.username),
         cryptBcryptHash(requestData.password)
       );
 
-      if (result) {
-        // Registration Successful.
-        message = createMessage('success', 'User Registered Successfully.');
-      } else {
-        // Registration Failure.
-        message = createMessage('server-error', 'User Registration failed.');
-      }
+      message = result
+        ? // Registration Successful.
+          createMessage('success', 'User Registered Successfully.')
+        : // Registration Failure.
+          createMessage('server-error', 'User Registration failed.');
+
       break;
 
     case `LOGIN`:
@@ -74,7 +89,7 @@ const authRequest = (
           registeredUsers._id
         );
 
-        // Session Data to be stored.
+        // Create Session Object.
         result = {
           _id: registeredUsers._id,
           username: requestData.username,
@@ -84,8 +99,10 @@ const authRequest = (
       }
 
       message = loginStatus
-        ? createMessage('success', 'Login Successful.')
-        : createMessage('client-error', 'Wrong Credentials.');
+        ? // Login Successful.
+          createMessage('success', 'Login Successful.')
+        : // Login Failure.
+          createMessage('client-error', 'Wrong Credentials.');
       break;
 
     default:
@@ -93,7 +110,7 @@ const authRequest = (
       message = createMessage('client-error', 'Invalid Request');
       break;
   }
-  return [result, message];
+  return { data: result, message };
 };
 
 /**
@@ -101,43 +118,191 @@ const authRequest = (
  *
  * @param requestType
  * @param requestData
- * @returns {[result, message]} Result and message regarding the request fulfillment.
+ * @returns {{data, message}} Data/Result and message regarding the request fulfillment.
  */
 const spacesRequest = (
   requestType: string[],
-  requestData: Pick<SpacesTableInterface, 'space_name'>
-): [result: unknown, message: MessageInterface] => {
-  const result: SpacesInterface = {
-    metaData: { SPACES_MAX_COUNT_ALLOWED: CONSTANTS.SPACES_MAX_COUNT_ALLOWED },
-    list: [],
-  };
-  let message: MessageInterface;
+  requestData: SpacesRequestDataType
+): resolvedSubRequestType => {
+  let result: unknown, message: MessageInterface;
 
   switch (requestType[1]) {
     case `GET`:
-      // Get all spaces.
-      result.list = database.getSpaces();
+      result = {
+        metaData: {
+          SPACES_MAX_COUNT_ALLOWED: CONSTANTS.SPACES_MAX_COUNT_ALLOWED,
+        },
+        // Get all spaces.
+        list: database.getSpaces(),
+      };
 
       message = createMessage('success');
       break;
 
     case `ADD`:
+      requestData = requestData as Pick<SpacesTableInterface, 'space_name'>;
+
       const createStatus = database.createNewSpace(requestData.space_name);
 
-      if (createStatus) {
-        // Get all spaces.
-        result.list = database.getSpaces();
+      message = createStatus.changes
+        ? // Space Added Successfully.
+          createMessage(
+            'success',
+            `${requestData.space_name} Space added successfully.`
+          )
+        : // Error while adding Space.
+          createMessage(
+            'server-error',
+            `Error while adding ${requestData.space_name} Space.`
+          );
 
-        message = createMessage(
-          'success',
-          `${requestData.space_name} Space added successfully.`
-        );
-      } else {
-        // Error while adding spaces.
-        message = createMessage(
-          'server-error',
-          `Error while adding ${requestData.space_name} Space.`
-        );
+      if (createStatus.changes) {
+        // Get newly inserted Space.
+        result = database.getSpaceWithId(createStatus.lastInsertRowid);
+      }
+      break;
+
+    case `GET_SPACE`:
+      requestData = requestData as Pick<SpacesTableInterface, '_id'>;
+
+      // Get all Notes.
+      const notesList: NotesTableInterface[] = database.getNotes(
+        requestData._id
+      );
+
+      // Get all Credentials.
+      const credentialsList: CredentialsTableInterface[] =
+        database.getCredentials(requestData._id);
+
+      // Converting to type of NoteStoreType[] from NotesTableInterface[].
+      const notesListMapped: NoteStoreType[] = notesList.map(
+        ({ _id, note, updated_at }: NotesTableInterface) => ({
+          _id,
+          note,
+          updated_at,
+        })
+      );
+
+      // Converting to type of CredentialStoreType[] from CredentialsTableInterface[].
+      const credentialsListMapped: CredentialStoreType[] = credentialsList.map(
+        ({ _id, credential, updated_at }: CredentialsTableInterface) => ({
+          _id,
+          credential: JSON.parse(credential),
+          updated_at,
+        })
+      );
+
+      // Get all data related to Space ID.
+      result = {
+        space_id: requestData._id,
+        notes: notesListMapped,
+        credentials: credentialsListMapped,
+      };
+
+      message = createMessage('success');
+      break;
+
+    default:
+      // Invalid Sub Request.
+      message = createMessage('client-error', 'Invalid Request');
+      break;
+  }
+
+  return { data: result, message };
+};
+
+/**
+ * Handles Notes related requests.
+ *
+ * @param requestType
+ * @param requestData
+ * @returns {{data, message}} Data/Result and message regarding the request fulfillment.
+ */
+const notesRequest = (
+  requestType: string[],
+  requestData: NotesRequestDataType
+): resolvedSubRequestType => {
+  let result: unknown, message: MessageInterface;
+
+  switch (requestType[1]) {
+    case `ADD`:
+      const createStatus = database.createNewNote(
+        requestData.space_id,
+        requestData.note
+      );
+
+      message = createStatus.changes
+        ? // Note Added Successfully.
+          createMessage('success')
+        : // Error while adding Note.
+          createMessage('server-error', `Error while adding Note.`);
+
+      if (createStatus.changes) {
+        // Get newly inserted Note.
+        result = database.getNoteWithId(createStatus.lastInsertRowid);
+      }
+      break;
+
+    case `UPDATE`:
+      // Update note.
+      const updateStatus = database.updateNote(
+        { note: requestData.note, updated_at: requestData.updated_at },
+        requestData._id
+      );
+
+      message = updateStatus
+        ? // Note updated Successfully.
+          createMessage('success')
+        : // Error while saving Space.
+          createMessage('server-error', `Error while saving notes.`);
+
+      if (updateStatus)
+        result = {
+          _id: requestData._id,
+          note: requestData.note,
+          updated_at: requestData.updated_at,
+        };
+
+      break;
+
+    default:
+      // Invalid Sub Request.
+      message = createMessage('client-error', 'Invalid Request');
+      break;
+  }
+
+  return { data: result, message };
+};
+
+/**
+ * Handles Credentials related requests.
+ *
+ * @param requestType
+ * @param requestData
+ * @returns {{data, message}} Data/Result and message regarding the request fulfillment.
+ */
+const credentialsRequest = (
+  requestType: string[],
+  requestData: CredentialsRequestDataType
+): resolvedSubRequestType => {
+  let result: unknown, message: MessageInterface;
+
+  switch (requestType[1]) {
+    case `ADD`:
+      const createStatus = database.createNewCredential(
+        requestData.space_id,
+        JSON.stringify(requestData.credential)
+      );
+
+      message = createStatus.changes
+        ? // Credential Added Successfully.
+          createMessage('success')
+        : // Error while adding Credential.
+          createMessage('server-error', `Error while adding Credential.`);
+
+      if (createStatus.changes) {
+        // Get newly inserted Credential.
+        result = database.getCredentialWithId(createStatus.lastInsertRowid);
       }
       break;
 
@@ -147,7 +312,7 @@ const spacesRequest = (
       break;
   }
 
-  return [result, message];
+  return { data: result, message };
 };
 
 /**
@@ -157,33 +322,55 @@ const spacesRequest = (
  * @returns {IPCResponseObject} IPC Response Object to be sent to renderer process.
  */
 const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
-  let data: unknown, message: MessageInterface;
+  let resolvedSubRequest: resolvedSubRequestType;
 
   // Resolve Request URI
   const requestSubURI = resolveRoute(request.URI);
 
   switch (requestSubURI[0]) {
     case `AUTH`:
-      [data, message] = authRequest(
+      resolvedSubRequest = authRequest(
         requestSubURI,
         <AuthCredentialType>request.data
       );
       break;
 
     case `SPACES`:
-      [data, message] = spacesRequest(
+      resolvedSubRequest = spacesRequest(
         requestSubURI,
-        <Pick<SpacesTableInterface, 'space_name'>>request.data
+        <SpacesRequestDataType>request.data
+      );
+      break;
+
+    case `NOTES`:
+      resolvedSubRequest = notesRequest(
+        requestSubURI,
+        <NotesRequestDataType>request.data
+      );
+      break;
+
+    case `CREDENTIALS`:
+      resolvedSubRequest = credentialsRequest(
+        requestSubURI,
+        <CredentialsRequestDataType>request.data
       );
       break;
 
     default:
-      [data, message] = [-1, createMessage('client-error', 'Invalid Request')];
+      resolvedSubRequest = {
+        data: -1,
+        message: createMessage('client-error', 'Invalid Request'),
+      };
       console.log(`Invalid Request`);
       break;
   }
 
-  return IPCResponseObject(request.URI, request.timestamp, message, data);
+  return IPCResponseObject(
+    request.URI,
+    request.timestamp,
+    resolvedSubRequest.message,
+    resolvedSubRequest.data
+  );
 };
 
 export default resolveRequest;

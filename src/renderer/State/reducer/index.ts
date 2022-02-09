@@ -6,22 +6,21 @@
  *
  */
 
-import message, { clearMessageState, updateMessageState } from './message';
-import response, { clearResponseState, updateResponseState } from './response';
-import session, { clearSessionState, updateSessionState } from './session';
-import spaces, { clearSpacesState, updateSpacesState } from './spaces';
+import message from './message';
+import session from './session';
+import spaces from './spaces';
 
-// Exports to update State.
+export { clearMessageState, setMessageState } from './message';
+export { clearSessionState, setSessionState } from './session';
 export {
-  clearMessageState,
-  updateMessageState,
-  clearResponseState,
-  updateResponseState,
-  clearSessionState,
-  updateSessionState,
+  addCredentialState,
+  addNoteState,
+  addSpaceState,
   clearSpacesState,
-  updateSpacesState,
-};
+  setCurrentSpaceState,
+  setSpacesState,
+  updateNoteState,
+} from './spaces';
 
-// Default export to view State.
-export default { message, response, session, spaces };
+// Export reducers as default.
+export default { message, session, spaces };

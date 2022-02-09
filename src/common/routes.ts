@@ -8,18 +8,27 @@
 
 // Mapped Routes. { Simple-Route : Normalized-Route}
 const definedRoutes: Record<string, string> = {
-  'auth-status': 'AUTH:STATUS',
-  'auth-register': 'AUTH:REGISTER',
   'auth-login': 'AUTH:LOGIN',
-  'spaces-get': 'SPACES:GET',
+  'auth-register': 'AUTH:REGISTER',
+  'auth-status': 'AUTH:STATUS',
+  'credentials-add': 'CREDENTIALS:ADD',
+  'notes-add': 'NOTES:ADD',
+  'notes-update': 'NOTES:UPDATE',
   'spaces-add': 'SPACES:ADD',
+  'spaces-get': 'SPACES:GET',
+  'spaces-get-space': 'SPACES:GET_SPACE',
 };
 
 // Mapped React Routes
 const reactRoutes: Record<string, string> = {
-  auth: '/',
+  root: '/',
+  auth: '/auth',
+  auth_login: '/auth/login',
+  auth_register: '/auth/register',
   profile: '/profile',
   spaces: '/spaces',
+  notes: '/spaces/{space_id}/notes',
+  credentials: '/spaces/{space_id}/credentials',
 };
 
 /**
@@ -34,4 +43,25 @@ const resolveRoute = (route: string): string[] => {
   else throw new Error('Invalid Route Request.');
 };
 
-export { resolveRoute, reactRoutes };
+/**
+ * Gets React Route with parameters replaced (if any).
+ *
+ * @param route Simple React Route
+ * @returns {string} Route string with passed parameter.
+ */
+const resolveReactRoutes = (
+  route: string,
+  params?: Record<string, string | number>
+): string => {
+  if (reactRoutes.hasOwnProperty(route)) {
+    let url: string = reactRoutes[route];
+    if (params !== undefined) {
+      for (const key in params) {
+        url = url.replace(`{${key}}`, <string>params[key]);
+      }
+    }
+    return url;
+  } else throw new Error('Invalid Route Request.');
+};
+
+export { resolveReactRoutes, resolveRoute };

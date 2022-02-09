@@ -5,25 +5,22 @@
  *    Base file for all the pages to be rendered.
  */
 
+import { IPCRequestObject, resolveReactRoutes } from 'common';
 import React, { useEffect } from 'react';
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
-import { reactRoutes } from '../../common/routes';
-import Message from '../Components/Elements/Message';
-import Header from '../Components/Header';
-import Spaces from '../Components/Spaces';
-import { updateResponseState } from '../State/reducer';
+import { Header, Message, Spaces } from 'renderer/Components';
+import { useAppSelector, useResponse } from 'renderer/Hooks';
+import { sendToIpcMain } from 'renderer/util';
 import Auth from './Auth';
 import Profile from './Profile';
 import ProtectedRoute from './ProtectedRoutes';
 
 const App = () => {
-  const dispatch = useDispatch();
+  // Resolve Response Hook.
+  useResponse();
 
-  // Get message value stored in Redux Store.
-  const messageState = useSelector((state: RootStateOrAny) => state.message);
   // Get session value stored in Redux Store.
-  const sessionState = useSelector((state: RootStateOrAny) => state.session);
+  const sessionState = useAppSelector((state) => state.session);
 
   /**
    * User is authenticated if session is created.
@@ -47,7 +44,9 @@ const App = () => {
   ) => {
     return (
       <ProtectedRoute
-        redirectTo={redirect === undefined ? reactRoutes.auth : redirect}
+        redirectTo={
+          redirect === undefined ? resolveReactRoutes('auth_login') : redirect
+        }
         condition={condition === undefined ? isAuthenticated() : condition}
       >
         {element}
@@ -55,43 +54,44 @@ const App = () => {
     );
   };
 
+  useEffect(() => {
+    // Get Auth Status.
+    sendToIpcMain(IPCRequestObject(`auth-status`));
+  }, []);
+
   // List of Routes.
   const RouteList = [
     {
+      name: 'Startup Page',
+      path: resolveReactRoutes('root'),
+      element: <div> Loading.. </div>,
+    },
+    {
       name: 'Auth Page',
-      path: reactRoutes.auth,
+      path: resolveReactRoutes('auth') + `/*`,
       element: getProtectedRoutes(
         <Auth />,
-        reactRoutes.spaces,
+        resolveReactRoutes('spaces'),
         !isAuthenticated()
       ),
     },
     {
       name: 'Spaces Page',
-      path: `${reactRoutes.spaces}/*`,
+      path: resolveReactRoutes('spaces') + `/*`,
       element: getProtectedRoutes(<Spaces />),
     },
     {
       name: 'Profile Page',
-      path: reactRoutes.profile,
+      path: resolveReactRoutes('profile'),
       element: getProtectedRoutes(<Profile />),
     },
   ];
-
-  useEffect(() => {
-    window.NotesAPI.receive(`fromMain`, (responseData: string) => {
-      // Update response in Redux Store
-      dispatch(updateResponseState(JSON.parse(responseData)));
-    });
-  }, []);
 
   return (
     <>
       <Header />
       <main className="d-flex flex-column">
-        {messageState != null && (
-          <Message messageState={messageState} autoDisappear={true} />
-        )}
+        <Message />
         <Routes>
           {RouteList.map((route) => (
             <Route key={route.name} path={route.path} element={route.element} />

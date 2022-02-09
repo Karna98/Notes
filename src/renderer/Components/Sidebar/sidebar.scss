@@ -1,0 +1,13 @@
+/**
+ * sidebar.scss 
+ * 
+ * Description:
+ *    Style file for Sidebar Component.
+ *
+*/
+
+.sidebar {
+  min-width: var(--sidebar-width);
+  height: 100%;
+  background-color: var(--fluorescent-blue);
+}

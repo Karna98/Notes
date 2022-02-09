@@ -6,7 +6,10 @@
  *
  */
 
-import bcrypt from 'bcryptjs';
+import {
+  compareSync as bcryptCompareSync,
+  hashSync as bcryptHashSync,
+} from 'bcryptjs';
 import { createHash } from 'crypto';
 
 /**
@@ -34,7 +37,7 @@ const cryptoHash = (key: string) => {
  * @returns {string} Bcrypt Hash value of key.
  */
 const bcryptHash = (key: string) => {
-  return bcrypt.hashSync(key, SALT_ROUNDS);
+  return bcryptHashSync(key, SALT_ROUNDS);
 };
 
 /**
@@ -55,7 +58,7 @@ const cryptBcryptHash = (key: string) => {
  * @returns {boolean} Returns Status of key matches the hash or not.
  */
 const cryptBcryptCompare = (key: string, hash: string) => {
-  return bcrypt.compareSync(cryptoHash(key), hash);
+  return bcryptCompareSync(cryptoHash(key), hash);
 };
 
 export { cryptBcryptCompare, cryptBcryptHash };

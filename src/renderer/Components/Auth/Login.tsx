@@ -6,15 +6,14 @@
  *
  */
 
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { IPCRequestObject } from '../../../common/util';
-import { updateMessageState } from '../../State/reducer';
-import { sendToIpcMain } from '../../util';
-import Form from '../Elements/Form';
+import { createMessage, IPCRequestObject } from 'common';
+import { Form } from 'renderer/Components';
+import { useAppDispatch } from 'renderer/Hooks';
+import { setMessageState } from 'renderer/State';
+import { sendToIpcMain } from 'renderer/util';
 
 const Login = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // Form Elements.
   const formElements: FormElementsInterface = {
@@ -52,7 +51,7 @@ const Login = () => {
    * @param formData Form fields value
    */
   const formSubmitAction = (formData: Record<string, unknown>): void => {
-    dispatch(updateMessageState(0, `Checking Credentials ..`));
+    dispatch(setMessageState(createMessage(0, `Checking Credentials ..`)));
 
     sendToIpcMain(
       IPCRequestObject(`auth-login`, {

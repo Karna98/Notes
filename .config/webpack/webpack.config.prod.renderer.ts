@@ -6,15 +6,18 @@
  *
  */
 
-import webpackPaths from './webpack.paths';
-import baseConfig from './webpack.config.base';
-import { merge as webpackMergeConfig } from 'webpack-merge';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { join as pathJoin } from 'path';
 import { EnvironmentPlugin } from 'webpack';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { merge as webpackMergeConfig } from 'webpack-merge';
 import checkNodeEnv from '../script/check-node-env';
+import deleteSourceMaps from '../script/delete-source-maps';
+import baseConfig from './webpack.config.base';
+import webpackPaths from './webpack.paths';
 
 checkNodeEnv('production');
+
+deleteSourceMaps();
 
 const isDevelopmentMode = process.env.NODE_ENV === `development`;
 
@@ -30,17 +33,20 @@ export default webpackMergeConfig(baseConfig, {
 
   mode: `production`,
 
-  target: `electron-renderer`,
+  target: ['web', 'electron-renderer'],
 
   entry: {
     renderer: pathJoin(webpackPaths.srcRendererPath, `index.tsx`),
-    launch: pathJoin(webpackPaths.srcRendererPath, `launch`, `launch.tsx`),
+    launch: pathJoin(webpackPaths.srcRendererPath, `launch`, `index.tsx`),
   },
 
   output: {
     filename: `[name].js`,
     path: webpackPaths.distRendererPath,
     publicPath: './',
+    library: {
+      type: 'umd',
+    },
   },
 
   module: {

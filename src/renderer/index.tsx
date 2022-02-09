@@ -6,26 +6,21 @@
  *    attached to `index.html`.
  */
 
-import React from 'react';
+import { StrictMode } from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { MemoryRouter as Router } from 'react-router-dom';
 import App from './App';
-import store from './State';
+import { store } from './State';
 import './style.scss';
 
 render(
-  <React.StrictMode>
+  <StrictMode>
     <Provider store={store}>
       <Router>
         <App />
       </Router>
     </Provider>
-  </React.StrictMode>,
+  </StrictMode>,
   document.getElementById(`root`)
 );
-
-// For HMR Webpack Plugin.
-if (process.env.NODE_ENV === 'development' && module.hot) {
-  module.hot.accept();
-}

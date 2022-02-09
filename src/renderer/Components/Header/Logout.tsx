@@ -6,17 +6,12 @@
  *
  */
 
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import {
-  clearResponseState,
-  clearSessionState,
-  clearSpacesState,
-} from '../../State/reducer';
-import Form from '../Elements/Form';
+import { Form } from 'renderer/Components';
+import { useAppDispatch } from 'renderer/Hooks';
+import { clearSessionState, clearSpacesState } from 'renderer/State';
 
 const Logout = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // Form Elements.
   const formElements: FormElementsInterface = {
@@ -35,8 +30,6 @@ const Logout = () => {
     // Clear all redux stores on logout.
     dispatch(clearSessionState());
     dispatch(clearSpacesState());
-    // @TODO: Verify if we need to clear response state. On auth page, the page requests for auth status and overrides previous response state.
-    dispatch(clearResponseState());
   };
 
   return (

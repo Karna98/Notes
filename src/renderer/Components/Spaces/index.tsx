@@ -6,7 +6,6 @@
  *
  */
 
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import List from './List';
 import Space from './Space';
@@ -20,18 +19,20 @@ const routeList = [
   },
   {
     name: 'Space Page',
-    path: `:space_id`,
+    path: `:space_id/*`,
     element: <Space />,
   },
 ];
 
 const Spaces = () => {
   return (
-    <Routes>
-      {routeList.map((route) => (
-        <Route key={route.name} path={route.path} element={route.element} />
-      ))}
-    </Routes>
+    <div className="spaces-body">
+      <Routes>
+        {routeList.map((route) => (
+          <Route key={route.name} path={route.path} element={route.element} />
+        ))}
+      </Routes>
+    </div>
   );
 };
 

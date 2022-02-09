@@ -2,15 +2,48 @@
  * index.ts
  *
  * Description:
- *    Redux Store.
+ *    Index for Redux Store, Reducers and Actions.
  *
  */
 
-import { combineReducers, createStore } from 'redux';
-import reducers from './reducer';
+// Import actions and reducers from 'reducer';
+import reducer, {
+  addCredentialState,
+  addNoteState,
+  addSpaceState,
+  clearMessageState,
+  clearSessionState,
+  clearSpacesState,
+  setCurrentSpaceState,
+  setMessageState,
+  setSessionState,
+  setSpacesState,
+  updateNoteState,
+} from './reducer';
+import store from './store';
 
-const reducer = combineReducers(reducers);
+// Infer the `RootState` and `AppDispatch` types from the store itself.
+type RootStateType = ReturnType<typeof store.getState>;
+type AppDispatchType = typeof store.dispatch;
 
-const store = createStore(reducer);
+export {
+  store,
+  // Types
+  RootStateType,
+  AppDispatchType,
+  // Actions
+  addCredentialState,
+  addNoteState,
+  addSpaceState,
+  clearMessageState,
+  clearSessionState,
+  clearSpacesState,
+  setMessageState,
+  setCurrentSpaceState,
+  setSessionState,
+  setSpacesState,
+  updateNoteState,
+};
 
-export default store;
+// Default export of State of Redux store.
+export default reducer;

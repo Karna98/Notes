@@ -6,16 +6,15 @@
  *
  */
 
-import React from 'react';
-import { RootStateOrAny, useSelector } from 'react-redux';
+import IMAGE from 'assets/logo/png/256x256.png';
+import { resolveReactRoutes } from 'common';
 import { Link } from 'react-router-dom';
-import IMAGE from '../../../assets/logo/png/256x256.png';
-import { reactRoutes } from '../../../common/routes';
+import { useAppSelector } from 'renderer/Hooks';
 import Logout from './Logout';
 
 const Navbar = () => {
   // Get session value stored in Redux Store.
-  const sessionState = useSelector((state: RootStateOrAny) => state.session);
+  const sessionState = useAppSelector((state) => state.session);
 
   return (
     <div className="d-flex flex-row align-items-center justify-content-between navbar">
@@ -26,8 +25,8 @@ const Navbar = () => {
 
       {sessionState != null && (
         <div className="d-flex flex-row align-items-center navbar-links">
-          <Link to={reactRoutes.spaces}>Spaces</Link>
-          <Link to={reactRoutes.profile}>Profile</Link>
+          <Link to={resolveReactRoutes('spaces')}>Spaces</Link>
+          <Link to={resolveReactRoutes('profile')}>Profile</Link>
           <Logout />
         </div>
       )}

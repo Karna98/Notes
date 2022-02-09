@@ -6,10 +6,9 @@
  *    attached to `index.html`.
  */
 
-import React from 'react';
+import IMAGE from 'assets/logo/png/256x256.png';
 import { render } from 'react-dom';
 import './launch.scss';
-import IMAGE from '../../assets/logo/png/256x256.png';
 
 render(
   <>
