@@ -9,6 +9,7 @@
 import React, { useState } from 'react';
 import Button from '../Button';
 import Input from '../Input';
+import AuthForm from './AuthForm';
 import CredentialForm from './CredentialForm';
 import './form.scss';
 
@@ -25,7 +26,7 @@ const Form: React.FC<FormInterface> = ({
     string | number | readonly string[] | undefined
   > = {};
 
-  elements.input?.map((element) => {
+  elements?.input?.map((element) => {
     formFields[element.name] = element.value;
   });
 
@@ -88,10 +89,12 @@ const Form: React.FC<FormInterface> = ({
         formValues={formValues}
       />
     );
+  else if (id.startsWith(`auth-form`))
+    return <AuthForm id={id} submitAction={submitAction} />;
   else
     return (
       <form method={method} onSubmit={submitForm} className={getClassName()}>
-        {elements.input?.map((attributes: InputInterface) => {
+        {elements?.input?.map((attributes: InputInterface) => {
           return (
             <Input
               key={attributes.name}
@@ -102,7 +105,7 @@ const Form: React.FC<FormInterface> = ({
           );
         })}
         <div className="d-flex flex-row justify-content-evenly">
-          {elements.button?.map((button) => (
+          {elements?.button?.map((button) => (
             <Button key={button.id} {...button} />
           ))}
         </div>

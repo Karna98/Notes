@@ -15,36 +15,6 @@ import { sendToIpcMain } from 'renderer/util';
 const Login = () => {
   const dispatch = useAppDispatch();
 
-  // Form Elements.
-  const formElements: FormElementsInterface = {
-    input: [
-      {
-        id: 'login-username',
-        name: 'username',
-        type: 'text',
-        label: 'Username',
-        placeholder: 'Username',
-        required: true,
-        value: '',
-      },
-      {
-        id: 'login-password',
-        name: 'password',
-        type: 'password',
-        label: 'Password',
-        placeholder: 'Password',
-        required: true,
-        value: '',
-      },
-    ],
-    button: [
-      {
-        id: 'login',
-        label: 'Login',
-      },
-    ],
-  };
-
   /**
    * Submit Login form.
    *
@@ -52,23 +22,12 @@ const Login = () => {
    */
   const formSubmitAction = (formData: Record<string, unknown>): void => {
     dispatch(setMessageState(createMessage(0, `Checking Credentials ..`)));
-
-    sendToIpcMain(
-      IPCRequestObject(`auth-login`, {
-        username: formData?.username,
-        password: formData?.password,
-      })
-    );
+    sendToIpcMain(IPCRequestObject(`auth-login`, formData));
   };
 
   return (
-    <div>
-      <Form
-        id="form-login"
-        method="POST"
-        elements={formElements}
-        submitAction={formSubmitAction}
-      />
+    <div className="auth-card">
+      <Form id="auth-form-login" submitAction={formSubmitAction} />
     </div>
   );
 };

@@ -89,7 +89,7 @@ const App = () => {
 
   return (
     <>
-      <Header />
+      {sessionState !== null && <Header />}
       <main className="d-flex flex-column">
         <Message />
         <Routes>

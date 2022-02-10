@@ -155,12 +155,19 @@ Body
 body {
   --navbar-height: 50px;
   --sidebar-width: 200px;
+
+  // Basic Standard Pixels.
+  --x: 2px;
+  --2x: 4px;
+  --4x: 8px;
+  --8x: 16px;
+  --16x: 32px;
 }
 
 main {
   position: absolute;
-  margin: 5px;
-  height: calc(100% - var(--navbar-height) - 10px);
-  width: calc(100% - 10px);
+  margin: var(--2x);
+  width: calc(100% - var(--4x));
+  height: calc(100% - var(--4x));
   overflow-y: auto;
 }

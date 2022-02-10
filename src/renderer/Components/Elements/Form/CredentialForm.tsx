@@ -9,8 +9,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Input, TextArea } from '..';
 
-type InputsInterface = InputInterface | TextAreaInputInterface;
-
 const getElementBasicAttributes = (elementName: string) => {
   return {
     id: `credential-${elementName}`,
@@ -18,7 +16,7 @@ const getElementBasicAttributes = (elementName: string) => {
   };
 };
 
-const defaultFormInputs: InputsInterface[] = [
+const defaultFormInputs: (InputInterface | TextAreaInputInterface)[] = [
   {
     ...getElementBasicAttributes('title'),
     label: 'Title',
@@ -150,14 +148,16 @@ const CredentialForm: React.FC<
       secure: [],
     };
 
-    formElementsState.map((formElement: InputsInterface | ButtonInterface) => {
-      if (formElement !== undefined && formElement.name !== `title`) {
-        finalformValues.secure.push({
-          name: formElement.name,
-          value: formElementsValue[formElement.name as string],
-        });
+    formElementsState.map(
+      (formElement: InputInterface | TextAreaInputInterface) => {
+        if (formElement !== undefined && formElement.name !== `title`) {
+          finalformValues.secure.push({
+            name: formElement.name,
+            value: formElementsValue[formElement.name as string],
+          });
+        }
       }
-    });
+    );
 
     submitAction(finalformValues);
 
@@ -184,6 +184,7 @@ const CredentialForm: React.FC<
 
   return (
     <form
+      id={id}
       method="POST"
       onSubmit={submitForm}
       className="d-flex flex-column align-items-center justify-content-evenly"

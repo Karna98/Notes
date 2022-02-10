@@ -15,7 +15,7 @@ const Input: React.FC<InputInterface> = (props) => {
     label,
     name,
     placeholder,
-    type = 'text',
+    type = `text`,
     required,
     onChange,
   } = props;
@@ -36,9 +36,10 @@ const Input: React.FC<InputInterface> = (props) => {
   };
 
   return (
-    <div className="d-flex flex-row input-element">
+    <div className="d-flex flex-row align-items-center justify-content-center input-element">
       {label && <label className="d-flex align-items-center">{label}</label>}
       <input
+        id={id}
         type={type}
         value={value}
         name={name}

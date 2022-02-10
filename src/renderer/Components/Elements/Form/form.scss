@@ -11,7 +11,20 @@ form {
   height: inherit;
 }
 
-.auth-form,
+.auth-card form {
+  width: 100%;
+  height: 100%;
+
+  .form-inputs {
+    width: 100%;
+    height: 80%;
+  }
+  .form-button {
+    height: 20%;
+    width: 100%;
+  }
+}
+
 .space-card form {
   background-color: var(--fluorescent-blue);
 }
