@@ -6,32 +6,53 @@
  *
 */
 
-.spaces-body {
-  height: 100%;
+.spaces {
+  width: 100%;
+  height: calc(100% - var(--navbar-height));
+  overflow-y: overlay;
 }
 
-.spaces-content {
-  height: 100%;
+.spaces .spaces-greeting {
+  width: 100%;
+  height: 80px;
 }
 
-.spaces-content a {
-  text-decoration: none;
+.spaces-list {
+  width: 100%;
+  height: calc(100% - 80px);
+
+  a {
+    text-decoration: none;
+  }
+
+  .space-card {
+    margin: var(--4x);
+  }
 }
 
 .space-card {
-  min-width: 300px;
-  min-height: 200px;
+  width: calc(300px - var(--4x));
+  height: calc(200px - var(--4x));
+  padding: var(--4x);
+  border-radius: var(--4x);
   background-color: var(--fluorescent-blue);
 }
+
 .space-card:hover {
   background-color: var(--turquoise-blue);
 }
 
 .space {
+  width: 100%;
+  height: 100%;
+}
+
+.space-welcome {
   height: 100%;
 }
 
 .space-content {
-  width: calc(100%);
-  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  overflow-y: overlay;
 }

@@ -12,10 +12,11 @@ import Input from '../Input';
 import AuthForm from './AuthForm';
 import CredentialForm from './CredentialForm';
 import './form.scss';
+import SpaceForm from './SpaceForm';
 
 const Form: React.FC<FormInterface> = ({
   id,
-  method = 'POST',
+  method = `POST`,
   elements,
   submitAction,
   reset,
@@ -61,27 +62,8 @@ const Form: React.FC<FormInterface> = ({
     reset && setForm(formFields);
   };
 
-  /**
-   * Get className based on form id.
-   *
-   * @returns {string} Class Names.
-   */
-  const getClassName = (): string => {
-    const defaultClassName =
-      'd-flex flex-column align-items-center justify-content-evenly';
-    switch (id) {
-      case 'form-login':
-        return defaultClassName + ' auth-form';
-      case 'form-register':
-        return defaultClassName + ' auth-form';
-      case 'form-add-space':
-        return defaultClassName + ' space-card';
-      default:
-        return defaultClassName;
-    }
-  };
-
   if (id.startsWith(`form-credential`))
+    // Credential Related Form
     return (
       <CredentialForm
         id={id}
@@ -90,10 +72,18 @@ const Form: React.FC<FormInterface> = ({
       />
     );
   else if (id.startsWith(`auth-form`))
+    // Authentication - login/Register Related Form
     return <AuthForm id={id} submitAction={submitAction} />;
+  else if (id.startsWith(`space-form`))
+    // Space Related Form
+    return <SpaceForm id={id} submitAction={submitAction} />;
   else
     return (
-      <form method={method} onSubmit={submitForm} className={getClassName()}>
+      <form
+        method={method}
+        onSubmit={submitForm}
+        className="d-flex flex-column align-items-center justify-content-evenly"
+      >
         {elements?.input?.map((attributes: InputInterface) => {
           return (
             <Input

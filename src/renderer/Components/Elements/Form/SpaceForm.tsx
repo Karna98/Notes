@@ -1,8 +1,8 @@
 /**
- * AuthForm.tsx
+ * SpaceForm.tsx
  *
  * Description:
- *    Auth - Login & Register Form.
+ *    Space Form.
  *
  */
 
@@ -11,61 +11,39 @@ import { Button, Input } from '..';
 
 const getElementBasicAttributes = (elementName: string) => {
   return {
-    id: `auth-${elementName}`,
+    id: `spaces-${elementName}`,
     name: elementName,
   };
 };
 const defaultFormInputs: InputInterface[] = [
   {
-    ...getElementBasicAttributes(`username`),
-    placeholder: `Username`,
+    ...getElementBasicAttributes(`space_name`),
+    placeholder: `New Space Name`,
     required: true,
-    value: ``,
-  },
-  {
-    ...getElementBasicAttributes(`password`),
-    placeholder: `Password`,
-    type: `password`,
-    required: true,
-    value: ``,
-  },
-  {
-    ...getElementBasicAttributes(`retype_password`),
-    placeholder: `Retype Password`,
-    required: true,
-    type: `password`,
     value: ``,
   },
 ];
 
 const formButtons: Record<string, ButtonInterface> = {
-  register: {
-    ...getElementBasicAttributes(`button-register`),
-    label: `Register`,
-    disabled: true,
-  },
-  login: {
-    ...getElementBasicAttributes(`button-login`),
-    label: `Login`,
+  add: {
+    ...getElementBasicAttributes(`button-add`),
+    label: `Add`,
     disabled: true,
   },
 };
 
-const AuthForm: React.FC<Pick<FormInterface, `id` | `submitAction`>> = ({
+const SpaceForm: React.FC<Pick<FormInterface, `id` | `submitAction`>> = ({
   id,
   submitAction,
 }) => {
   // Default input value for Form Elements.
   const defaultFormValues: Record<string, string> = {
-    username: ``,
-    password: ``,
+    space_name: ``,
   };
-
-  if (id === `auth-form-register`) defaultFormValues[`retype_password`] = ``;
 
   // Form Elements Value.
   const [formElementsValue, setFormElementsValue] = useState(defaultFormValues);
-  // Login/Register button disabled status.
+  // Add button disabled status.
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
   /**
@@ -78,11 +56,12 @@ const AuthForm: React.FC<Pick<FormInterface, `id` | `submitAction`>> = ({
       ...formElementsValue,
       [event.target.name]: event.target.value,
     };
+
     setFormElementsValue(updateFormValues);
 
     setButtonDisabled(
       Object.values(updateFormValues).some(
-        (elementValue) => elementValue === ''
+        (elementValue) => elementValue === ``
       )
     );
   };
@@ -97,6 +76,10 @@ const AuthForm: React.FC<Pick<FormInterface, `id` | `submitAction`>> = ({
     event.preventDefault();
 
     submitAction(formElementsValue);
+
+    // Reset Form Field Values.
+    setFormElementsValue(defaultFormValues);
+    setButtonDisabled(true);
   };
 
   return (
@@ -107,30 +90,21 @@ const AuthForm: React.FC<Pick<FormInterface, `id` | `submitAction`>> = ({
       className="d-flex flex-column justify-content-evenly align-items-center"
     >
       <div className="d-flex flex-column justify-content-evenly align-items-center form-inputs">
-        {defaultFormInputs.map(
-          (elementObject: InputInterface) =>
-            (elementObject.name !== `retype_password` ||
-              id === `auth-form-register`) && (
-              <Input
-                key={elementObject.id}
-                {...elementObject}
-                value={formElementsValue[elementObject.name]}
-                onChange={handleInputChange}
-              />
-            )
-        )}
+        {defaultFormInputs.map((elementObject: InputInterface) => (
+          <Input
+            key={elementObject.id}
+            {...elementObject}
+            value={formElementsValue[elementObject.name]}
+            onChange={handleInputChange}
+          />
+        ))}
       </div>
 
       <div className="d-flex flex-row justify-content-evenly align-items-center form-button">
-        <Button
-          {...(id === `auth-form-register`
-            ? formButtons.register
-            : formButtons.login)}
-          disabled={buttonDisabled}
-        />
+        <Button {...formButtons.add} disabled={buttonDisabled} />
       </div>
     </form>
   );
 };
 
-export default AuthForm;
+export default SpaceForm;

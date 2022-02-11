@@ -13,6 +13,13 @@ html,
 body {
   height: 100%;
   width: 100%;
+
+  // Basic Standard Pixels.
+  --x: 2px;
+  --2x: 4px;
+  --4x: 8px;
+  --8x: 16px;
+  --16x: 32px;
 }
 
 * {
@@ -155,13 +162,6 @@ Body
 body {
   --navbar-height: 50px;
   --sidebar-width: 200px;
-
-  // Basic Standard Pixels.
-  --x: 2px;
-  --2x: 4px;
-  --4x: 8px;
-  --8x: 16px;
-  --16x: 32px;
 }
 
 main {
@@ -169,5 +169,21 @@ main {
   margin: var(--2x);
   width: calc(100% - var(--4x));
   height: calc(100% - var(--4x));
-  overflow-y: auto;
+}
+
+/*-----
+Scroll Bar
+-----*/
+
+*::-webkit-scrollbar {
+  width: var(--2x);
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--fluorescent-blue);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--black);
+  border-radius: var(--x);
 }

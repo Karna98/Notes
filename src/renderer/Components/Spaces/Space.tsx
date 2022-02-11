@@ -41,9 +41,13 @@ const Space = () => {
       name: 'Space Welcome Page',
       path: resolveReactRoutes('root'),
       element: (
-        <>
-          Welcome to <h3>{currentSpaceDetails?.space_name} Space.</h3>
-        </>
+        <div className="d-flex flex-column justify-content-center align-items-center space-welcome">
+          <h4>Welcome to</h4>
+          <h2>
+            <i>{currentSpaceDetails?.space_name}</i>
+          </h2>
+          <h4>Space</h4>
+        </div>
       ),
     },
     {
@@ -69,7 +73,7 @@ const Space = () => {
   }, []);
 
   return (
-    <div className="d-flex flex-row space">
+    <div className="d-flex flex-row justify-content-center align-items-center space">
       <Sidebar title={currentSpaceDetails?.space_name} links={sidebarLinks} />
       <div className="space-content">
         <Routes>

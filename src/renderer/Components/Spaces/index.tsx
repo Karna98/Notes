@@ -26,7 +26,7 @@ const routeList = [
 
 const Spaces = () => {
   return (
-    <div className="spaces-body">
+    <div className="d-flex flex-column align-items-center justify-content-center spaces">
       <Routes>
         {routeList.map((route) => (
           <Route key={route.name} path={route.path} element={route.element} />
