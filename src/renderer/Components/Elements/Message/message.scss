@@ -9,6 +9,7 @@
 .message-card {
   position: absolute;
   margin: 0;
+  top: var(--4x);
   left: 50%;
   max-width: 500px;
   min-height: 24px;

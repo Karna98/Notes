@@ -12,6 +12,7 @@ import Input from '../Input';
 import AuthForm from './AuthForm';
 import CredentialForm from './CredentialForm';
 import './form.scss';
+import LogoutForm from './LogoutForm';
 import SpaceForm from './SpaceForm';
 
 const Form: React.FC<FormInterface> = ({
@@ -77,6 +78,9 @@ const Form: React.FC<FormInterface> = ({
   else if (id.startsWith(`space-form`))
     // Space Related Form
     return <SpaceForm id={id} submitAction={submitAction} />;
+  else if (id === `sidebar-logout-form`)
+    // Logout Related Form
+    return <LogoutForm id={id} submitAction={submitAction} />;
   else
     return (
       <form

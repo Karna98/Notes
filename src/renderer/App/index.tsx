@@ -8,7 +8,7 @@
 import { IPCRequestObject, resolveReactRoutes } from 'common';
 import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { Header, Message, Spaces } from 'renderer/Components';
+import { Message, Sidebar, Spaces } from 'renderer/Components';
 import { useAppSelector, useResponse } from 'renderer/Hooks';
 import { sendToIpcMain } from 'renderer/util';
 import Auth from './Auth';
@@ -45,7 +45,7 @@ const App = () => {
     return (
       <ProtectedRoute
         redirectTo={
-          redirect === undefined ? resolveReactRoutes('auth_login') : redirect
+          redirect === undefined ? resolveReactRoutes(`auth_login`) : redirect
         }
         condition={condition === undefined ? isAuthenticated() : condition}
       >
@@ -62,34 +62,34 @@ const App = () => {
   // List of Routes.
   const RouteList = [
     {
-      name: 'Startup Page',
-      path: resolveReactRoutes('root'),
+      name: `Startup Page`,
+      path: resolveReactRoutes(`root`),
       element: <div> Loading.. </div>,
     },
     {
-      name: 'Auth Page',
-      path: resolveReactRoutes('auth') + `/*`,
+      name: `Auth Page`,
+      path: resolveReactRoutes(`auth`) + `/*`,
       element: getProtectedRoutes(
         <Auth />,
-        resolveReactRoutes('spaces'),
+        resolveReactRoutes(`spaces`),
         !isAuthenticated()
       ),
     },
     {
-      name: 'Spaces Page',
-      path: resolveReactRoutes('spaces') + `/*`,
+      name: `Spaces Page`,
+      path: resolveReactRoutes(`spaces`) + `/*`,
       element: getProtectedRoutes(<Spaces />),
     },
     {
-      name: 'Profile Page',
-      path: resolveReactRoutes('profile'),
+      name: `Profile Page`,
+      path: resolveReactRoutes(`profile`),
       element: getProtectedRoutes(<Profile />),
     },
   ];
 
   return (
-    <>
-      {sessionState !== null && <Header />}
+    <div className="d-flex flex-row body-content">
+      {sessionState !== null && <Sidebar />}
       <main className="d-flex flex-column">
         <Message />
         <Routes>
@@ -98,7 +98,7 @@ const App = () => {
           ))}
         </Routes>
       </main>
-    </>
+    </div>
   );
 };
 

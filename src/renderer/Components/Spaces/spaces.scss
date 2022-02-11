@@ -8,7 +8,7 @@
 
 .spaces {
   width: 100%;
-  height: calc(100% - var(--navbar-height));
+  height: 100%;
   overflow-y: overlay;
 }
 
@@ -31,7 +31,7 @@
 }
 
 .space-card {
-  width: calc(300px - var(--4x));
+  width: calc(250px - var(--4x));
   height: calc(200px - var(--4x));
   padding: var(--4x);
   border-radius: var(--4x);
