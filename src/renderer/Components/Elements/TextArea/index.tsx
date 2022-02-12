@@ -5,23 +5,22 @@
  *    Input Component similar to HTML TextArea Input.
  *
  */
-
 import './textarea.scss';
 
-const TextAreaInput: React.FC<TextAreaInputInterface> = (props) => {
-  const {
-    id,
-    value,
-    label,
-    name,
-    placeholder,
-    required = false,
-    onChange,
-  } = props;
-
+const TextArea: React.FC<TextAreaInputInterface> = ({
+  id,
+  label,
+  name,
+  onChange,
+  placeholder,
+  readonly = false,
+  required = false,
+  value,
+}) => {
   return (
-    <div className="d-flex flex-row input-textarea-element">
+    <div className="d-flex flex-row align-items-center element-textarea">
       {label && <label className="d-flex align-items-center">{label}</label>}
+
       <textarea
         id={id}
         value={value}
@@ -29,10 +28,13 @@ const TextAreaInput: React.FC<TextAreaInputInterface> = (props) => {
         placeholder={placeholder}
         onChange={onChange}
         required={required}
-        className="d-flex align-items-center"
+        className={`d-flex align-items-center ${
+          readonly ? 'textarea-readonly' : ''
+        }`}
+        readOnly={readonly}
       />
     </div>
   );
 };
 
-export default TextAreaInput;
+export default TextArea;

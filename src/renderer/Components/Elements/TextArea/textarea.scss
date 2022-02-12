@@ -6,17 +6,28 @@
  *
 */
 
-.input-textarea-element {
-  padding: 8px;
+.element-textarea {
+  width: calc(100% - var(--2x));
+  height: calc(100% - var(--2x));
+  padding: var(--x);
 }
-.input-textarea-element label {
+
+.element-textarea label {
   min-width: 150px;
 }
 
-.input-textarea-element textarea {
-  margin: 4px 0;
+.element-textarea textarea {
+  width: calc(100% - var(--4x));
+  height: calc(100% - var(--4x));
+  padding: var(--2x);
   resize: none;
-  width: 250px;
-  height: 80px;
-  padding: 2px;
+  outline: none;
+  border: none;
+  border-radius: var(--2x);
+}
+
+textarea.textarea-readonly {
+  background: none;
+  overflow: hidden;
+  cursor: pointer;
 }

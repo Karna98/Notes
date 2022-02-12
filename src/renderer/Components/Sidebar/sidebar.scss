@@ -8,7 +8,9 @@
 
 .sidebar {
   margin: var(--x);
-  width: calc(var(--sidebar-width) - var(--2x));
+  width: calc(var(--sidebar-width) - var(--4x));
+  height: calc(100% - var(--4x));
+  padding: var(--x);
   background-color: var(--fluorescent-blue);
 
   .links-section {

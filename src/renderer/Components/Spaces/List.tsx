@@ -46,7 +46,7 @@ const List = () => {
   };
 
   return (
-    <>
+    <div className="spaces">
       <div className="d-flex flex-column justify-content-evenly spaces-greeting">
         <h3>Hello, {sessionState?.username}.</h3>
         <p>
@@ -69,6 +69,7 @@ const List = () => {
                 {value.space_name}
               </Link>
             ))}
+
             {spacesState.list.length <
               (spacesState.metaData.SPACES_MAX_COUNT_ALLOWED as number) && (
               <div className="d-flex flex-column justify-content-evenly align-items-center space-card">
@@ -78,7 +79,7 @@ const List = () => {
           </>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

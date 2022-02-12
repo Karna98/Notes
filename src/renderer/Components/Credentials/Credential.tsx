@@ -35,7 +35,7 @@ const Credential = () => {
    * @param formData Form fields value.
    */
   const formSubmitAction = (formData: Record<string, unknown>) => {
-    console.log('Update Credential:\n', formData);
+    console.log(`Update Credential:\n`, formData);
   };
 
   const formValues = {
@@ -56,15 +56,14 @@ const Credential = () => {
         <br />
         <b>Last Updated at: </b>
         {currentCredential &&
-          new Date(currentCredential.updated_at).toLocaleString('en-IN', {
-            hourCycle: 'h23',
+          new Date(currentCredential.updated_at).toLocaleString(`en-IN`, {
+            hourCycle: `h23`,
           })}
         <hr />
         <div>
           <Form
             id="form-credential-update"
             submitAction={formSubmitAction}
-            elements={{}}
             formValues={formValues}
           />
         </div>

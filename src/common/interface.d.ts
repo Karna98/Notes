@@ -88,6 +88,7 @@ interface TextAreaInputInterface extends ElementInterface {
   placeholder?: string;
   required?: boolean;
   onChange?: React.ChangeEventHandler<HTMLTextAreaElement> | undefined;
+  readonly?: boolean;
 }
 
 interface ButtonInterface extends Omit<ElementInterface, 'name' | 'value'> {
@@ -100,10 +101,7 @@ interface ButtonInterface extends Omit<ElementInterface, 'name' | 'value'> {
 interface FormInterface {
   id: string;
   submitAction: (form: Record<string, unknown>) => void;
-  elements?: FormElementsInterface;
-  method?: 'POST' | 'GET';
   formValues?: Record<string, unknown>;
-  reset?: boolean;
 }
 
 interface FormElementsInterface {

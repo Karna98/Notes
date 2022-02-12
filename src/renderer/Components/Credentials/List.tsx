@@ -40,11 +40,7 @@ const List = () => {
   return (
     <div className="d-flex flex-column align-items-center">
       <div className="d-flex flex-column align-items-center add-credential-card">
-        <Form
-          id="form-credential-add"
-          submitAction={formSubmitAction}
-          elements={{}}
-        />
+        <Form id="form-credential-add" submitAction={formSubmitAction} />
       </div>
 
       <div className="d-flex flex-row flex-wrap justify-content-evenly">

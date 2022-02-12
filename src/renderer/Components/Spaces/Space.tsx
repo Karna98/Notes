@@ -30,7 +30,7 @@ const Space = () => {
       name: `Space Welcome Page`,
       path: resolveReactRoutes(`root`),
       element: (
-        <div className="d-flex flex-column justify-content-center align-items-center space-welcome">
+        <div className="d-flex flex-column justify-content-center align-items-center space">
           <h4>Welcome to</h4>
           <h2>
             <i>{currentSpaceDetails?.space_name}</i>
@@ -62,15 +62,11 @@ const Space = () => {
   }, []);
 
   return (
-    <div className="d-flex flex-row justify-content-center align-items-center space">
-      <div className="space-content">
-        <Routes>
-          {routeList.map((route) => (
-            <Route key={route.name} path={route.path} element={route.element} />
-          ))}
-        </Routes>
-      </div>
-    </div>
+    <Routes>
+      {routeList.map((route) => (
+        <Route key={route.name} path={route.path} element={route.element} />
+      ))}
+    </Routes>
   );
 };
 

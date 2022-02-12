@@ -13,27 +13,22 @@ import './spaces.scss';
 
 const routeList = [
   {
-    name: 'Spaces Page',
-    path: '/',
+    name: `Spaces Page`,
+    path: `/`,
     element: <List />,
   },
   {
-    name: 'Space Page',
+    name: `Space Page`,
     path: `:space_id/*`,
     element: <Space />,
   },
 ];
 
-const Spaces = () => {
-  return (
-    <div className="d-flex flex-column align-items-center justify-content-center spaces">
-      <Routes>
-        {routeList.map((route) => (
-          <Route key={route.name} path={route.path} element={route.element} />
-        ))}
-      </Routes>
-    </div>
-  );
-};
-
+const Spaces = () => (
+  <Routes>
+    {routeList.map((route) => (
+      <Route key={route.name} path={route.path} element={route.element} />
+    ))}
+  </Routes>
+);
 export default Spaces;
