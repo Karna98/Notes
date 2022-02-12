@@ -31,4 +31,5 @@ const Spaces = () => (
     ))}
   </Routes>
 );
+
 export default Spaces;

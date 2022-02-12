@@ -22,15 +22,17 @@ const formButtons: Record<string, ButtonInterface> = {
   },
 };
 
-const LogoutForm: React.FC<Pick<FormInterface, `id` | `submitAction`>> = ({
-  id,
-  submitAction,
-}) => {
+const LogoutForm: React.FC<FormInterface> = ({ id, submitAction }) => {
   /**
    * Executes the Submit Action on Form Submit.
+   *
+   * @param event
    */
-  const submitForm = () => {
-    submitAction({});
+  const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
+    // Preventing the page from reloading
+    event.preventDefault();
+
+    submitAction();
   };
 
   return (

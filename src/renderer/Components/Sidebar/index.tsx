@@ -70,7 +70,7 @@ const Sidebar = () => {
       </div>
 
       <div className="d-flex flex-column justify-content-between align-items-center links-section">
-        <div className="d-flex flex-column align-items-center top-section">
+        <div className="d-flex flex-column align-items-center main-secondary-links-section">
           <div className="d-flex flex-column align-items-center main-links">
             {links.main.map((link) => (
               <Link key={link?.title} to={link.URI}>

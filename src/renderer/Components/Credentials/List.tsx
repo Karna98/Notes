@@ -28,7 +28,7 @@ const List = () => {
    *
    * @param formData Form fields value.
    */
-  const formSubmitAction = (formData: Record<string, unknown>) => {
+  const formSubmitAction = (formData?: Record<string, unknown>) => {
     sendToIpcMain(
       IPCRequestObject(`credentials-add`, {
         credential: { ...formData },

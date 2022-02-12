@@ -2,7 +2,7 @@
  * index.tsx
  *
  * Description:
- *    Input Component similar to HTML TextArea Input.
+ *    Textarea Component similar to HTML TextArea Input.
  *
  */
 import './textarea.scss';

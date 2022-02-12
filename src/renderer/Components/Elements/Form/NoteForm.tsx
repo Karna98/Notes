@@ -6,7 +6,7 @@
  *
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, TextArea } from '..';
 
@@ -36,9 +36,11 @@ const formButtons: Record<string, ButtonInterface> = {
   },
 };
 
-const NoteForm: React.FC<
-  Pick<FormInterface, `id` | `submitAction` | `formValues`>
-> = ({ id, submitAction, formValues }) => {
+const NoteForm: React.FC<FormInterface> = ({
+  id,
+  submitAction,
+  formValues,
+}) => {
   const navigate = useNavigate();
 
   // Default input value for Form Elements.

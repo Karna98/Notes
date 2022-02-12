@@ -20,8 +20,8 @@ const Register = () => {
    *
    * @param formData Form fields value.
    */
-  const formSubmitAction = (formData: Record<string, unknown>): void => {
-    if (formData?.password === formData?.retype_password) {
+  const formSubmitAction = (formData?: Record<string, unknown>): void => {
+    if (formData && formData?.password === formData?.retype_password) {
       delete formData[`retype_password`];
 
       dispatch(setMessageState(createMessage(0, `Registering User...`)));

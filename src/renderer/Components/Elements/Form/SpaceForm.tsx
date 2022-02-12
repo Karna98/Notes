@@ -15,6 +15,7 @@ const getElementBasicAttributes = (elementName: string) => {
     name: elementName,
   };
 };
+
 const defaultFormInputs: InputInterface[] = [
   {
     ...getElementBasicAttributes(`space_name`),
@@ -32,10 +33,7 @@ const formButtons: Record<string, ButtonInterface> = {
   },
 };
 
-const SpaceForm: React.FC<Pick<FormInterface, `id` | `submitAction`>> = ({
-  id,
-  submitAction,
-}) => {
+const SpaceForm: React.FC<FormInterface> = ({ id, submitAction }) => {
   // Default input value for Form Elements.
   const defaultFormValues: Record<string, string> = {
     space_name: ``,

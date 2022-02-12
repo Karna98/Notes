@@ -34,7 +34,7 @@ const Credential = () => {
    *
    * @param formData Form fields value.
    */
-  const formSubmitAction = (formData: Record<string, unknown>) => {
+  const formSubmitAction = (formData?: Record<string, unknown>) => {
     console.log(`Update Credential:\n`, formData);
   };
 

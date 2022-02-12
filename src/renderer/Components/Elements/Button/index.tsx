@@ -8,8 +8,13 @@
 
 import './button.scss';
 
-const Button: React.FC<ButtonInterface> = (props) => {
-  const { id, label, onClick, type = `submit`, disabled = false } = props;
+const Button: React.FC<ButtonInterface> = ({
+  disabled = false,
+  id,
+  label,
+  onClick,
+  type = `submit`,
+}) => {
   /**
    * Executes onClick() on Button Click.
    */

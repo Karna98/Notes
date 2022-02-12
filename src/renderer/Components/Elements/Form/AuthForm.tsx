@@ -15,6 +15,7 @@ const getElementBasicAttributes = (elementName: string) => {
     name: elementName,
   };
 };
+
 const defaultFormInputs: InputInterface[] = [
   {
     ...getElementBasicAttributes(`username`),
@@ -51,10 +52,7 @@ const formButtons: Record<string, ButtonInterface> = {
   },
 };
 
-const AuthForm: React.FC<Pick<FormInterface, `id` | `submitAction`>> = ({
-  id,
-  submitAction,
-}) => {
+const AuthForm: React.FC<FormInterface> = ({ id, submitAction }) => {
   // Default input value for Form Elements.
   const defaultFormValues: Record<string, string> = {
     username: ``,
@@ -78,6 +76,7 @@ const AuthForm: React.FC<Pick<FormInterface, `id` | `submitAction`>> = ({
       ...formElementsValue,
       [event.target.name]: event.target.value,
     };
+
     setFormElementsValue(updateFormValues);
 
     setButtonDisabled(

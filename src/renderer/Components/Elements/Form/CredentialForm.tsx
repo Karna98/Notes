@@ -6,7 +6,7 @@
  *
  */
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Input, TextArea } from '..';
 
 const getElementBasicAttributes = (elementName: string) => {
@@ -52,9 +52,11 @@ const formButtons: Record<string, ButtonInterface> = {
   },
 };
 
-const CredentialForm: React.FC<
-  Pick<FormInterface, 'id' | 'submitAction' | 'formValues'>
-> = ({ id, submitAction, formValues }) => {
+const CredentialForm: React.FC<FormInterface> = ({
+  id,
+  submitAction,
+  formValues,
+}) => {
   // Default input value for Form Elements.
   const defaultFormValues: Record<string, string> = {
     title: '',
@@ -101,15 +103,13 @@ const CredentialForm: React.FC<
   const createNewInputElement = (
     name: string,
     value?: string
-  ): InputInterface => {
-    return {
-      ...getElementBasicAttributes(name),
-      type: 'text',
-      label: name,
-      placeholder: name,
-      value: value === undefined ? '' : value,
-    };
-  };
+  ): InputInterface => ({
+    ...getElementBasicAttributes(name),
+    type: 'text',
+    label: name,
+    placeholder: name,
+    value: value === undefined ? '' : value,
+  });
 
   const handleOnClick = () => {
     const newFieldName = formElementsValue.newField;

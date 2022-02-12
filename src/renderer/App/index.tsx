@@ -41,18 +41,16 @@ const App = () => {
     element: React.ReactElement,
     redirect?: string,
     condition?: boolean
-  ) => {
-    return (
-      <ProtectedRoute
-        redirectTo={
-          redirect === undefined ? resolveReactRoutes(`auth_login`) : redirect
-        }
-        condition={condition === undefined ? isAuthenticated() : condition}
-      >
-        {element}
-      </ProtectedRoute>
-    );
-  };
+  ) => (
+    <ProtectedRoute
+      redirectTo={
+        redirect === undefined ? resolveReactRoutes(`auth_login`) : redirect
+      }
+      condition={condition === undefined ? isAuthenticated() : condition}
+    >
+      {element}
+    </ProtectedRoute>
+  );
 
   useEffect(() => {
     // Get Auth Status.

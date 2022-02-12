@@ -27,8 +27,9 @@ const List = () => {
    *
    * @param formData Form fields value.
    */
-  const formSubmitAction = (formData: Record<string, unknown>) => {
+  const formSubmitAction = (formData?: Record<string, unknown>) => {
     if (
+      formData &&
       spacesState?.list.some(
         ({ space_name }) => space_name === formData.space_name
       )

@@ -20,7 +20,7 @@ const Login = () => {
    *
    * @param formData Form fields value
    */
-  const formSubmitAction = (formData: Record<string, unknown>): void => {
+  const formSubmitAction = (formData?: Record<string, unknown>): void => {
     dispatch(setMessageState(createMessage(0, `Checking Credentials ..`)));
     sendToIpcMain(IPCRequestObject(`auth-login`, formData));
   };

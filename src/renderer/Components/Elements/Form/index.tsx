@@ -6,7 +6,6 @@
  *
  */
 
-import React from 'react';
 import AuthForm from './AuthForm';
 import CredentialForm from './CredentialForm';
 import './form.scss';
