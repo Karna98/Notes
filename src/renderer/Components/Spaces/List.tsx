@@ -47,7 +47,7 @@ const List = () => {
   };
 
   return (
-    <div className="spaces">
+    <>
       <div className="d-flex flex-column justify-content-evenly spaces-greeting">
         <h3>Hello, {sessionState?.username}.</h3>
         <p>
@@ -80,7 +80,7 @@ const List = () => {
           </>
         )}
       </div>
-    </div>
+    </>
   );
 };
 

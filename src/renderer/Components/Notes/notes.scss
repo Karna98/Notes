@@ -6,18 +6,21 @@
  *
 */
 
-.notes {
-  width: 100%;
-  height: 100%;
-  overflow-y: overlay;
-}
-
 .note-form-section {
   height: calc(216px - var(--8x));
   padding: var(--4x) 0;
 
   .note-card {
     width: calc(350px - var(--4x));
+  }
+}
+
+.note-form-update-section {
+  height: 100%;
+
+  .note-card {
+    width: calc(400px - var(--4x));
+    height: calc(400px - var(--4x));
   }
 }
 
@@ -41,9 +44,4 @@
   padding: var(--2x);
   border-radius: var(--4x);
   background-color: var(--fluorescent-blue);
-}
-
-.note-form-update-section.note-card {
-  width: calc(400px - var(--4x));
-  height: calc(400px - var(--4x));
 }

@@ -38,7 +38,7 @@ const List = () => {
   };
 
   return (
-    <div className="credentials">
+    <>
       <div className="d-flex flex-column align-items-center credential-form-section">
         <div className="d-flex flex-column align-items-center credential-card">
           <Form id="credential-form-add" submitAction={formSubmitAction} />
@@ -58,7 +58,7 @@ const List = () => {
           )
         )}
       </div>
-    </div>
+    </>
   );
 };
 

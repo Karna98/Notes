@@ -45,15 +45,13 @@ const Credential = () => {
   };
 
   return (
-    <div className="credentials">
-      <div className="d-flex flex-column justify-content-center align-items-center">
-        <div className="credential-form-update-section credential-card">
-          <Form
-            id="credential-form-update"
-            submitAction={formSubmitAction}
-            formValues={formValues}
-          />
-        </div>
+    <div className="d-flex flex-column justify-content-center align-items-center credential-form-update-section">
+      <div className="credential-card">
+        <Form
+          id="credential-form-update"
+          submitAction={formSubmitAction}
+          formValues={formValues}
+        />
       </div>
     </div>
   );

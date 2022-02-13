@@ -39,7 +39,7 @@ const List = () => {
   };
 
   return (
-    <div className="notes">
+    <>
       <div className="d-flex flex-column align-items-center note-form-section">
         <div className="note-card">
           <Form id="note-form-add" submitAction={formSubmitAction} />
@@ -62,7 +62,7 @@ const List = () => {
           </Link>
         ))}
       </div>
-    </div>
+    </>
   );
 };
 

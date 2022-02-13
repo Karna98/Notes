@@ -88,7 +88,7 @@ const App = () => {
   return (
     <div className="d-flex flex-row body-content">
       {sessionState !== null && <Sidebar />}
-      <main className="d-flex flex-column">
+      <main className="d-flex flex-column justify-content-center align-items-center">
         <Message />
         <Routes>
           {RouteList.map((route) => (

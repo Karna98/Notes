@@ -25,11 +25,13 @@ const routeList = [
 ];
 
 const Spaces = () => (
-  <Routes>
-    {routeList.map((route) => (
-      <Route key={route.name} path={route.path} element={route.element} />
-    ))}
-  </Routes>
+  <div className="spaces">
+    <Routes>
+      {routeList.map((route) => (
+        <Route key={route.name} path={route.path} element={route.element} />
+      ))}
+    </Routes>
+  </div>
 );
 
 export default Spaces;

@@ -35,8 +35,8 @@ const Note = () => {
   };
 
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center notes">
-      <div className="note-form-update-section note-card">
+    <div className="d-flex flex-column justify-content-center align-items-center note-form-update-section">
+      <div className="note-card">
         <Form
           id="note-form-update"
           submitAction={formSubmitAction}
