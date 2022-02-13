@@ -30,7 +30,7 @@ const Space = () => {
       name: `Space Welcome Page`,
       path: resolveReactRoutes(`root`),
       element: (
-        <div className="d-flex flex-column justify-content-center align-items-center space">
+        <div className="d-flex flex-column justify-content-center align-items-center space-greeting">
           <h4>Welcome to</h4>
           <h2>
             <i>{currentSpaceDetails?.space_name}</i>
