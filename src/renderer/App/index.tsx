@@ -8,7 +8,7 @@
 import { IPCRequestObject, resolveReactRoutes } from 'common';
 import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { Header, Message, Spaces } from 'renderer/Components';
+import { Message, Sidebar, Spaces } from 'renderer/Components';
 import { useAppSelector, useResponse } from 'renderer/Hooks';
 import { sendToIpcMain } from 'renderer/util';
 import Auth from './Auth';
@@ -41,18 +41,16 @@ const App = () => {
     element: React.ReactElement,
     redirect?: string,
     condition?: boolean
-  ) => {
-    return (
-      <ProtectedRoute
-        redirectTo={
-          redirect === undefined ? resolveReactRoutes('auth_login') : redirect
-        }
-        condition={condition === undefined ? isAuthenticated() : condition}
-      >
-        {element}
-      </ProtectedRoute>
-    );
-  };
+  ) => (
+    <ProtectedRoute
+      redirectTo={
+        redirect === undefined ? resolveReactRoutes(`auth_login`) : redirect
+      }
+      condition={condition === undefined ? isAuthenticated() : condition}
+    >
+      {element}
+    </ProtectedRoute>
+  );
 
   useEffect(() => {
     // Get Auth Status.
@@ -62,35 +60,35 @@ const App = () => {
   // List of Routes.
   const RouteList = [
     {
-      name: 'Startup Page',
-      path: resolveReactRoutes('root'),
+      name: `Startup Page`,
+      path: resolveReactRoutes(`root`),
       element: <div> Loading.. </div>,
     },
     {
-      name: 'Auth Page',
-      path: resolveReactRoutes('auth') + `/*`,
+      name: `Auth Page`,
+      path: resolveReactRoutes(`auth`) + `/*`,
       element: getProtectedRoutes(
         <Auth />,
-        resolveReactRoutes('spaces'),
+        resolveReactRoutes(`spaces`),
         !isAuthenticated()
       ),
     },
     {
-      name: 'Spaces Page',
-      path: resolveReactRoutes('spaces') + `/*`,
+      name: `Spaces Page`,
+      path: resolveReactRoutes(`spaces`) + `/*`,
       element: getProtectedRoutes(<Spaces />),
     },
     {
-      name: 'Profile Page',
-      path: resolveReactRoutes('profile'),
+      name: `Profile Page`,
+      path: resolveReactRoutes(`profile`),
       element: getProtectedRoutes(<Profile />),
     },
   ];
 
   return (
-    <>
-      <Header />
-      <main className="d-flex flex-column">
+    <div className="d-flex flex-row body-content">
+      {sessionState !== null && <Sidebar />}
+      <main className="d-flex flex-column justify-content-center align-items-center">
         <Message />
         <Routes>
           {RouteList.map((route) => (
@@ -98,7 +96,7 @@ const App = () => {
           ))}
         </Routes>
       </main>
-    </>
+    </div>
   );
 };
 

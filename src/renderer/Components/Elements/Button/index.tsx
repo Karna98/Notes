@@ -8,8 +8,13 @@
 
 import './button.scss';
 
-const Button: React.FC<ButtonInterface> = (props) => {
-  const { id, label, onClick, type = 'submit', disabled = false } = props;
+const Button: React.FC<ButtonInterface> = ({
+  disabled = false,
+  id,
+  label,
+  onClick,
+  type = `submit`,
+}) => {
   /**
    * Executes onClick() on Button Click.
    */
@@ -18,13 +23,29 @@ const Button: React.FC<ButtonInterface> = (props) => {
     onClick && onClick();
   };
 
+  /**
+   * Apply class name based on button id.
+   *
+   * @returns {string} Class Names.
+   */
+  const getClassName = () => {
+    const defaultClassName = `d-flex align-items-center`;
+
+    switch (id) {
+      case `sidebar-button-logout`:
+        return defaultClassName + ` button-logout`;
+      default:
+        return defaultClassName + ` justify-content-center button-element`;
+    }
+  };
+
   return (
     <button
       id={id}
-      className={'d-flex button-element justify-content-center'}
       onClick={onButtonClick}
       type={type}
       disabled={disabled}
+      className={getClassName()}
     >
       {label}
     </button>

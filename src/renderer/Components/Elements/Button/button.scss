@@ -6,8 +6,29 @@
  *
 */
 
+button {
+  --height: 40px;
+  --width: 160px;
+}
+
 .button-element {
-  min-width: 100px;
-  margin: 4px;
-  padding: 4px;
+  height: var(--height);
+  min-width: var(--width);
+  border-radius: calc(var(--height) / 2);
+  outline: none;
+}
+
+button#sidebar-button-logout {
+  margin-top: var(--x);
+  width: calc(100% - var(--4x));
+  height: 26px;
+  padding: 0 var(--2x);
+  border: none;
+  background: none;
+}
+
+button#sidebar-button-logout:hover {
+  background: var(--turquoise-blue);
+  text-decoration: underline;
+  cursor: pointer;
 }

@@ -6,32 +6,41 @@
  *
 */
 
-.spaces-body {
+.spaces {
+  width: 100%;
+  height: 100%;
+  overflow-y: overlay;
+}
+
+.spaces .spaces-greeting {
+  width: 100%;
+  height: 80px;
+}
+
+.space-greeting {
   height: 100%;
 }
 
-.spaces-content {
-  height: 100%;
-}
+.spaces-list {
+  width: 100%;
 
-.spaces-content a {
-  text-decoration: none;
+  a {
+    text-decoration: none;
+  }
+
+  .space-card {
+    margin: var(--4x);
+  }
 }
 
 .space-card {
-  min-width: 300px;
-  min-height: 200px;
+  width: calc(250px - var(--4x));
+  height: calc(200px - var(--4x));
+  padding: var(--2x);
+  border-radius: var(--4x);
   background-color: var(--fluorescent-blue);
 }
+
 .space-card:hover {
   background-color: var(--turquoise-blue);
-}
-
-.space {
-  height: 100%;
-}
-
-.space-content {
-  width: calc(100%);
-  overflow-y: auto;
 }

@@ -28,7 +28,7 @@ const Message = () => {
   return (
     <>
       {messageState.message && (
-        <div className="text-align-center message-card">
+        <div className="d-flex flex-column justify-content-evenly align-items-center message-card">
           Message : [{messageState.status}] - {messageState.message}
         </div>
       )}

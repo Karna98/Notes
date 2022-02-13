@@ -6,7 +6,10 @@
  *
 */
 
-.auth {
-  width: 100%;
-  height: 100%;
+.auth-card {
+  width: calc(400px - var(--8x));
+  height: calc(240px - var(--8x));
+  padding: var(--4x);
+  border-radius: var(--4x);
+  background-color: var(--fluorescent-blue);
 }

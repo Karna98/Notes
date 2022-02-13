@@ -9,9 +9,13 @@
 .message-card {
   position: absolute;
   margin: 0;
+  top: var(--4x);
   left: 50%;
-  padding: 4px 8px;
+  max-width: 500px;
+  min-height: 24px;
+  padding: var(--2x) var(--8x);
   transform: translate(-50%, 0);
   z-index: 1;
   background-color: var(--turquoise-blue);
+  border-radius: var(--8x);
 }

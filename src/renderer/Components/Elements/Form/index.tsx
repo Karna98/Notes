@@ -6,108 +6,30 @@
  *
  */
 
-import React, { useState } from 'react';
-import Button from '../Button';
-import Input from '../Input';
+import AuthForm from './AuthForm';
 import CredentialForm from './CredentialForm';
 import './form.scss';
+import LogoutForm from './LogoutForm';
+import NoteForm from './NoteForm';
+import SpaceForm from './SpaceForm';
 
-const Form: React.FC<FormInterface> = ({
-  id,
-  method = 'POST',
-  elements,
-  submitAction,
-  reset,
-  formValues,
-}) => {
-  const formFields: Record<
-    string,
-    string | number | readonly string[] | undefined
-  > = {};
-
-  elements.input?.map((element) => {
-    formFields[element.name] = element.value;
-  });
-
-  // Form Fields
-  const [form, setForm] = useState(formFields);
-
-  /**
-   * Handle Form Input changes.
-   *
-   * @param event
-   */
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const updatedForm = {
-      ...form,
-      [event.target.name]: event.target.value,
-    };
-    setForm(updatedForm);
-  };
-
-  /**
-   * Executes the Submit Action on Form Submit.
-   *
-   * @param event
-   */
-  const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
-    // Preventing the page from reloading
-    event.preventDefault();
-
-    submitAction(form);
-
-    // Reset Form Field Values.
-    reset && setForm(formFields);
-  };
-
-  /**
-   * Get className based on form id.
-   *
-   * @returns {string} Class Names.
-   */
-  const getClassName = (): string => {
-    const defaultClassName =
-      'd-flex flex-column align-items-center justify-content-evenly';
-    switch (id) {
-      case 'form-login':
-        return defaultClassName + ' auth-form';
-      case 'form-register':
-        return defaultClassName + ' auth-form';
-      case 'form-add-space':
-        return defaultClassName + ' space-card';
-      default:
-        return defaultClassName;
-    }
-  };
-
-  if (id.startsWith(`form-credential`))
-    return (
-      <CredentialForm
-        id={id}
-        submitAction={submitAction}
-        formValues={formValues}
-      />
-    );
-  else
-    return (
-      <form method={method} onSubmit={submitForm} className={getClassName()}>
-        {elements.input?.map((attributes: InputInterface) => {
-          return (
-            <Input
-              key={attributes.name}
-              {...attributes}
-              value={form[attributes.name]}
-              onChange={handleInputChange}
-            />
-          );
-        })}
-        <div className="d-flex flex-row justify-content-evenly">
-          {elements.button?.map((button) => (
-            <Button key={button.id} {...button} />
-          ))}
-        </div>
-      </form>
-    );
+const Form: React.FC<FormInterface> = (props) => {
+  if (props.id.startsWith(`auth-form`))
+    // Authentication - login/Register Related Form.
+    return <AuthForm {...props} />;
+  else if (props.id === `sidebar-logout-form`)
+    // Logout Related Form.
+    return <LogoutForm {...props} />;
+  else if (props.id.startsWith(`space-form`))
+    // Space Related Form.
+    return <SpaceForm {...props} />;
+  else if (props.id.startsWith(`note-form`))
+    // Note Related Form.
+    return <NoteForm {...props} />;
+  else if (props.id.startsWith(`credential-form`))
+    // Credential Related Form.
+    return <CredentialForm {...props} />;
+  else return <>Form Error !!!</>;
 };
 
 export default Form;

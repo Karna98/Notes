@@ -13,27 +13,23 @@ import './notes.scss';
 
 const routeList = [
   {
-    name: 'Notes',
-    path: '/',
+    name: `Notes`,
+    path: `/`,
     element: <List />,
   },
   {
-    name: 'Note',
+    name: `Note`,
     path: `:note_id`,
     element: <Note />,
   },
 ];
 
-const Notes = () => {
-  return (
-    <div className="d-flex flex-row flex-wrap justify-content-evenly notes-body">
-      <Routes>
-        {routeList.map((route) => (
-          <Route key={route.name} path={route.path} element={route.element} />
-        ))}
-      </Routes>
-    </div>
-  );
-};
+const Notes = () => (
+  <Routes>
+    {routeList.map((route) => (
+      <Route key={route.name} path={route.path} element={route.element} />
+    ))}
+  </Routes>
+);
 
 export default Notes;

@@ -6,18 +6,42 @@
  *
 */
 
-.note-add form {
-  width: 400px;
-  padding: 5px 0;
+.note-form-section {
+  height: calc(216px - var(--8x));
+  padding: var(--4x) 0;
+
+  .note-card {
+    width: calc(350px - var(--4x));
+  }
+}
+
+.note-form-update-section {
+  height: 100%;
+
+  .note-card {
+    width: calc(400px - var(--4x));
+    height: calc(400px - var(--4x));
+  }
+}
+
+.notes-list {
+  a {
+    text-decoration: none;
+  }
+
+  .note-card {
+    margin: var(--4x);
+  }
+
+  .note-card:hover {
+    background-color: var(--turquoise-blue);
+  }
 }
 
 .note-card {
-  margin: 10px;
-  padding: 5px;
-  width: 240px;
-  max-height: 200px;
-  box-shadow: inset 0 0 2px black;
-  overflow: hidden;
-  text-decoration: none;
-  cursor: pointer;
+  width: calc(250px - var(--4x));
+  height: calc(200px - var(--4x));
+  padding: var(--2x);
+  border-radius: var(--4x);
+  background-color: var(--fluorescent-blue);
 }

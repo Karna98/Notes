@@ -7,14 +7,19 @@
 */
 
 .input-element {
-  padding: 8px;
+  --label_width: 100px;
+  width: calc(100% - var(--2x));
+  padding: var(--2x) 0;
 }
+
 .input-element label {
-  min-width: 150px;
+  min-width: var(--label_width);
 }
 
 .input-element input {
-  margin: 4px 0;
-  padding: 2px;
-  width: 250px;
+  width: calc(80% - var(--16x));
+  height: 24px;
+  padding: var(--2x) var(--8x);
+  border-radius: var(--8x);
+  outline: none;
 }

@@ -6,13 +6,11 @@
  *
  */
 
-import { useNavigate, useParams } from 'react-router-dom';
-import { Button, Form } from 'renderer/Components';
+import { useParams } from 'react-router-dom';
+import { Form } from 'renderer/Components';
 import { useAppSelector } from 'renderer/Hooks';
 
 const Credential = () => {
-  const navigate = useNavigate();
-
   // Infer credential_id passed in URL.
   const { credential_id } = useParams();
 
@@ -25,17 +23,13 @@ const Credential = () => {
     ({ _id }: CredentialStoreType) => _id == Number(credential_id)
   )[0];
 
-  const onClose = () => {
-    navigate(-1);
-  };
-
   /**
    * Update new credential.
    *
    * @param formData Form fields value.
    */
-  const formSubmitAction = (formData: Record<string, unknown>) => {
-    console.log('Update Credential:\n', formData);
+  const formSubmitAction = (formData?: Record<string, unknown>) => {
+    console.log(`Update Credential:\n`, formData);
   };
 
   const formValues = {
@@ -47,33 +41,19 @@ const Credential = () => {
       }),
       {}
     ),
+    updated_at: currentCredential?.updated_at,
   };
 
   return (
-    <>
-      <div>
-        <b>Credential-ID:</b> {currentCredential?._id}
-        <br />
-        <b>Last Updated at: </b>
-        {currentCredential &&
-          new Date(currentCredential.updated_at).toLocaleString('en-IN', {
-            hourCycle: 'h23',
-          })}
-        <hr />
-        <div>
-          <Form
-            id="form-credential-update"
-            submitAction={formSubmitAction}
-            elements={{}}
-            formValues={formValues}
-          />
-        </div>
+    <div className="d-flex flex-column justify-content-center align-items-center credential-form-update-section">
+      <div className="credential-card">
+        <Form
+          id="credential-form-update"
+          submitAction={formSubmitAction}
+          formValues={formValues}
+        />
       </div>
-
-      <div>
-        <Button id="close-credential" label="Close" onClick={onClose} />
-      </div>
-    </>
+    </div>
   );
 };
 

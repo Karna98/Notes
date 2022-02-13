@@ -1,0 +1,36 @@
+/**
+ * profile.scss 
+ * 
+ * Description:
+ *    Styles for Profile Section.
+ *
+*/
+
+.profile-card {
+  width: calc(500px - var(--8x));
+  height: calc(400px - var(--8x));
+  padding: var(--4x);
+  border-radius: var(--4x);
+  background-color: var(--fluorescent-blue);
+}
+
+.profile-heading {
+  height: 30%;
+}
+
+.profile-details {
+  margin: var(--2x) var(--4x);
+  width: calc(100% - var(--8x));
+
+  .detail-label {
+    width: 40%;
+  }
+
+  .detail-value {
+    width: 60%;
+  }
+}
+
+.profile-details:hover {
+  background-color: var(--turquoise-blue);
+}
