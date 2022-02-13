@@ -29,6 +29,10 @@
   .note-card {
     margin: var(--4x);
   }
+
+  .note-card:hover {
+    background-color: var(--turquoise-blue);
+  }
 }
 
 .note-card {

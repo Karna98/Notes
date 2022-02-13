@@ -2,7 +2,7 @@
  * LogoutForm.tsx
  *
  * Description:
- *    Logout Form Componenet.
+ *    Logout Form.
  *
  */
 

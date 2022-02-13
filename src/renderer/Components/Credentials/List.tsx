@@ -38,18 +38,20 @@ const List = () => {
   };
 
   return (
-    <div className="d-flex flex-column align-items-center">
-      <div className="d-flex flex-column align-items-center add-credential-card">
-        <Form id="form-credential-add" submitAction={formSubmitAction} />
+    <div className="credentials">
+      <div className="d-flex flex-column align-items-center credential-form-section">
+        <div className="d-flex flex-column align-items-center credential-card">
+          <Form id="credential-form-add" submitAction={formSubmitAction} />
+        </div>
       </div>
 
-      <div className="d-flex flex-row flex-wrap justify-content-evenly">
+      <div className="d-flex flex-row flex-wrap justify-content-evenly credentials-list">
         {currentSpaceState?.credentials.map(
           (credentialObject: CredentialStoreType) => (
             <Link
               key={credentialObject._id}
               to={`${location.pathname}/${credentialObject._id}`}
-              className="credential-card"
+              className="d-flex flex-column justify-content-center align-items-center credential-card"
             >
               {credentialObject.credential.title}
             </Link>

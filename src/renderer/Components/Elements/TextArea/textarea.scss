@@ -32,3 +32,7 @@ textarea.textarea-readonly {
   overflow: hidden;
   cursor: pointer;
 }
+
+.credential-card textarea {
+  height: calc(100px - var(--4x));
+}

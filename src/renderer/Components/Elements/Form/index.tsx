@@ -26,7 +26,7 @@ const Form: React.FC<FormInterface> = (props) => {
   else if (props.id.startsWith(`note-form`))
     // Note Related Form.
     return <NoteForm {...props} />;
-  else if (props.id.startsWith(`form-credential`))
+  else if (props.id.startsWith(`credential-form`))
     // Credential Related Form.
     return <CredentialForm {...props} />;
   else return <>Form Error !!!</>;

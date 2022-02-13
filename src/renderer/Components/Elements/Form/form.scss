@@ -48,6 +48,17 @@ form {
   }
 }
 
+.credential-card form {
+  .form-inputs {
+    min-height: 150px;
+  }
+
+  .form-dynamic-inputs,
+  .form-button {
+    height: 50px;
+  }
+}
+
 form#note-form-update {
   .form-inputs {
     height: 75%;
@@ -55,6 +66,24 @@ form#note-form-update {
 
   .form-button {
     height: 20%;
+  }
+
+  sub {
+    margin-left: var(--2x);
+    margin-top: var(--2x);
+  }
+}
+
+form#credential-form-update {
+  min-height: inherit;
+
+  .form-inputs {
+    min-height: 150px;
+    flex-grow: 1;
+  }
+
+  .form-button {
+    height: 50px;
   }
 
   sub {

@@ -55,9 +55,9 @@ const Sidebar = () => {
   };
 
   /**
-   * Clears all store data.
+   * Submit Logout form.
    */
-  const logoutFormSubmitAction = () => {
+  const logoutFormAction = () => {
     // Clear all redux stores on logout.
     dispatch(clearSessionState());
     dispatch(clearSpacesState());
@@ -100,10 +100,7 @@ const Sidebar = () => {
             </Link>
           ))}
 
-          <Form
-            id="sidebar-logout-form"
-            submitAction={logoutFormSubmitAction}
-          />
+          <Form id="sidebar-logout-form" submitAction={logoutFormAction} />
         </div>
       </div>
     </div>

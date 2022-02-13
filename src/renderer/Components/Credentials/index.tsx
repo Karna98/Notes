@@ -25,16 +25,12 @@ const routeList = [
   },
 ];
 
-const Credentials = () => {
-  return (
-    <div className="d-flex flex-row flex-wrap justify-content-evenly">
-      <Routes>
-        {routeList.map((route) => (
-          <Route key={route.name} path={route.path} element={route.element} />
-        ))}
-      </Routes>
-    </div>
-  );
-};
+const Credentials = () => (
+  <Routes>
+    {routeList.map((route) => (
+      <Route key={route.name} path={route.path} element={route.element} />
+    ))}
+  </Routes>
+);
 
 export default Credentials;

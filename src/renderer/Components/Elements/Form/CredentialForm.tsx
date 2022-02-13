@@ -7,6 +7,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, Input, TextArea } from '..';
 
 const getElementBasicAttributes = (elementName: string) => {
@@ -19,14 +20,12 @@ const getElementBasicAttributes = (elementName: string) => {
 const defaultFormInputs: (InputInterface | TextAreaInputInterface)[] = [
   {
     ...getElementBasicAttributes('title'),
-    label: 'Title',
     placeholder: 'Title or Website name',
     required: true,
     value: '',
   },
   {
     ...getElementBasicAttributes('description'),
-    label: 'Description',
     placeholder: 'Description',
     value: '',
   },
@@ -34,7 +33,6 @@ const defaultFormInputs: (InputInterface | TextAreaInputInterface)[] = [
 
 const addFieldInput: InputInterface = {
   ...getElementBasicAttributes('newField'),
-  label: '',
   placeholder: 'New Field',
   value: '',
 };
@@ -44,11 +42,17 @@ const formButtons: Record<string, ButtonInterface> = {
     ...getElementBasicAttributes('button-save'),
     label: 'Save',
     type: 'submit',
+    disabled: true,
   },
   add: {
     ...getElementBasicAttributes('button-add'),
-    label: 'Add Field',
+    label: 'Add',
     type: 'button',
+  },
+  close: {
+    ...getElementBasicAttributes(`button-close`),
+    label: `Close`,
+    type: `button`,
   },
 };
 
@@ -57,6 +61,8 @@ const CredentialForm: React.FC<FormInterface> = ({
   submitAction,
   formValues,
 }) => {
+  const navigate = useNavigate();
+
   // Default input value for Form Elements.
   const defaultFormValues: Record<string, string> = {
     title: '',
@@ -71,6 +77,8 @@ const CredentialForm: React.FC<FormInterface> = ({
   const [formElementsValue, setFormElementsValue] = useState(defaultFormValues);
   // Add Field button disabled status.
   const [addFieldButtonDisabled, setAddFieldButtonDisabled] = useState(true);
+  // Save button disabled status.
+  const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
 
   /**
    * Handle Form Input changes.
@@ -98,6 +106,7 @@ const CredentialForm: React.FC<FormInterface> = ({
       );
 
     setFormElementsValue(updatedForm);
+    setSaveButtonDisabled(updatedForm.title === ``);
   };
 
   const createNewInputElement = (
@@ -118,6 +127,7 @@ const CredentialForm: React.FC<FormInterface> = ({
       ...formElementsValue,
       newField: '',
     };
+
     // Add new entry to 'formElementsValue' object.
     updatedFormElementsValue[newFieldName] = '';
 
@@ -187,48 +197,62 @@ const CredentialForm: React.FC<FormInterface> = ({
       id={id}
       method="POST"
       onSubmit={submitForm}
-      className="d-flex flex-column align-items-center justify-content-evenly"
+      className="d-flex flex-column justify-content-between"
     >
-      {formElementsState.map(
-        (elementObject: InputInterface | TextAreaInputInterface) => (
-          <div key={elementObject.id}>
-            {elementObject.name === 'description' ? (
+      <div className="d-flex flex-column align-items-center form-inputs">
+        {formElementsState.map(
+          (elementObject: InputInterface | TextAreaInputInterface) =>
+            elementObject.name !== `updated_at` &&
+            (elementObject.name === 'description' ? (
               <TextArea
+                key={elementObject.id}
                 {...elementObject}
                 value={formElementsValue[elementObject.name]}
                 onChange={handleInputChange}
               />
             ) : (
               <Input
+                key={elementObject.id}
                 {...elementObject}
                 value={formElementsValue[elementObject.name]}
                 onChange={handleInputChange}
               />
-            )}
-          </div>
-        )
+            ))
+        )}
+      </div>
+
+      {id === `credential-form-update` && formValues?.updated_at && (
+        <sub>
+          <b>Updated at </b>
+          {new Date(formValues?.updated_at as number).toLocaleString(`en-IN`, {
+            hourCycle: `h23`,
+          })}
+        </sub>
       )}
 
-      {/* Temporary hides Form edit for Update.*/}
-      {id === `form-credential-add` && (
-        <>
-          <div className="d-flex flex-row align-items-center justify-content-evenly">
-            <Input
-              {...addFieldInput}
-              value={formElementsValue[addFieldInput.name]}
-              onChange={handleInputChange}
-            />
-            <Button
-              {...formButtons['add']}
-              onClick={handleOnClick}
-              disabled={addFieldButtonDisabled}
-            />
-          </div>
-          <div className="d-flex flex-row justify-content-evenly">
-            <Button {...formButtons['save']} />
-          </div>
-        </>
-      )}
+      <div>
+        <div className="d-flex flex-row justify-content-evenly align-items-center form-dynamic-inputs">
+          <Input
+            {...addFieldInput}
+            value={formElementsValue[addFieldInput.name]}
+            onChange={handleInputChange}
+          />
+
+          <Button
+            {...formButtons['add']}
+            onClick={handleOnClick}
+            disabled={addFieldButtonDisabled}
+          />
+        </div>
+
+        <div className="d-flex flex-row justify-content-evenly align-items-center form-button">
+          {id === `credential-form-update` && (
+            <Button {...formButtons.close} onClick={() => navigate(-1)} />
+          )}
+
+          <Button {...formButtons['save']} disabled={saveButtonDisabled} />
+        </div>
+      </div>
     </form>
   );
 };
