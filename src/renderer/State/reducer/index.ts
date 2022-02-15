@@ -19,6 +19,7 @@ export {
   clearSpacesState,
   setCurrentSpaceState,
   setSpacesState,
+  updateCredentialState,
   updateNoteState,
 } from './spaces';
 

@@ -253,7 +253,7 @@ const notesRequest = (
       message = updateStatus
         ? // Note updated Successfully.
           createMessage('success')
-        : // Error while saving Space.
+        : // Error while updating Note.
           createMessage('server-error', `Error while saving notes.`);
 
       if (updateStatus)
@@ -297,13 +297,37 @@ const credentialsRequest = (
       message = createStatus.changes
         ? // Credential Added Successfully.
           createMessage('success')
-        : // Error while adding Credential.
+        : // Error while updating Credential.
           createMessage('server-error', `Error while adding Credential.`);
 
       if (createStatus.changes) {
         // Get newly inserted Credential.
         result = database.getCredentialWithId(createStatus.lastInsertRowid);
       }
+      break;
+
+    case `UPDATE`:
+      // Update Credential.
+      const updateStatus = database.updateCredential(
+        {
+          credential: JSON.stringify(requestData.credential),
+          updated_at: requestData.updated_at,
+        },
+        requestData._id
+      );
+
+      message = updateStatus
+        ? // Credential updated Successfully.
+          createMessage('success')
+        : // Error while updating Credential.
+          createMessage('server-error', `Error while saving Credential.`);
+
+      if (updateStatus)
+        result = {
+          _id: requestData._id,
+          credential: requestData.credential,
+          updated_at: requestData.updated_at,
+        };
       break;
 
     default:

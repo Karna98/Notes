@@ -12,6 +12,7 @@ const definedRoutes: Record<string, string> = {
   'auth-register': 'AUTH:REGISTER',
   'auth-status': 'AUTH:STATUS',
   'credentials-add': 'CREDENTIALS:ADD',
+  'credentials-update': 'CREDENTIALS:UPDATE',
   'notes-add': 'NOTES:ADD',
   'notes-update': 'NOTES:UPDATE',
   'spaces-add': 'SPACES:ADD',

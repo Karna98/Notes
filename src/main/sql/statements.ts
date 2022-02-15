@@ -328,6 +328,15 @@ const getCredentialWithIdStatement = (): string => {
   return getConditionalStatement(`credentials`, [`*`], `_id = $credentialId`);
 };
 
+/**
+ * Update Credential.
+ *
+ * @returns {string}
+ */
+const updateCredentialStatement = (values: Record<string, unknown>): string => {
+  return updateStatement('credentials', values, `_id = $credentialId`);
+};
+
 export {
   createDatabaseStatement,
   insertDefaultValueStatement,
@@ -349,4 +358,5 @@ export {
   createCredentialStatement,
   getCredentialsStatement,
   getCredentialWithIdStatement,
+  updateCredentialStatement,
 };
