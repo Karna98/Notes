@@ -6,9 +6,11 @@
  *
  */
 
+import { IPCRequestObject } from 'common';
 import { useParams } from 'react-router-dom';
 import { Form } from 'renderer/Components';
 import { useAppSelector } from 'renderer/Hooks';
+import { sendToIpcMain } from 'renderer/util';
 
 const Credential = () => {
   // Infer credential_id passed in URL.
@@ -29,19 +31,7 @@ const Credential = () => {
    * @param formData Form fields value.
    */
   const formSubmitAction = (formData?: Record<string, unknown>) => {
-    console.log(`Update Credential:\n`, formData);
-  };
-
-  const formValues = {
-    title: currentCredential?.credential.title,
-    ...currentCredential?.credential.secure.reduce(
-      (previousElementObject, { name, ...otherAttributes }) => ({
-        ...previousElementObject,
-        [name]: otherAttributes.value,
-      }),
-      {}
-    ),
-    updated_at: currentCredential?.updated_at,
+    sendToIpcMain(IPCRequestObject(`credentials-update`, formData));
   };
 
   return (
@@ -50,7 +40,7 @@ const Credential = () => {
         <Form
           id="credential-form-update"
           submitAction={formSubmitAction}
-          formValues={formValues}
+          formValues={currentCredential}
         />
       </div>
     </div>

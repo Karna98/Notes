@@ -18,6 +18,7 @@ import reducer, {
   setMessageState,
   setSessionState,
   setSpacesState,
+  updateCredentialState,
   updateNoteState,
 } from './reducer';
 import store from './store';
@@ -42,6 +43,7 @@ export {
   setCurrentSpaceState,
   setSessionState,
   setSpacesState,
+  updateCredentialState,
   updateNoteState,
 };
 

@@ -26,6 +26,7 @@ import {
   getUsersCountStatement,
   getUsersStatement,
   insertDefaultValueStatement,
+  updateCredentialStatement,
   updateNoteStatement,
   updateUserStatement,
 } from './statements';
@@ -334,6 +335,22 @@ const getCredentialWithId = (credentialId: number | bigint) => {
   return results;
 };
 
+/**
+ * Update Credential in Database.
+ */
+const updateCredential = (
+  value: Record<string, unknown>,
+  credentialId: number
+) => {
+  const db = dbInstance();
+  const results = db
+    .prepare(updateCredentialStatement(value))
+    .run({ credentialId });
+  db.close();
+
+  return results.changes;
+};
+
 export default {
   // Database
   checkIfDbExsts,
@@ -357,4 +374,5 @@ export default {
   createNewCredential,
   getCredentials,
   getCredentialWithId,
+  updateCredential,
 };

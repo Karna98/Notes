@@ -6,82 +6,187 @@
  *
  */
 
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Input, TextArea } from '..';
 
-const getElementBasicAttributes = (elementName: string) => {
-  return {
-    id: `credential-${elementName}`,
-    name: elementName,
-  };
+/**
+ * Returns an object with 'id' and 'name'.
+ *
+ * @param elementName
+ * @returns {object} Object of 'id' and 'name'.
+ */
+const getElementBasicAttributes = (elementName: string) => ({
+  id: `credential-${elementName}`,
+  name: elementName,
+});
+
+// Form Elements
+const formElements: {
+  defaultInput: [InputInterface, TextAreaInputInterface];
+  newFieldInput: InputInterface;
+  buttons: Record<string, ButtonInterface>;
+} = {
+  defaultInput: [
+    {
+      ...getElementBasicAttributes(`title`),
+      placeholder: `Title or Website name`,
+      required: true,
+      value: ``,
+    },
+    {
+      ...getElementBasicAttributes(`description`),
+      placeholder: `Description`,
+      value: ``,
+    },
+  ],
+
+  newFieldInput: {
+    ...getElementBasicAttributes(`newField`),
+    placeholder: `New Field`,
+    value: ``,
+  },
+
+  buttons: {
+    save: {
+      ...getElementBasicAttributes(`button-save`),
+      label: `Save`,
+      type: `submit`,
+      disabled: true,
+    },
+    add: {
+      ...getElementBasicAttributes(`button-add`),
+      label: `➕`,
+      type: `button`,
+    },
+    remove: {
+      ...getElementBasicAttributes(`button-remove`),
+      label: `❌`,
+      type: `button`,
+    },
+    close: {
+      ...getElementBasicAttributes(`button-close`),
+      label: `Close`,
+      type: `button`,
+    },
+  },
 };
 
-const defaultFormInputs: (InputInterface | TextAreaInputInterface)[] = [
-  {
-    ...getElementBasicAttributes('title'),
-    placeholder: 'Title or Website name',
-    required: true,
-    value: '',
-  },
-  {
-    ...getElementBasicAttributes('description'),
-    placeholder: 'Description',
-    value: '',
-  },
-];
+/**
+ * Populate default form values.
+ *
+ * @param formData
+ * @returns {object} Object with form field name as key and corresponding value.
+ */
+const populateDefaultFormValues = (formData: CredentialStoreType) => ({
+  title: formData.credential.title,
+  ...formData.credential.secure.reduce(
+    (previousElementObject, { name, ...otherAttributes }) => ({
+      ...previousElementObject,
+      [name]: otherAttributes.value,
+    }),
+    {}
+  ),
+});
 
-const addFieldInput: InputInterface = {
-  ...getElementBasicAttributes('newField'),
-  placeholder: 'New Field',
-  value: '',
-};
+/**
+ * Create Dynamic Input Field.
+ *
+ * @param name Name of the Input Element.
+ * @param value Value of the Input Element
+ * @returns {object} Attributes object of Input Elements.
+ */
+const createNewInputElement = (name: string, value = ``): InputInterface => ({
+  ...getElementBasicAttributes(name),
+  type: `text`,
+  label: name,
+  placeholder: name,
+  value,
+});
 
-const formButtons: Record<string, ButtonInterface> = {
-  save: {
-    ...getElementBasicAttributes('button-save'),
-    label: 'Save',
-    type: 'submit',
-    disabled: true,
-  },
-  add: {
-    ...getElementBasicAttributes('button-add'),
-    label: 'Add',
-    type: 'button',
-  },
-  close: {
-    ...getElementBasicAttributes(`button-close`),
-    label: `Close`,
-    type: `button`,
-  },
-};
+/**
+ * Check if value is empty.
+ *
+ * @param fieldValue Value to be checked.
+ * @returns {boolean} Returns true if empty else false.
+ */
+const checkIfFieldIsEmpty = (fieldValue: string) =>
+  fieldValue.trim().length == 0;
+
+/**
+ * Check if values are equal.
+ *
+ * @param originalValue Orignal Value to be compared with.
+ * @param newValue New value.
+ * @returns {boolean} Returns true if equal else false.
+ */
+const checkIfEqual = (originalValue: string, newValue: string) =>
+  originalValue === newValue;
 
 const CredentialForm: React.FC<FormInterface> = ({
   id,
   submitAction,
-  formValues,
+  formValues: formData,
 }) => {
   const navigate = useNavigate();
 
-  // Default input value for Form Elements.
-  const defaultFormValues: Record<string, string> = {
-    title: '',
-    description: '',
-    newField: '',
-    ...formValues,
-  };
+  const [IS_ADD_FORM, IS_UPDATE_FORM] = useMemo(
+    () => [id === `credential-form-add`, id === `credential-form-update`],
+    [id]
+  );
 
-  // Form Elements List.
-  const [formElementsState, setFormElementsState] = useState(defaultFormInputs);
-  // Form Elements Value.
-  const [formElementsValue, setFormElementsValue] = useState(defaultFormValues);
-  // Add Field button disabled status.
-  const [addFieldButtonDisabled, setAddFieldButtonDisabled] = useState(true);
-  // Save button disabled status.
-  const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
+  const { title, description, ...dynamicValues }: Record<string, string> =
+    useMemo(
+      () =>
+        IS_UPDATE_FORM
+          ? populateDefaultFormValues(formData as CredentialStoreType)
+          : {},
+      [IS_UPDATE_FORM, formData]
+    );
+
+  const defaultFormValues: Record<string, string> = useMemo(
+    () => ({
+      ...{
+        title: IS_ADD_FORM ? `` : title,
+        description: IS_ADD_FORM ? `` : description,
+        newField: ``,
+      },
+      ...dynamicValues,
+    }),
+    [IS_ADD_FORM]
+  );
 
   /**
-   * Handle Form Input changes.
+   * Check if form values are updated or not.
+   *
+   * @param formValue Updated form values.
+   * @returns {boolean} Return true if changed or else false.
+   */
+  const verifyChangeInForm = useMemo(
+    () => (formValue: Record<string, unknown>) =>
+      checkIfEqual(
+        JSON.stringify(defaultFormValues),
+        JSON.stringify(formValue)
+      ),
+    [defaultFormValues]
+  );
+
+  // Dynamic Elements List.
+  const [dynamicFormElementsList, setDynamicFormElementsList] = useState(
+    Object.keys(dynamicValues)
+  );
+
+  // Form Elements Value.
+  const [formElementsValue, setFormElementsValue] = useState(defaultFormValues);
+
+  // 'Add' & 'Save' button disabled status.
+  const [disableButtonStatus, setDisableButtonStatus] = useState({
+    add: true,
+    save: true,
+  });
+
+  /**
+   * Handles Form Input changes.
    *
    * @param event
    */
@@ -93,52 +198,81 @@ const CredentialForm: React.FC<FormInterface> = ({
       [event.target.name]: event.target.value,
     };
 
-    // Enable 'Add' Button when input is empty or field with same name already present.
-    event.target.name === addFieldInput.name &&
-      setAddFieldButtonDisabled(
-        // Empty Input.
-        updatedForm.newField.trim().length == 0 ||
-          // Field Name already exists.
+    setDisableButtonStatus({
+      // Disable 'Add' Button when input is empty or Field name already exists.
+      add: checkIfEqual(formElements.newFieldInput.name, event.target.name)
+        ? checkIfFieldIsEmpty(updatedForm.newField) ||
           Object.prototype.hasOwnProperty.call(
             formElementsValue,
             event.target.value
           )
-      );
+        : disableButtonStatus.add,
+      // Empty title or no changes in form value.
+      save: checkIfEqual(formElements.newFieldInput.name, event.target.name)
+        ? disableButtonStatus.save
+        : checkIfFieldIsEmpty(updatedForm.title) ||
+          (IS_UPDATE_FORM && verifyChangeInForm(updatedForm)),
+    });
 
     setFormElementsValue(updatedForm);
-    setSaveButtonDisabled(updatedForm.title === ``);
   };
 
-  const createNewInputElement = (
-    name: string,
-    value?: string
-  ): InputInterface => ({
-    ...getElementBasicAttributes(name),
-    type: 'text',
-    label: name,
-    placeholder: name,
-    value: value === undefined ? '' : value,
-  });
-
-  const handleOnClick = () => {
-    const newFieldName = formElementsValue.newField;
-
-    const updatedFormElementsValue: typeof defaultFormValues = {
+  /**
+   * Add new Dynamic Field on button click.
+   */
+  const addFieldOnClick = () => {
+    const updatedFormValue: Record<string, string> = {
       ...formElementsValue,
-      newField: '',
+      newField: ``,
     };
 
     // Add new entry to 'formElementsValue' object.
-    updatedFormElementsValue[newFieldName] = '';
+    updatedFormValue[formElementsValue.newField] = ``;
 
-    setFormElementsState([
-      ...formElementsState,
-      createNewInputElement(newFieldName),
+    // Add new field to dynamic elements list.
+    setDynamicFormElementsList([
+      ...dynamicFormElementsList,
+      formElementsValue.newField,
     ]);
 
-    setFormElementsValue(updatedFormElementsValue);
+    // Update Form's value object.
+    setFormElementsValue(updatedFormValue);
 
-    setAddFieldButtonDisabled(true);
+    // Updated button disable status.
+    setDisableButtonStatus({
+      add: true,
+      save: IS_UPDATE_FORM
+        ? verifyChangeInForm(updatedFormValue)
+        : disableButtonStatus.save,
+    });
+  };
+
+  /**
+   * Remove Dynamic Field.
+   *
+   * @param index Index of Element to be removed.
+   */
+  const removeFieldOnClick = (index: number) => {
+    const elementsCopy = [...dynamicFormElementsList];
+    const valuesCopy = { ...formElementsValue };
+
+    // Remove field from list.
+    const fieldRemoved = elementsCopy.splice(index, 1);
+
+    // Remove field from form's value object.
+    delete valuesCopy[fieldRemoved[0]];
+
+    // Update state to new list.
+    setDynamicFormElementsList(elementsCopy);
+    // Update Form's value object.
+    setFormElementsValue(valuesCopy);
+
+    // Updated button disable status.
+    IS_UPDATE_FORM &&
+      setDisableButtonStatus({
+        ...disableButtonStatus,
+        save: verifyChangeInForm(valuesCopy),
+      });
   };
 
   /**
@@ -150,48 +284,32 @@ const CredentialForm: React.FC<FormInterface> = ({
     // Preventing the page from reloading
     event.preventDefault();
 
-    const finalformValues: {
-      title: string;
-      secure: Record<string, unknown>[];
-    } = {
-      title: formElementsValue.title,
-      secure: [],
+    const finalformValues: CredentialStoreType = {
+      _id: formData?._id as number,
+      credential: {
+        title: formElementsValue.title,
+        secure: [{ name: `description`, value: formElementsValue.description }],
+      },
+      updated_at: Date.now(),
     };
 
-    formElementsState.map(
-      (formElement: InputInterface | TextAreaInputInterface) => {
-        if (formElement !== undefined && formElement.name !== `title`) {
-          finalformValues.secure.push({
-            name: formElement.name,
-            value: formElementsValue[formElement.name as string],
-          });
-        }
-      }
-    );
+    dynamicFormElementsList.map((field: string) => {
+      finalformValues.credential.secure.push({
+        name: field,
+        value: formElementsValue[field],
+      });
+    });
 
     submitAction(finalformValues);
 
-    // Reset Form Field Values.
-    setFormElementsState(defaultFormInputs);
-    setFormElementsValue(defaultFormValues);
-    setSaveButtonDisabled(true);
-  };
-
-  useEffect(() => {
-    if (formValues !== undefined) {
-      const secureCredentialList = [];
-
-      for (const key in formValues) {
-        if (!(key === `title` || key === `description`)) {
-          secureCredentialList.push(
-            createNewInputElement(key, formValues[key] as string)
-          );
-        }
-      }
-
-      setFormElementsState([...formElementsState, ...secureCredentialList]);
+    if (IS_ADD_FORM) {
+      // Reset Form Field Values.
+      setDynamicFormElementsList([]);
+      setFormElementsValue(defaultFormValues);
     }
-  }, []);
+
+    setDisableButtonStatus({ ...disableButtonStatus, save: true });
+  };
 
   return (
     <form
@@ -201,31 +319,41 @@ const CredentialForm: React.FC<FormInterface> = ({
       className="d-flex flex-column justify-content-between"
     >
       <div className="d-flex flex-column align-items-center form-inputs">
-        {formElementsState.map(
-          (elementObject: InputInterface | TextAreaInputInterface) =>
-            elementObject.name !== `updated_at` &&
-            (elementObject.name === 'description' ? (
-              <TextArea
-                key={elementObject.id}
-                {...elementObject}
-                value={formElementsValue[elementObject.name]}
-                onChange={handleInputChange}
-              />
-            ) : (
-              <Input
-                key={elementObject.id}
-                {...elementObject}
-                value={formElementsValue[elementObject.name]}
-                onChange={handleInputChange}
-              />
-            ))
-        )}
+        <Input
+          {...(formElements.defaultInput[0] as InputInterface)}
+          value={formElementsValue[formElements.defaultInput[0].name]}
+          onChange={handleInputChange}
+        />
+
+        <TextArea
+          {...formElements.defaultInput[1]}
+          value={formElementsValue[formElements.defaultInput[1].name]}
+          onChange={handleInputChange}
+        />
+
+        {dynamicFormElementsList.map((element: string, index: number) => (
+          <div
+            key={index}
+            className="d-flex flex-row justify-content-evenly align-items-center dynamic-section"
+          >
+            <Input
+              {...createNewInputElement(element, formElementsValue[element])}
+              onChange={handleInputChange}
+            />
+            <Button
+              {...formElements.buttons.remove}
+              onClick={() => {
+                removeFieldOnClick(index);
+              }}
+            />
+          </div>
+        ))}
       </div>
 
-      {id === `credential-form-update` && formValues?.updated_at && (
+      {IS_UPDATE_FORM && (
         <sub>
           <b>Updated at </b>
-          {new Date(formValues?.updated_at as number).toLocaleString(`en-IN`, {
+          {new Date(formData?.updated_at as number).toLocaleString(`en-IN`, {
             hourCycle: `h23`,
           })}
         </sub>
@@ -234,24 +362,30 @@ const CredentialForm: React.FC<FormInterface> = ({
       <div>
         <div className="d-flex flex-row justify-content-evenly align-items-center form-dynamic-inputs">
           <Input
-            {...addFieldInput}
-            value={formElementsValue[addFieldInput.name]}
+            {...formElements.newFieldInput}
+            value={formElementsValue[formElements.newFieldInput.name]}
             onChange={handleInputChange}
           />
 
           <Button
-            {...formButtons['add']}
-            onClick={handleOnClick}
-            disabled={addFieldButtonDisabled}
+            {...formElements.buttons.add}
+            onClick={addFieldOnClick}
+            disabled={disableButtonStatus.add}
           />
         </div>
 
         <div className="d-flex flex-row justify-content-evenly align-items-center form-button">
-          {id === `credential-form-update` && (
-            <Button {...formButtons.close} onClick={() => navigate(-1)} />
+          {IS_UPDATE_FORM && (
+            <Button
+              {...formElements.buttons.close}
+              onClick={() => navigate(-1)}
+            />
           )}
 
-          <Button {...formButtons['save']} disabled={saveButtonDisabled} />
+          <Button
+            {...formElements.buttons.save}
+            disabled={disableButtonStatus.save}
+          />
         </div>
       </div>
     </form>

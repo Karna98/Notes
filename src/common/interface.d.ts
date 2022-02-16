@@ -127,6 +127,5 @@ interface SpaceInterface {
 
 interface ElementObjectInterface {
   name: string;
-  element: string;
   value: string | number | readonly string[] | undefined;
 }

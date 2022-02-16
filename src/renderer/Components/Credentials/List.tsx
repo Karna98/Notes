@@ -31,7 +31,7 @@ const List = () => {
   const formSubmitAction = (formData?: Record<string, unknown>) => {
     sendToIpcMain(
       IPCRequestObject(`credentials-add`, {
-        credential: { ...formData },
+        ...formData,
         space_id: Number(space_id),
       })
     );

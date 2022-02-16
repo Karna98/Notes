@@ -80,6 +80,10 @@ form#credential-form-update {
   .form-inputs {
     min-height: 150px;
     flex-grow: 1;
+
+    .dynamic-section {
+      width: 100%;
+    }
   }
 
   .form-button {

@@ -32,3 +32,8 @@ button#sidebar-button-logout:hover {
   text-decoration: underline;
   cursor: pointer;
 }
+
+button#credential-button-add,
+button#credential-button-remove {
+  min-width: var(--height);
+}

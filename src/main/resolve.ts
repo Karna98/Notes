@@ -235,7 +235,7 @@ const notesRequest = (
         ? // Note Added Successfully.
           createMessage('success')
         : // Error while adding Note.
-          createMessage('server-error', `Error while adding Note.`);
+          createMessage('server-error', `Error while adding note.`);
 
       if (createStatus.changes) {
         // Get newly inserted Note.
@@ -253,8 +253,8 @@ const notesRequest = (
       message = updateStatus
         ? // Note updated Successfully.
           createMessage('success')
-        : // Error while saving Space.
-          createMessage('server-error', `Error while saving notes.`);
+        : // Error while updating Note.
+          createMessage('server-error', `Error while saving note.`);
 
       if (updateStatus)
         result = {
@@ -297,13 +297,37 @@ const credentialsRequest = (
       message = createStatus.changes
         ? // Credential Added Successfully.
           createMessage('success')
-        : // Error while adding Credential.
-          createMessage('server-error', `Error while adding Credential.`);
+        : // Error while updating Credential.
+          createMessage('server-error', `Error while adding credential.`);
 
       if (createStatus.changes) {
         // Get newly inserted Credential.
         result = database.getCredentialWithId(createStatus.lastInsertRowid);
       }
+      break;
+
+    case `UPDATE`:
+      // Update Credential.
+      const updateStatus = database.updateCredential(
+        {
+          credential: JSON.stringify(requestData.credential),
+          updated_at: requestData.updated_at,
+        },
+        requestData._id
+      );
+
+      message = updateStatus
+        ? // Credential updated Successfully.
+          createMessage('success')
+        : // Error while updating Credential.
+          createMessage('server-error', `Error while saving credential.`);
+
+      if (updateStatus)
+        result = {
+          _id: requestData._id,
+          credential: requestData.credential,
+          updated_at: requestData.updated_at,
+        };
       break;
 
     default:
