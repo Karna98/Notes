@@ -235,7 +235,7 @@ const notesRequest = (
         ? // Note Added Successfully.
           createMessage('success')
         : // Error while adding Note.
-          createMessage('server-error', `Error while adding Note.`);
+          createMessage('server-error', `Error while adding note.`);
 
       if (createStatus.changes) {
         // Get newly inserted Note.
@@ -254,7 +254,7 @@ const notesRequest = (
         ? // Note updated Successfully.
           createMessage('success')
         : // Error while updating Note.
-          createMessage('server-error', `Error while saving notes.`);
+          createMessage('server-error', `Error while saving note.`);
 
       if (updateStatus)
         result = {
@@ -298,7 +298,7 @@ const credentialsRequest = (
         ? // Credential Added Successfully.
           createMessage('success')
         : // Error while updating Credential.
-          createMessage('server-error', `Error while adding Credential.`);
+          createMessage('server-error', `Error while adding credential.`);
 
       if (createStatus.changes) {
         // Get newly inserted Credential.
@@ -320,7 +320,7 @@ const credentialsRequest = (
         ? // Credential updated Successfully.
           createMessage('success')
         : // Error while updating Credential.
-          createMessage('server-error', `Error while saving Credential.`);
+          createMessage('server-error', `Error while saving credential.`);
 
       if (updateStatus)
         result = {
