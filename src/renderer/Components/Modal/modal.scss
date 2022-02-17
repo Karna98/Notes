@@ -1,0 +1,35 @@
+/**
+ * modal.scss 
+ * 
+ * Description:
+ *    Styles for Modal Component.
+ *
+*/
+
+.modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.modal-box {
+  position: relative;
+  width: 600px;
+  height: 70%;
+  border-radius: var(--4x);
+  padding: var(--2x);
+  background-color: var(--fluorescent-blue);
+}
+
+.modal-close {
+  position: absolute;
+  right: -20px;
+  top: -20px;
+}
+
+.modal-body {
+  height: 100%;
+}

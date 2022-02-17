@@ -109,6 +109,11 @@ interface FormElementsInterface {
   button?: ButtonInterface[];
 }
 
+interface ModalInterface {
+  onClickClose: (value: boolean) => void;
+  children: React.ReactNode;
+}
+
 // ================================================================================
 // Others.
 // ================================================================================
