@@ -8,18 +8,17 @@
 
 import './input.scss';
 
-const Input: React.FC<InputInterface> = (props) => {
-  const {
-    id,
-    value,
-    label,
-    name,
-    placeholder,
-    type = `text`,
-    required,
-    onChange,
-  } = props;
-
+const Input: React.FC<InputInterface> = ({
+  id,
+  value,
+  label,
+  name,
+  placeholder,
+  type = `text`,
+  required,
+  onChange,
+  readonly,
+}) => {
   /**
    * Apply class name based on input name.
    *
@@ -47,6 +46,7 @@ const Input: React.FC<InputInterface> = (props) => {
         onChange={onChange}
         required={required}
         className={getClassName()}
+        readOnly={readonly}
       />
     </div>
   );

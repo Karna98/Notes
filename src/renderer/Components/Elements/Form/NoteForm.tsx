@@ -7,7 +7,6 @@
  */
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button, TextArea } from '..';
 
 const getElementBasicAttributes = (elementName: string) => {
@@ -29,9 +28,9 @@ const formButtons: Record<string, ButtonInterface> = {
     label: `Save`,
     type: `submit`,
   },
-  close: {
-    ...getElementBasicAttributes(`button-close`),
-    label: `Close Note`,
+  reset: {
+    ...getElementBasicAttributes(`button-reset`),
+    label: `Reset`,
     type: `button`,
   },
 };
@@ -41,8 +40,6 @@ const NoteForm: React.FC<FormInterface> = ({
   submitAction,
   formValues,
 }) => {
-  const navigate = useNavigate();
-
   // Default input value for Form Elements.
   const defaultFormValues: Record<string, string | number> = {
     note: ``,
@@ -93,37 +90,53 @@ const NoteForm: React.FC<FormInterface> = ({
   };
 
   return (
-    <form
-      id={id}
-      method="POST"
-      onSubmit={submitForm}
-      className="d-flex flex-column justify-content-evenly"
-    >
-      <div className="d-flex flex-column justify-content-evenly align-items-center form-inputs">
-        <TextArea
-          {...defaultFormInputs}
-          value={formElementsValue[defaultFormInputs.name]}
-          onChange={handleInputChange}
-        />
+    <>
+      <div className="d-flex flex-row align-items-center note-form-heading">
+        <i>
+          <h4>
+            {id === `note-form-update`
+              ? `Note #${formValues?._id}`
+              : `New Note`}
+          </h4>
+        </i>
       </div>
+      <form
+        id={id}
+        method="POST"
+        onSubmit={submitForm}
+        className="d-flex flex-column justify-content-evenly"
+      >
+        <div className="d-flex flex-column justify-content-evenly align-items-center form-inputs">
+          <TextArea
+            {...defaultFormInputs}
+            value={formElementsValue[defaultFormInputs.name]}
+            onChange={handleInputChange}
+          />
+        </div>
 
-      {id === `note-form-update` && formValues?.updated_at && (
-        <sub>
-          <b>Updated at </b>
-          {new Date(formValues?.updated_at as number).toLocaleString(`en-IN`, {
-            hourCycle: `h23`,
-          })}
-        </sub>
-      )}
-
-      <div className="d-flex flex-row justify-content-evenly align-items-center form-button">
-        {id === `note-form-update` && (
-          <Button {...formButtons.close} onClick={() => navigate(-1)} />
+        {id === `note-form-update` && formValues?.updated_at && (
+          <sub>
+            <b>Updated at </b>
+            {new Date(formValues?.updated_at as number).toLocaleString(
+              `en-IN`,
+              {
+                hourCycle: `h23`,
+              }
+            )}
+          </sub>
         )}
 
-        <Button {...formButtons.save} disabled={saveButtonDisabled} />
-      </div>
-    </form>
+        <div className="d-flex flex-row justify-content-evenly align-items-center form-button">
+          <Button
+            {...formButtons.reset}
+            onClick={() => setFormElementsValue(defaultFormValues)}
+            disabled={saveButtonDisabled}
+          />
+
+          <Button {...formButtons.save} disabled={saveButtonDisabled} />
+        </div>
+      </form>
+    </>
   );
 };
 

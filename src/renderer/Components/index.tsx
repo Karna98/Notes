@@ -13,6 +13,6 @@ import Sidebar from './Sidebar';
 import Spaces from './Spaces';
 
 export { Login, Register } from './Auth';
-export { Button, Form, Input, Message } from './Elements';
+export { Button, Form, Input, Message, TextArea } from './Elements';
 // Re-exporting default exports as named exports.
 export { Credentials, Modal, Notes, Sidebar, Spaces };

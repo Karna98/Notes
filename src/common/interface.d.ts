@@ -82,6 +82,7 @@ interface InputInterface extends ElementInterface {
   placeholder?: string;
   required?: boolean;
   onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
+  readonly?: boolean;
 }
 
 interface TextAreaInputInterface extends ElementInterface {

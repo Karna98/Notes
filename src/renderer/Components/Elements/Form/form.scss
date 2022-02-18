@@ -38,13 +38,17 @@ form {
   }
 }
 
-.note-card form {
+form#note-form-add,
+form#note-form-update {
+  width: 100%;
+  height: calc(100% - 50px);
+
   .form-inputs {
-    height: 70%;
+    height: 85%;
   }
 
   .form-button {
-    height: 30%;
+    height: 15%;
   }
 }
 

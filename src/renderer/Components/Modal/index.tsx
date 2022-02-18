@@ -41,7 +41,7 @@ const Modal = ({ onClickClose, children }: ModalInterface) => {
     <>
       <div className="d-flex flex-row justify-content-center align-items-center modal-background">
         <div className="modal-box">
-          <div className="modal-close">
+          <div className="d-flex flex-row justify-content-center align-items-center modal-close">
             <Button {...formButtons.close} onClick={closeModal} />
           </div>
           <div className="d-flex flex-row justify-content-center align-items-center modal-body">
