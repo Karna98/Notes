@@ -89,6 +89,11 @@ const NoteForm: React.FC<FormInterface> = ({
       setFormElementsValue(defaultFormValues);
   };
 
+  const formReset = () => {
+    setFormElementsValue(defaultFormValues);
+    setSaveButtonDisabled(true);
+  };
+
   return (
     <>
       <div className="d-flex flex-row align-items-center note-form-heading">
@@ -100,6 +105,7 @@ const NoteForm: React.FC<FormInterface> = ({
           </h4>
         </i>
       </div>
+
       <form
         id={id}
         method="POST"
@@ -129,7 +135,7 @@ const NoteForm: React.FC<FormInterface> = ({
         <div className="d-flex flex-row justify-content-evenly align-items-center form-button">
           <Button
             {...formButtons.reset}
-            onClick={() => setFormElementsValue(defaultFormValues)}
+            onClick={formReset}
             disabled={saveButtonDisabled}
           />
 

@@ -7,7 +7,6 @@
  */
 
 import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button, Input, TextArea } from '..';
 
 /**
@@ -64,9 +63,9 @@ const formElements: {
       label: `❌`,
       type: `button`,
     },
-    close: {
-      ...getElementBasicAttributes(`button-close`),
-      label: `Close`,
+    reset: {
+      ...getElementBasicAttributes(`button-reset`),
+      label: `Reset`,
       type: `button`,
     },
   },
@@ -128,8 +127,6 @@ const CredentialForm: React.FC<FormInterface> = ({
   submitAction,
   formValues: formData,
 }) => {
-  const navigate = useNavigate();
-
   const [IS_ADD_FORM, IS_UPDATE_FORM] = useMemo(
     () => [id === `credential-form-add`, id === `credential-form-update`],
     [id]
@@ -311,84 +308,107 @@ const CredentialForm: React.FC<FormInterface> = ({
     setDisableButtonStatus({ ...disableButtonStatus, save: true });
   };
 
+  const formReset = () => {
+    setFormElementsValue(defaultFormValues);
+    setDynamicFormElementsList(Object.keys(dynamicValues));
+    setDisableButtonStatus({
+      add: true,
+      save: true,
+    });
+  };
+
   return (
-    <form
-      id={id}
-      method="POST"
-      onSubmit={submitForm}
-      className="d-flex flex-column justify-content-between"
-    >
-      <div className="d-flex flex-column align-items-center form-inputs">
-        <Input
-          {...(formElements.defaultInput[0] as InputInterface)}
-          value={formElementsValue[formElements.defaultInput[0].name]}
-          onChange={handleInputChange}
-        />
-
-        <TextArea
-          {...formElements.defaultInput[1]}
-          value={formElementsValue[formElements.defaultInput[1].name]}
-          onChange={handleInputChange}
-        />
-
-        {dynamicFormElementsList.map((element: string, index: number) => (
-          <div
-            key={index}
-            className="d-flex flex-row justify-content-evenly align-items-center dynamic-section"
-          >
-            <Input
-              {...createNewInputElement(element, formElementsValue[element])}
-              onChange={handleInputChange}
-            />
-            <Button
-              {...formElements.buttons.remove}
-              onClick={() => {
-                removeFieldOnClick(index);
-              }}
-            />
-          </div>
-        ))}
+    <>
+      <div className="d-flex flex-row align-items-center credential-form-heading">
+        <i>
+          <h4>
+            {id === `credential-form-update`
+              ? `Credential #${formData?._id}`
+              : `New Credential`}
+          </h4>
+        </i>
       </div>
 
-      {IS_UPDATE_FORM && (
-        <sub>
-          <b>Updated at </b>
-          {new Date(formData?.updated_at as number).toLocaleString(`en-IN`, {
-            hourCycle: `h23`,
-          })}
-        </sub>
-      )}
-
-      <div>
-        <div className="d-flex flex-row justify-content-evenly align-items-center form-dynamic-inputs">
+      <form
+        id={id}
+        method="POST"
+        onSubmit={submitForm}
+        className="d-flex flex-column justify-content-between"
+      >
+        <div className="d-flex flex-column align-items-center form-inputs">
           <Input
-            {...formElements.newFieldInput}
-            value={formElementsValue[formElements.newFieldInput.name]}
+            {...(formElements.defaultInput[0] as InputInterface)}
+            value={formElementsValue[formElements.defaultInput[0].name]}
             onChange={handleInputChange}
           />
 
-          <Button
-            {...formElements.buttons.add}
-            onClick={addFieldOnClick}
-            disabled={disableButtonStatus.add}
+          <TextArea
+            {...formElements.defaultInput[1]}
+            value={formElementsValue[formElements.defaultInput[1].name]}
+            onChange={handleInputChange}
           />
-        </div>
 
-        <div className="d-flex flex-row justify-content-evenly align-items-center form-button">
+          {dynamicFormElementsList.map((element: string, index: number) => (
+            <div
+              key={index}
+              className="d-flex flex-row justify-content-evenly align-items-center dynamic-section"
+            >
+              <Input
+                {...createNewInputElement(element, formElementsValue[element])}
+                onChange={handleInputChange}
+              />
+              <Button
+                {...formElements.buttons.remove}
+                onClick={() => {
+                  removeFieldOnClick(index);
+                }}
+              />
+            </div>
+          ))}
+        </div>
+        <div>
+          <hr />
           {IS_UPDATE_FORM && (
-            <Button
-              {...formElements.buttons.close}
-              onClick={() => navigate(-1)}
-            />
+            <sub>
+              <b>Updated at </b>
+              {new Date(formData?.updated_at as number).toLocaleString(
+                `en-IN`,
+                {
+                  hourCycle: `h23`,
+                }
+              )}
+            </sub>
           )}
 
-          <Button
-            {...formElements.buttons.save}
-            disabled={disableButtonStatus.save}
-          />
+          <div className="d-flex flex-row justify-content-evenly align-items-center form-dynamic-inputs">
+            <Input
+              {...formElements.newFieldInput}
+              value={formElementsValue[formElements.newFieldInput.name]}
+              onChange={handleInputChange}
+            />
+
+            <Button
+              {...formElements.buttons.add}
+              onClick={addFieldOnClick}
+              disabled={disableButtonStatus.add}
+            />
+          </div>
+
+          <div className="d-flex flex-row justify-content-evenly align-items-center form-button">
+            <Button
+              {...formElements.buttons.reset}
+              onClick={formReset}
+              disabled={disableButtonStatus.save}
+            />
+
+            <Button
+              {...formElements.buttons.save}
+              disabled={disableButtonStatus.save}
+            />
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 };
 
