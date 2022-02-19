@@ -9,7 +9,7 @@
 import { IPCRequestObject } from 'common';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Form, Input, Modal, TextArea } from 'renderer/Components';
+import { Form, Modal, TextArea } from 'renderer/Components';
 import { useAppSelector } from 'renderer/Hooks';
 import { sendToIpcMain } from 'renderer/util';
 import './notes.scss';
@@ -18,84 +18,93 @@ const Notes = () => {
   // Modal State
   const [modalState, setModalState] = useState(false);
 
-  // Type of action. Add - 0, Update - 1.
-  const [addOrUpdateState, setAddOrUpdateState] = useState(0);
+  // Type of Form. {Add_Credential: 0, Update_Credential: 1}.
+  const [modalFormType, setModalFormType] = useState(0);
 
-  // Modal Details
-  const [modalDetails, setModalDetails] = useState({} as NoteStoreType);
+  // Form details opened in Modal.
+  const [formDetails, setFormDetails] = useState({} as NoteStoreType);
 
-  // Get Current Space ID
+  // Get current Space ID.
   const { space_id } = useParams();
 
-  // Get space value stored in Redux Store.
+  // Get current space details.
   const currentSpaceState = useAppSelector(
     (state) => state.spaces?.currentSpace
   );
 
+  /**
+   * Get Note for provided ID.
+   *
+   * @param noteId Note ID.
+   * @returns {NoteStoreType} Note.
+   */
   const getNoteWithId = (noteId: number) => {
-    const currentNote = currentSpaceState?.notes.filter(
+    return currentSpaceState?.notes.filter(
       ({ _id }: NoteStoreType) => _id == Number(noteId)
     )[0];
-
-    return currentNote;
   };
 
   /**
-   * Add new note.
+   * Update states to add new Note.
+   */
+  const addNoteForm = () => {
+    setModalFormType(0);
+    setModalState(!modalState);
+  };
+
+  /**
+   * Update states to update Note.
+   *
+   * @param noteId Note ID to be updated.
+   */
+  const openNoteForm = (noteId: number) => {
+    setModalFormType(1);
+    setFormDetails(getNoteWithId(noteId) as NoteStoreType);
+    setModalState(!modalState);
+  };
+
+  /**
+   * Form submit action to add new note.
    *
    * @param formData Form fields value.
    */
-  const formSubmitAction = (formData?: Record<string, unknown>) => {
+  const addNoteFormAction = (formData?: Record<string, unknown>) => {
     sendToIpcMain(
       IPCRequestObject(`notes-add`, {
         ...formData,
         space_id: Number(space_id),
       })
     );
+
     setModalState(!modalState);
   };
 
-  useEffect(() => {
-    if (modalState)
-      setModalDetails(getNoteWithId(modalDetails._id) as NoteStoreType);
-  }, [currentSpaceState]);
-
   /**
-   * Update note.
+   * Form submit action to update note.
    *
    * @param formData Form fields value.
    */
-  const formUpdateAction = (formData?: Record<string, unknown>) => {
+  const updateNoteFormAction = (formData?: Record<string, unknown>) => {
     sendToIpcMain(IPCRequestObject(`notes-update`, formData));
   };
 
-  const openNote = (noteId: number) => {
-    setAddOrUpdateState(1);
-    setModalState(!modalState);
-    setModalDetails(getNoteWithId(noteId) as NoteStoreType);
-  };
-
-  const addNoteModal = () => {
-    setModalState(!modalState);
-    setAddOrUpdateState(0);
-  };
+  useEffect(() => {
+    modalState &&
+      setFormDetails(getNoteWithId(formDetails._id) as NoteStoreType);
+  }, [currentSpaceState]);
 
   return (
     <>
-      <div className="d-flex flex-row justify-content-center align-items-center note-form-section">
+      <div className="d-flex flex-row justify-content-between align-items-center note-form-section">
+        <h2>Notes</h2>
         <div
           className="d-flex flex-row justify-content-center align-items-center note-card"
           role="button"
-          onClick={addNoteModal}
-          onKeyPress={(event) => event.key === ` ` && addNoteModal()}
+          onClick={addNoteForm}
+          onKeyPress={(event) => event.key === ` ` && addNoteForm()}
           tabIndex={0}
         >
-          <Input
-            id="note-add-preview"
-            name="note-add"
-            placeholder={`Let's Note it down ...`}
-            readonly
-          />
+          Add Note
         </div>
       </div>
 
@@ -105,8 +114,8 @@ const Notes = () => {
             className="note-card"
             key={note._id}
             role="button"
-            onClick={() => openNote(note._id)}
-            onKeyPress={(event) => event.key === ` ` && openNote(note._id)}
+            onClick={() => openNoteForm(note._id)}
+            onKeyPress={(event) => event.key === ` ` && openNoteForm(note._id)}
             tabIndex={0}
           >
             <div className="d-flex flex-row align-items-center note-form-heading">
@@ -130,14 +139,14 @@ const Notes = () => {
       {modalState && (
         <Modal onClickClose={(value: boolean) => setModalState(value)}>
           <div className="d-flex flex-column justify-content-center align-items-center note-form-modal">
-            {addOrUpdateState ? (
+            {modalFormType ? (
               <Form
                 id="note-form-update"
-                submitAction={formUpdateAction}
-                formValues={modalDetails}
+                submitAction={updateNoteFormAction}
+                formValues={formDetails}
               />
             ) : (
-              <Form id="note-form-add" submitAction={formSubmitAction} />
+              <Form id="note-form-add" submitAction={addNoteFormAction} />
             )}
           </div>
         </Modal>

@@ -9,95 +9,104 @@
 import { IPCRequestObject } from 'common';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Form, Input, Modal } from 'renderer/Components';
+import { Form, Modal } from 'renderer/Components';
 import { useAppSelector } from 'renderer/Hooks';
 import { sendToIpcMain } from 'renderer/util';
 import './credentials.scss';
 
 const Credentials = () => {
-  // Modal State
+  // Modal State (Open or CLose).
   const [modalState, setModalState] = useState(false);
 
-  // Type of action. Add - 0, Update - 1.
-  const [addOrUpdateState, setAddOrUpdateState] = useState(0);
+  // Type of Form. {Add_Credential: 0, Update_Credential: 1}.
+  const [modalFormType, setModalFormType] = useState(0);
 
-  // Modal Details
-  const [modalDetails, setModalDetails] = useState({} as CredentialStoreType);
+  // Form details opened in Modal.
+  const [formDetails, setFormDetails] = useState({} as CredentialStoreType);
 
-  // Get Current Space IDF
+  // Get current Space ID.
   const { space_id } = useParams();
 
-  // Get space value stored in Redux Store.
+  // Get current space details.
   const currentSpaceState = useAppSelector(
     (state) => state.spaces?.currentSpace
   );
 
+  /**
+   * Get Credential for provided ID.
+   *
+   * @param credentialId Credential ID.
+   * @returns {CredentialStoreType} Credential.
+   */
   const getCredentialWithId = (credentialId: number) => {
-    const currentCredential = currentSpaceState?.credentials.filter(
+    return currentSpaceState?.credentials.filter(
       ({ _id }: CredentialStoreType) => _id == Number(credentialId)
     )[0];
-
-    return currentCredential;
   };
 
-  useEffect(() => {
-    if (modalState)
-      setModalDetails(
-        getCredentialWithId(modalDetails._id) as CredentialStoreType
-      );
-  }, [currentSpaceState]);
+  /**
+   * Update states to add new Credential.
+   */
+  const addCredentialForm = () => {
+    setModalFormType(0);
+    setModalState(!modalState);
+  };
 
   /**
-   * Add new credential.
+   * Update states to update Credential.
+   *
+   * @param credentialId Credential ID to be updated.
+   */
+  const openCredentialForm = (credentialId: number) => {
+    setModalFormType(1);
+    setFormDetails(getCredentialWithId(credentialId) as CredentialStoreType);
+    setModalState(!modalState);
+  };
+
+  /**
+   * Form submit action to add new credential.
    *
    * @param formData Form fields value.
    */
-  const formSubmitAction = (formData?: Record<string, unknown>) => {
+  const addCredentialFormAction = (formData?: Record<string, unknown>) => {
     sendToIpcMain(
       IPCRequestObject(`credentials-add`, {
         ...formData,
         space_id: Number(space_id),
       })
     );
+
     setModalState(!modalState);
   };
 
   /**
-   * Update new credential.
+   * Form submit action to update credential.
    *
    * @param formData Form fields value.
    */
-  const formUpdateAction = (formData?: Record<string, unknown>) => {
+  const updateCredentialFormAction = (formData?: Record<string, unknown>) => {
     sendToIpcMain(IPCRequestObject(`credentials-update`, formData));
   };
 
-  const openCredential = (credentialId: number) => {
-    setAddOrUpdateState(1);
-    setModalState(!modalState);
-    setModalDetails(getCredentialWithId(credentialId) as CredentialStoreType);
-  };
-
-  const addCredentialModal = () => {
-    setModalState(!modalState);
-    setAddOrUpdateState(0);
-  };
+  useEffect(() => {
+    modalState &&
+      setFormDetails(
+        getCredentialWithId(formDetails._id) as CredentialStoreType
+      );
+  }, [currentSpaceState]);
 
   return (
     <>
-      <div className="d-flex flex-row justify-content-center align-items-center credential-form-section">
+      <div className="d-flex flex-row justify-content-between align-items-center credential-form-section">
+        <h2>Credentials</h2>
         <div
           className="d-flex flex-row justify-content-center align-items-center credential-card"
           role="button"
-          onClick={addCredentialModal}
-          onKeyPress={(event) => event.key === ` ` && addCredentialModal()}
+          onClick={addCredentialForm}
+          onKeyPress={(event) => event.key === ` ` && addCredentialForm()}
           tabIndex={0}
         >
-          <Input
-            id="credential-add-preview"
-            name="credential-add"
-            placeholder={`Title or Website name ...`}
-            readonly
-          />
+          Add Credential
         </div>
       </div>
 
@@ -108,9 +117,9 @@ const Credentials = () => {
               className="credential-card"
               key={credentialObject._id}
               role="button"
-              onClick={() => openCredential(credentialObject._id)}
+              onClick={() => openCredentialForm(credentialObject._id)}
               onKeyPress={(event) =>
-                event.key === ` ` && openCredential(credentialObject._id)
+                event.key === ` ` && openCredentialForm(credentialObject._id)
               }
               tabIndex={0}
             >
@@ -121,6 +130,7 @@ const Credentials = () => {
               </div>
 
               <hr />
+
               {credentialObject.credential.title}
             </div>
           )
@@ -130,14 +140,17 @@ const Credentials = () => {
       {modalState && (
         <Modal onClickClose={(value: boolean) => setModalState(value)}>
           <div className="d-flex flex-column justify-content-center align-items-center credential-form-modal">
-            {addOrUpdateState ? (
+            {modalFormType ? (
               <Form
                 id="credential-form-update"
-                submitAction={formUpdateAction}
-                formValues={modalDetails}
+                submitAction={updateCredentialFormAction}
+                formValues={formDetails}
               />
             ) : (
-              <Form id="credential-form-add" submitAction={formSubmitAction} />
+              <Form
+                id="credential-form-add"
+                submitAction={addCredentialFormAction}
+              />
             )}
           </div>
         </Modal>
