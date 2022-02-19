@@ -16,6 +16,7 @@ button {
   min-width: var(--width);
   border-radius: calc(var(--height) / 2);
   outline: none;
+  cursor: pointer;
 }
 
 button#sidebar-button-logout {
@@ -25,14 +26,15 @@ button#sidebar-button-logout {
   padding: 0 var(--2x);
   border: none;
   background: none;
+  cursor: pointer;
 }
 
 button#sidebar-button-logout:hover {
   background: var(--turquoise-blue);
   text-decoration: underline;
-  cursor: pointer;
 }
 
+button#modal-button-close,
 button#credential-button-add,
 button#credential-button-remove {
   min-width: var(--height);

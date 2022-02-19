@@ -38,13 +38,17 @@ form {
   }
 }
 
-.note-card form {
+form#note-form-add,
+form#note-form-update {
+  width: 100%;
+  height: calc(100% - 50px);
+
   .form-inputs {
-    height: 70%;
+    height: 85%;
   }
 
   .form-button {
-    height: 30%;
+    height: 15%;
   }
 }
 
@@ -74,15 +78,17 @@ form#note-form-update {
   }
 }
 
+form#credential-form-add,
 form#credential-form-update {
-  min-height: inherit;
+  width: 100%;
+  height: calc(100% - 50px);
 
   .form-inputs {
-    min-height: 150px;
-    flex-grow: 1;
+    overflow-y: overlay;
 
     .dynamic-section {
-      width: 100%;
+      width: calc(100% - var(--8x));
+      padding: 0 var(--4x);
     }
   }
 

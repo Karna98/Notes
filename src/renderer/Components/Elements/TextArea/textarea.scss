@@ -33,6 +33,6 @@ textarea.textarea-readonly {
   cursor: pointer;
 }
 
-.credential-card textarea {
+textarea#credential-description {
   height: calc(100px - var(--4x));
 }
