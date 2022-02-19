@@ -18,7 +18,7 @@ const Notes = () => {
   // Modal State
   const [modalState, setModalState] = useState(false);
 
-  // Type of Form. {Add_Credential: 0, Update_Credential: 1}.
+  // Type of Form. {Add_Note: 0, Update_Note: 1}.
   const [modalFormType, setModalFormType] = useState(0);
 
   // Form details opened in Modal.
@@ -97,6 +97,7 @@ const Notes = () => {
     <>
       <div className="d-flex flex-row justify-content-between align-items-center note-form-section">
         <h2>Notes</h2>
+
         <div
           className="d-flex flex-row justify-content-center align-items-center note-card"
           role="button"
@@ -109,27 +110,29 @@ const Notes = () => {
       </div>
 
       <div className="d-flex flex-row flex-wrap justify-content-evenly notes-list">
-        {currentSpaceState?.notes.map((note: NoteStoreType) => (
+        {currentSpaceState?.notes.map((noteObject: NoteStoreType) => (
           <div
             className="note-card"
-            key={note._id}
+            key={noteObject._id}
             role="button"
-            onClick={() => openNoteForm(note._id)}
-            onKeyPress={(event) => event.key === ` ` && openNoteForm(note._id)}
+            onClick={() => openNoteForm(noteObject._id)}
+            onKeyPress={(event) =>
+              event.key === ` ` && openNoteForm(noteObject._id)
+            }
             tabIndex={0}
           >
             <div className="d-flex flex-row align-items-center note-form-heading">
               <b>
-                <i>Note #{note._id}</i>
+                <i>Note #{noteObject._id}</i>
               </b>
             </div>
 
             <hr />
 
             <TextArea
-              id={`note-${note._id}`}
-              name={`note-${note._id}`}
-              value={note.note}
+              id={`note-${noteObject._id}`}
+              name={`note-${noteObject._id}`}
+              value={noteObject.note}
               readonly
             />
           </div>

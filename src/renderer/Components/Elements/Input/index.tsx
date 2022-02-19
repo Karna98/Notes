@@ -17,7 +17,6 @@ const Input: React.FC<InputInterface> = ({
   type = `text`,
   required,
   onChange,
-  readonly,
 }) => {
   /**
    * Apply class name based on input name.
@@ -46,7 +45,6 @@ const Input: React.FC<InputInterface> = ({
         onChange={onChange}
         required={required}
         className={getClassName()}
-        readOnly={readonly}
       />
     </div>
   );
