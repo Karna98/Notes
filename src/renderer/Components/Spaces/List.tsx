@@ -38,7 +38,7 @@ const List = () => {
       dispatch(
         setMessageState(
           createMessage(
-            -1,
+            `client-error`,
             `Space with name "${formData.space_name}" already exists.`
           )
         )
@@ -49,10 +49,8 @@ const List = () => {
   return (
     <>
       <div className="d-flex flex-column justify-content-evenly spaces-greeting">
-        <h3>Hello, {sessionState?.username}.</h3>
-        <p>
-          <b>Which Space to explore today?</b>
-        </p>
+        <h2>Hello, {sessionState?.username}</h2>
+        <b>Which Space to explore today?</b>
       </div>
 
       <div className="d-flex flex-row flex-wrap justify-content-evenly align-items-center spaces-list">
@@ -64,7 +62,7 @@ const List = () => {
               <Link
                 to={`${value._id}`}
                 key={value._id}
-                className="d-flex justify-content-center align-items-center space-card"
+                className="d-flex justify-content-center align-items-center card space-card"
                 aria-disabled
               >
                 {value.space_name}
@@ -73,7 +71,7 @@ const List = () => {
 
             {spacesState.list.length <
               (spacesState.metaData.SPACES_MAX_COUNT_ALLOWED as number) && (
-              <div className="d-flex flex-column justify-content-evenly align-items-center space-card">
+              <div className="d-flex flex-column justify-content-evenly align-items-center card space-card">
                 <Form id="space-form-add" submitAction={formSubmitAction} />
               </div>
             )}

@@ -41,7 +41,7 @@ const Profile = () => {
       : [];
 
   return (
-    <div className="d-flex flex-column align-items-center profile-card">
+    <div className="card profile-card">
       <div className="d-flex flex-row align-items-center profile-heading">
         <h1>Profile</h1>
       </div>
@@ -52,10 +52,12 @@ const Profile = () => {
           className="d-flex flex-row justify-content-between profile-details"
         >
           <p className="detail-label">
-            <i>{data.label}:</i>
+            <b>{data.label}</b>
           </p>
 
-          <p className="detail-value">{data.value}</p>
+          <p className="detail-value">
+            <b>:</b> {data.value}
+          </p>
         </div>
       ))}
     </div>
