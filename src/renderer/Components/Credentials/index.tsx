@@ -97,11 +97,11 @@ const Credentials = () => {
 
   return (
     <>
-      <div className="d-flex flex-row justify-content-between align-items-center credential-form-section">
+      <div className="d-flex flex-row justify-content-between align-items-center space-header">
         <h2>Credentials</h2>
 
         <div
-          className="d-flex flex-row justify-content-center align-items-center credential-card"
+          className="d-flex flex-row justify-content-center align-items-center card"
           role="button"
           onClick={addCredentialForm}
           onKeyPress={(event) => event.key === ` ` && addCredentialForm()}
@@ -115,7 +115,7 @@ const Credentials = () => {
         {currentSpaceState?.credentials.map(
           (credentialObject: CredentialStoreType) => (
             <div
-              className="credential-card"
+              className="card credential-card"
               key={credentialObject._id}
               role="button"
               onClick={() => openCredentialForm(credentialObject._id)}
@@ -124,13 +124,9 @@ const Credentials = () => {
               }
               tabIndex={0}
             >
-              <div className="d-flex flex-row align-items-center note-form-heading">
-                <b>
-                  <i>Credential #{credentialObject._id}</i>
-                </b>
+              <div className="d-flex flex-row align-items-center credential-heading">
+                <b>Credential #{credentialObject._id}</b>
               </div>
-
-              <hr />
 
               {credentialObject.credential.title}
             </div>
@@ -140,7 +136,7 @@ const Credentials = () => {
 
       {modalState && (
         <Modal onClickClose={(value: boolean) => setModalState(value)}>
-          <div className="d-flex flex-column justify-content-center align-items-center credential-form-modal">
+          <div className="d-flex flex-column justify-content-center align-items-center credential-modal">
             {modalFormType ? (
               <Form
                 id="credential-form-update"

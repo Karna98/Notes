@@ -95,11 +95,11 @@ const Notes = () => {
 
   return (
     <>
-      <div className="d-flex flex-row justify-content-between align-items-center note-form-section">
+      <div className="d-flex flex-row justify-content-between align-items-center space-header">
         <h2>Notes</h2>
 
         <div
-          className="d-flex flex-row justify-content-center align-items-center note-card"
+          className="d-flex flex-row justify-content-center align-items-center card"
           role="button"
           onClick={addNoteForm}
           onKeyPress={(event) => event.key === ` ` && addNoteForm()}
@@ -112,7 +112,7 @@ const Notes = () => {
       <div className="d-flex flex-row flex-wrap justify-content-evenly notes-list">
         {currentSpaceState?.notes.map((noteObject: NoteStoreType) => (
           <div
-            className="note-card"
+            className="card note-card"
             key={noteObject._id}
             role="button"
             onClick={() => openNoteForm(noteObject._id)}
@@ -121,13 +121,9 @@ const Notes = () => {
             }
             tabIndex={0}
           >
-            <div className="d-flex flex-row align-items-center note-form-heading">
-              <b>
-                <i>Note #{noteObject._id}</i>
-              </b>
+            <div className="d-flex flex-row align-items-center note-heading">
+              <b>Note #{noteObject._id}</b>
             </div>
-
-            <hr />
 
             <TextArea
               id={`note-${noteObject._id}`}
@@ -141,7 +137,7 @@ const Notes = () => {
 
       {modalState && (
         <Modal onClickClose={(value: boolean) => setModalState(value)}>
-          <div className="d-flex flex-column justify-content-center align-items-center note-form-modal">
+          <div className="d-flex flex-column justify-content-center align-items-center note-modal">
             {modalFormType ? (
               <Form
                 id="note-form-update"
