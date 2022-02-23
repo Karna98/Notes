@@ -64,7 +64,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="d-flex flex-column sidebar">
+    <div className="d-flex flex-column card sidebar">
       <div className="d-flex flex-row justify-content-center align-items-center">
         <img src={NOTES_LOGO_256} alt="Notes Logo" className="icon" />
       </div>
@@ -73,7 +73,7 @@ const Sidebar = () => {
         <div className="d-flex flex-column align-items-center main-secondary-links-section">
           <div className="d-flex flex-column align-items-center main-links">
             {links.main.map((link) => (
-              <Link key={link?.title} to={link.URI}>
+              <Link key={link?.title} to={link.URI} className="links">
                 {link?.title}
               </Link>
             ))}
@@ -85,7 +85,7 @@ const Sidebar = () => {
 
               {space_id &&
                 links.secondary.map((link) => (
-                  <Link key={link?.title} to={link.URI}>
+                  <Link key={link?.title} to={link.URI} className="links">
                     {link?.title}
                   </Link>
                 ))}
@@ -95,7 +95,7 @@ const Sidebar = () => {
 
         <div className="d-flex flex-column align-items-center other-links">
           {links.others.map((link) => (
-            <Link key={link?.title} to={link.URI}>
+            <Link key={link?.title} to={link.URI} className="links">
               {link?.title}
             </Link>
           ))}
