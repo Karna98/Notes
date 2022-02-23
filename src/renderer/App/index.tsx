@@ -86,7 +86,7 @@ const App = () => {
   ];
 
   return (
-    <div className="d-flex flex-row body-content">
+    <div className="d-flex flex-row justify-content-center card-block body-content">
       {sessionState !== null && <Sidebar />}
       <main className="d-flex flex-column justify-content-center align-items-center">
         <Message />

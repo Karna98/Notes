@@ -24,19 +24,19 @@ const Register = () => {
     if (formData && formData?.password === formData?.retype_password) {
       delete formData[`retype_password`];
 
-      dispatch(setMessageState(createMessage(0, `Registering User...`)));
+      dispatch(
+        setMessageState(createMessage(`progress`, `Registering User...`))
+      );
       sendToIpcMain(IPCRequestObject(`auth-register`, formData));
     } else {
       // Passored & Retype Password Mismatch.
-      dispatch(setMessageState(createMessage(-1, `Password Mismatch.`)));
+      dispatch(
+        setMessageState(createMessage(`client-error`, `Password Mismatch.`))
+      );
     }
   };
 
-  return (
-    <div className="auth-card">
-      <Form id="auth-form-register" submitAction={formSubmitAction} />
-    </div>
-  );
+  return <Form id="auth-form-register" submitAction={formSubmitAction} />;
 };
 
 export default Register;
