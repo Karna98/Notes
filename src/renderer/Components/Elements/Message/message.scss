@@ -11,11 +11,26 @@
   margin: 0;
   top: var(--4x);
   left: 50%;
-  max-width: 500px;
-  min-height: 24px;
-  padding: var(--2x) var(--8x);
+  min-width: 300px;
+  height: 40px;
+  padding: var(--4x) var(--8x);
   transform: translate(-50%, 0);
   z-index: 1;
-  background-color: var(--turquoise-blue);
-  border-radius: var(--8x);
+  border-radius: calc(5 * var(--2x)) !important;
+}
+
+.message-progress {
+  background-color: var(--message-blue) !important;
+}
+
+.message-success {
+  background-color: var(--message-green) !important;
+}
+
+.message-error.low {
+  background-color: var(--message-red) !important;
+}
+
+.message-error.high {
+  background-color: var(--message-high-red) !important;
 }

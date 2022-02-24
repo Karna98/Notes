@@ -25,12 +25,32 @@ const Message = () => {
       }, 3000);
   }, [messageState]);
 
+  const getClassName = () => {
+    const className =
+      'd-flex flex-column justify-content-evenly align-items-center card message-card';
+
+    switch (messageState.status) {
+      case 0:
+        return className + ` message-progress`;
+
+      case 200:
+        return className + ` message-success`;
+
+      case 400:
+        return className + ` message-error low`;
+
+      case 500:
+        return className + ` message-error high`;
+
+      default:
+        return className;
+    }
+  };
+
   return (
     <>
       {messageState.message && (
-        <div className="d-flex flex-column justify-content-evenly align-items-center message-card">
-          Message : [{messageState.status}] - {messageState.message}
-        </div>
+        <div className={getClassName()}>{messageState.message}</div>
       )}
     </>
   );
