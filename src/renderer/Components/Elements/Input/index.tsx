@@ -25,6 +25,7 @@ const Input: React.FC<InputInterface> = ({
    */
   const getClassName = () => {
     const defaultClassName = 'd-flex align-items-center';
+
     switch (id) {
       case 'spaces-space_name':
         return defaultClassName + ' text-align-center';
@@ -34,7 +35,7 @@ const Input: React.FC<InputInterface> = ({
   };
 
   return (
-    <div className="d-flex flex-row align-items-center justify-content-center input-element">
+    <div className="d-flex flex-row justify-content-center align-items-center input-element">
       {label && <label className="d-flex align-items-center">{label}</label>}
       <input
         id={id}

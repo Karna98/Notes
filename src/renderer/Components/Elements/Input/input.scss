@@ -8,18 +8,27 @@
 
 .input-element {
   --label_width: 100px;
-  width: calc(100% - var(--2x));
-  padding: var(--2x) 0;
+  --height: 32px;
+
+  width: 100%;
+  padding: var(--2x);
 }
 
 .input-element label {
-  min-width: var(--label_width);
+  width: var(--label_width);
 }
 
 .input-element input {
-  width: calc(80% - var(--16x));
-  height: 24px;
+  min-width: calc(100% - var(--label_width));
+  height: var(--height);
   padding: var(--2x) var(--8x);
-  border-radius: var(--8x);
+  border: none;
+  border-bottom: 1px solid var(--text);
   outline: none;
+  background-color: transparent;
+}
+
+input:focus {
+  border-radius: var(--2x);
+  background-color: var(--focus-shadow);
 }
