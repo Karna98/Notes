@@ -89,6 +89,7 @@ interface TextAreaInputInterface extends ElementInterface {
   required?: boolean;
   onChange?: React.ChangeEventHandler<HTMLTextAreaElement> | undefined;
   readonly?: boolean;
+  tabIndex?: number;
 }
 
 interface ButtonInterface extends Omit<ElementInterface, 'name' | 'value'> {

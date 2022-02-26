@@ -16,9 +16,10 @@ const TextArea: React.FC<TextAreaInputInterface> = ({
   readonly = false,
   required = false,
   value,
+  tabIndex,
 }) => {
   return (
-    <div className="d-flex flex-row align-items-center element-textarea">
+    <div className="d-flex flex-row justify-content-center align-items-center textarea-element">
       {label && <label className="d-flex align-items-center">{label}</label>}
 
       <textarea
@@ -32,6 +33,7 @@ const TextArea: React.FC<TextAreaInputInterface> = ({
           readonly ? 'textarea-readonly' : ''
         }`}
         readOnly={readonly}
+        tabIndex={tabIndex}
       />
     </div>
   );

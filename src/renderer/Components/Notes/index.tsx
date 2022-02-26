@@ -129,6 +129,7 @@ const Notes = () => {
               id={`note-${noteObject._id}`}
               name={`note-${noteObject._id}`}
               value={noteObject.note}
+              tabIndex={-1}
               readonly
             />
           </div>
