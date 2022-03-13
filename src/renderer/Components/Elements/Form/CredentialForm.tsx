@@ -362,6 +362,7 @@ const CredentialForm: React.FC<FormInterface> = ({
                 onClick={() => {
                   removeFieldOnClick(index);
                 }}
+                className="round-button"
               />
             </div>
           ))}
@@ -391,6 +392,7 @@ const CredentialForm: React.FC<FormInterface> = ({
               {...formElements.buttons.add}
               onClick={addFieldOnClick}
               disabled={disableButtonStatus.add}
+              className="round-button"
             />
           </div>
 
@@ -399,11 +401,13 @@ const CredentialForm: React.FC<FormInterface> = ({
               {...formElements.buttons.reset}
               onClick={formReset}
               disabled={disableButtonStatus.save}
+              className="button-type-1"
             />
 
             <Button
               {...formElements.buttons.save}
               disabled={disableButtonStatus.save}
+              className="button-type-2"
             />
           </div>
         </div>

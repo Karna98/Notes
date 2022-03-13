@@ -11,22 +11,34 @@ Declarations
 -----     -----     -----*/
 
 :root {
-  // Basic Standard Pixels.
-  --x: 2px;
-  --2x: 4px;
-  --4x: 8px;
-  --8x: 16px;
-  --16x: 32px;
-
-  // Logo Color
-  --logo-red: #ff0000;
-  --logo-green: #00ff00;
-  --logo-blue: #0000ff;
-
   // Color Palette.
-  --red-5: rgba(255, 240, 240);
-  --green-5: rgba(231, 255, 228);
-  --blue-5: rgba(240, 243, 255);
+  --background-light-primary: #ffffff;
+  --background-light-secondary: #fafafa;
+
+  --text-dark-primary: #251313;
+  --text-dark-secondary: #2f2f30;
+  --text-light-primary: #ffffff;
+
+  --red-core: #ff0000;
+  --red-light: #fff0f0;
+  --red-medium: #ff5757;
+  --red-dark: #d70000;
+
+  --blue-core: #0000ff;
+  --blue-light: #cdd6ff;
+  --blue-medium: #7382ff;
+  --blue-dark: #0101d6;
+
+  --purple-core: #ff00ff;
+  --purple-light: #fff2fe;
+  --purple-medium: #ff5def;
+  --purple-dark: #a900a3;
+
+  --green-core: #00ff00;
+  --green-light: #e7ffe4;
+
+  --yellow-core: #ffff00;
+  --yellow-light: #fbffe7;
 
   --message-red: #ffdddd;
   --message-green: #c9ffc4;
@@ -44,7 +56,13 @@ Declarations
   --card-shadow: rgba(0, 0, 0, 0.2);
   --overlay-shadow: rgba(0, 0, 0, 0.4);
 
-  // Variables
+  // Static Variables.
+  --x: 2px;
+  --2x: 4px;
+  --4x: 8px;
+  --8x: 16px;
+  --16x: 32px;
+
   --sidebar-width: 200px;
 }
 
@@ -73,6 +91,11 @@ html {
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -223,9 +246,9 @@ body {
   color: var(--text);
   background: linear-gradient(
     45deg,
-    var(--red-5) 25%,
-    var(--green-5) 50%,
-    var(--blue-5) 75%
+    var(--red-light) 25%,
+    var(--green-light) 50%,
+    var(--blue-light) 75%
   );
 }
 

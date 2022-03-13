@@ -99,7 +99,11 @@ const SpaceForm: React.FC<FormInterface> = ({ id, submitAction }) => {
       </div>
 
       <div className="d-flex flex-row justify-content-evenly align-items-center form-button">
-        <Button {...formButtons.add} disabled={buttonDisabled} />
+        <Button
+          {...formButtons.add}
+          disabled={buttonDisabled}
+          className="button-type-3"
+        />
       </div>
     </form>
   );

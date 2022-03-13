@@ -6,36 +6,125 @@
  *
 */
 
+// Basic button style properties.
 button {
-  --height: 40px;
-  --width: 160px;
-}
+  --button-width: 160px;
+  --button-height: 40px;
 
-.button-element {
-  height: var(--height);
-  min-width: var(--width);
-  border-radius: calc(var(--height) / 2);
-  outline: none;
+  width: var(--button-width);
+  height: var(--button-height);
+
+  font-size: medium;
+  font-weight: 600;
+  letter-spacing: 1px;
+
+  border-radius: calc(var(--button-height) / 2);
+  border: var(--x) solid;
+
+  background-color: transparent;
+  backdrop-filter: blur(var(--16x));
+
   cursor: pointer;
+  transition: all 0.5s;
 }
 
-button#sidebar-button-logout {
-  margin-top: var(--x);
-  width: calc(100% - var(--4x));
-  height: 26px;
-  padding: 0 var(--2x);
+button:disabled {
+  box-shadow: none !important;
+
+  cursor: default;
+  transition: all 0.5s;
+}
+
+button:hover:enabled {
+  color: var(--text-light-primary);
+  transition: all 0.5s;
+}
+
+button:active:focus {
+  box-shadow: none;
+  transition: all 0.5s;
+}
+
+// Button Type-1
+button.button-type-1 {
+  color: var(--red-core);
+  border-color: var(--red-medium);
+  box-shadow: 0 var(--x) var(--x) var(--red-medium);
+}
+
+button:disabled.button-type-1 {
+  border-color: var(--red-light);
+}
+
+button:hover:enabled.button-type-1 {
+  background-color: var(--red-core);
+}
+
+// Button Type-2
+button.button-type-2 {
+  color: var(--blue-core);
+  border-color: var(--blue-medium);
+  box-shadow: 0 var(--x) var(--x) var(--blue-medium);
+}
+
+button:disabled.button-type-2 {
+  border-color: var(--blue-light);
+}
+
+button:hover:enabled.button-type-2 {
+  background-color: var(--blue-core);
+}
+
+// Button Type-3
+button.button-type-3 {
+  color: var(--purple-core);
+  border-color: var(--purple-medium);
+  box-shadow: 0 var(--x) var(--x) var(--purple-medium);
+}
+
+button:disabled.button-type-3 {
+  border-color: var(--purple-light);
+}
+
+button:hover:enabled.button-type-3 {
+  background-color: var(--purple-core);
+}
+
+// Button Type-4
+button.button-type-4 {
   border: none;
-  background: none;
-  cursor: pointer;
+  color: var(--text-light-primary);
+  box-shadow: 0 var(--x) var(--x) var(--purple-medium);
+  background: linear-gradient(45deg, var(--red-medium), var(--blue-medium));
 }
 
-button#sidebar-button-logout:hover {
-  background: var(--turquoise-blue);
-  text-decoration: underline;
+button:disabled.button-type-4 {
+  color: var(--purple-medium);
+  background: linear-gradient(45deg, var(--red-light), var(--blue-light));
 }
 
-button#modal-button-close,
-button#credential-button-add,
-button#credential-button-remove {
-  min-width: var(--height);
+button:hover:enabled.button-type-4 {
+  background: linear-gradient(45deg, var(--red-core), var(--blue-core));
+}
+
+// Round Button Type.
+button.round-button {
+  width: var(--button-height);
+  border: none;
+}
+
+button:disabled.round-button {
+  background-color: var(--focus-shadow);
+}
+
+button:hover:enabled.round-button {
+  backdrop-filter: contrast(0.9);
+}
+
+// Logout Button.
+button#sidebar-button-logout {
+  justify-content: end;
+  font: inherit;
+  color: inherit;
+  border: none;
 }

@@ -137,9 +137,14 @@ const NoteForm: React.FC<FormInterface> = ({
             {...formButtons.reset}
             onClick={formReset}
             disabled={saveButtonDisabled}
+            className="button-type-1"
           />
 
-          <Button {...formButtons.save} disabled={saveButtonDisabled} />
+          <Button
+            {...formButtons.save}
+            disabled={saveButtonDisabled}
+            className="button-type-2"
+          />
         </div>
       </form>
     </>

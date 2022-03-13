@@ -13,6 +13,7 @@ const Button: React.FC<ButtonInterface> = ({
   id,
   label,
   onClick,
+  className,
   type = `submit`,
 }) => {
   /**
@@ -28,16 +29,8 @@ const Button: React.FC<ButtonInterface> = ({
    *
    * @returns {string} Class Names.
    */
-  const getClassName = () => {
-    const defaultClassName = `d-flex align-items-center`;
-
-    switch (id) {
-      case `sidebar-button-logout`:
-        return defaultClassName + ` button-logout`;
-      default:
-        return defaultClassName + ` justify-content-center button-element`;
-    }
-  };
+  const getClassName = () =>
+    `d-flex flex-row align-items-center justify-content-center `;
 
   return (
     <button
@@ -45,7 +38,9 @@ const Button: React.FC<ButtonInterface> = ({
       onClick={onButtonClick}
       type={type}
       disabled={disabled}
-      className={getClassName()}
+      className={
+        className === undefined ? getClassName() : getClassName() + className
+      }
     >
       {label}
     </button>
