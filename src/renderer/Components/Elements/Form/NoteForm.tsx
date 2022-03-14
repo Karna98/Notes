@@ -95,32 +95,22 @@ const NoteForm: React.FC<FormInterface> = ({
   };
 
   return (
-    <>
-      <div className="d-flex flex-row align-items-center note-form-heading">
-        <i>
-          <h4>
-            {id === `note-form-update`
-              ? `Note #${formValues?._id}`
-              : `New Note`}
-          </h4>
-        </i>
+    <form
+      id={id}
+      method="POST"
+      onSubmit={submitForm}
+      className="d-flex flex-column justify-content-evenly"
+    >
+      <div className="d-flex flex-column justify-content-evenly align-items-center form-inputs">
+        <TextArea
+          {...defaultFormInputs}
+          value={formElementsValue[defaultFormInputs.name]}
+          onChange={handleInputChange}
+        />
       </div>
 
-      <form
-        id={id}
-        method="POST"
-        onSubmit={submitForm}
-        className="d-flex flex-column justify-content-evenly"
-      >
-        <div className="d-flex flex-column justify-content-evenly align-items-center form-inputs">
-          <TextArea
-            {...defaultFormInputs}
-            value={formElementsValue[defaultFormInputs.name]}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        {id === `note-form-update` && formValues?.updated_at && (
+      {id === `note-form-update` && formValues?.updated_at && (
+        <div className="form-updated-at">
           <sub>
             <b>Updated at </b>
             {new Date(formValues?.updated_at as number).toLocaleString(
@@ -130,24 +120,24 @@ const NoteForm: React.FC<FormInterface> = ({
               }
             )}
           </sub>
-        )}
-
-        <div className="d-flex flex-row justify-content-evenly align-items-center form-button">
-          <Button
-            {...formButtons.reset}
-            onClick={formReset}
-            disabled={saveButtonDisabled}
-            className="button-type-1"
-          />
-
-          <Button
-            {...formButtons.save}
-            disabled={saveButtonDisabled}
-            className="button-type-2"
-          />
         </div>
-      </form>
-    </>
+      )}
+
+      <div className="d-flex flex-row justify-content-evenly align-items-center form-button">
+        <Button
+          {...formButtons.reset}
+          onClick={formReset}
+          disabled={saveButtonDisabled}
+          className="button-type-1"
+        />
+
+        <Button
+          {...formButtons.save}
+          disabled={saveButtonDisabled}
+          className="button-type-2"
+        />
+      </div>
+    </form>
   );
 };
 

@@ -47,10 +47,6 @@ Declarations
 
   --text: #44475b;
 
-  --background-white: #fff;
-  --background-primary: #fbfcff;
-  --background-secondary: #f5f5f5;
-
   --white-shadow: rgba(255, 255, 255, 0.2);
   --focus-shadow: rgba(0, 0, 0, 0.05);
   --card-shadow: rgba(0, 0, 0, 0.2);
@@ -274,7 +270,7 @@ Scroll Bar
 }
 
 *::-webkit-scrollbar-track {
-  background: var(--background-white);
+  background: var(--background-light-primary);
 }
 
 *::-webkit-scrollbar-thumb {
@@ -297,5 +293,5 @@ Scroll Bar
 .card {
   border-radius: var(--4x);
   box-shadow: 2px 2px 12px var(--card-shadow);
-  background-color: var(--background-white);
+  background-color: var(--background-light-primary);
 }

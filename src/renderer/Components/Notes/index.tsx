@@ -137,18 +137,19 @@ const Notes = () => {
       </div>
 
       {modalState && (
-        <Modal onClickClose={(value: boolean) => setModalState(value)}>
-          <div className="d-flex flex-column justify-content-center align-items-center note-modal">
-            {modalFormType ? (
-              <Form
-                id="note-form-update"
-                submitAction={updateNoteFormAction}
-                formValues={formDetails}
-              />
-            ) : (
-              <Form id="note-form-add" submitAction={addNoteFormAction} />
-            )}
-          </div>
+        <Modal
+          onClickClose={(value: boolean) => setModalState(value)}
+          title={modalFormType ? `Note #${formDetails?._id}` : `New Note`}
+        >
+          {modalFormType ? (
+            <Form
+              id="note-form-update"
+              submitAction={updateNoteFormAction}
+              formValues={formDetails}
+            />
+          ) : (
+            <Form id="note-form-add" submitAction={addNoteFormAction} />
+          )}
         </Modal>
       )}
     </>

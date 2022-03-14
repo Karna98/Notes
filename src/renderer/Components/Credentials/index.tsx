@@ -135,7 +135,12 @@ const Credentials = () => {
       </div>
 
       {modalState && (
-        <Modal onClickClose={(value: boolean) => setModalState(value)}>
+        <Modal
+          onClickClose={(value: boolean) => setModalState(value)}
+          title={
+            modalFormType ? `Credential #${formDetails?._id}` : `New Credential`
+          }
+        >
           <div className="d-flex flex-column justify-content-center align-items-center credential-modal">
             {modalFormType ? (
               <Form

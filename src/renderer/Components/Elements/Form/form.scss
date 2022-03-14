@@ -12,10 +12,18 @@ form {
 
   .form-inputs {
     width: 100%;
+    height: calc(100% - 60px);
+    padding: 0 var(--2x);
+  }
+
+  .form-updated-at {
+    height: 20px;
+    padding: 0 var(--2x);
   }
 
   .form-button {
     width: 100%;
+    height: 60px;
   }
 }
 
@@ -38,66 +46,45 @@ form {
   }
 }
 
-form#note-form-add,
-form#note-form-update {
-  width: 100%;
-  height: calc(100% - 50px);
-
-  .form-inputs {
-    height: 85%;
-  }
-
-  .form-button {
-    height: 15%;
-  }
-}
-
-.credential-card form {
-  .form-inputs {
-    min-height: 150px;
-  }
-
-  .form-dynamic-inputs,
-  .form-button {
-    height: 50px;
-  }
-}
-
 form#note-form-update {
   .form-inputs {
-    height: 75%;
-  }
-
-  .form-button {
-    height: 20%;
-  }
-
-  sub {
-    margin-left: var(--2x);
-    margin-top: var(--2x);
+    height: calc(100% - 80px);
   }
 }
 
 form#credential-form-add,
 form#credential-form-update {
-  width: 100%;
-  height: calc(100% - 50px);
-
   .form-inputs {
+    padding: 0 var(--4x);
     overflow-y: overlay;
 
-    .dynamic-section {
-      width: calc(100% - var(--8x));
-      padding: 0 var(--4x);
+    .credential-title {
+      width: inherit;
+      height: 40px;
+
+      input {
+        width: inherit;
+      }
+    }
+
+    .credential-description {
+      width: inherit;
+      min-height: 100px;
+    }
+
+    .form-dynamic-section {
+      width: inherit;
+
+      .dynamic-section {
+        width: inherit;
+        padding: 0 var(--4x);
+      }
     }
   }
 
-  .form-button {
-    height: 50px;
-  }
-
-  sub {
-    margin-left: var(--2x);
-    margin-top: var(--2x);
+  form#credential-form-update {
+    .form-inputs {
+      height: calc(100% - 80px);
+    }
   }
 }

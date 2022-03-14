@@ -95,6 +95,7 @@ interface TextAreaInputInterface extends ElementInterface {
 interface ButtonInterface extends Omit<ElementInterface, 'name' | 'value'> {
   name?: string;
   type?: 'submit' | 'button' | 'reset';
+  className?: string;
   disabled?: boolean;
   onClick?: () => void;
 }
@@ -112,6 +113,7 @@ interface FormElementsInterface {
 
 interface ModalInterface {
   onClickClose: (value: boolean) => void;
+  title: string;
   children: React.ReactNode;
 }
 
