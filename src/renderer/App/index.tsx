@@ -86,10 +86,12 @@ const App = () => {
   ];
 
   return (
-    <div className="d-flex flex-row justify-content-center card-block body-content">
+    <div className="d-flex flex-row justify-content-center body-content">
       {sessionState !== null && <Sidebar />}
+
       <main className="d-flex flex-column justify-content-center align-items-center">
         <Message />
+
         <Routes>
           {RouteList.map((route) => (
             <Route key={route.name} path={route.path} element={route.element} />

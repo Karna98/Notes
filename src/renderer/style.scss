@@ -239,13 +239,9 @@ body {
   height: 100%;
   overflow: hidden;
   font-family: 'system-ui';
-  color: var(--text);
-  background: linear-gradient(
-    45deg,
-    var(--red-light) 25%,
-    var(--green-light) 50%,
-    var(--blue-light) 75%
-  );
+  color: var(--text-dark-secondary);
+  background: url('./../assets/background.png') no-repeat fixed center;
+  background-size: cover;
 }
 
 .body-content {
@@ -274,21 +270,13 @@ Scroll Bar
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: var(--text);
+  background-color: var(--text-dark-secondary);
   border-radius: var(--x);
 }
 
 /*
  * Card
  */
-
-.card-block {
-  padding: var(--2x);
-  border-radius: var(--4x);
-  box-shadow: inset 3px 3px 3px var(--card-shadow),
-    inset -3px -3px 9px var(--white-shadow), 3px 3px 9px var(--card-shadow),
-    -3px -3px 9px var(--white-shadow);
-}
 
 .card {
   border-radius: var(--4x);
