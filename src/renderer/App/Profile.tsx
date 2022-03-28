@@ -41,7 +41,7 @@ const Profile = () => {
       : [];
 
   return (
-    <div className="card profile-card">
+    <div className="profile">
       <div className="d-flex flex-row align-items-center profile-heading">
         <h1>Profile</h1>
       </div>
@@ -55,9 +55,7 @@ const Profile = () => {
             <b>{data.label}</b>
           </p>
 
-          <p className="detail-value">
-            <b>:</b> {data.value}
-          </p>
+          <p className="detail-value">{data.value}</p>
         </div>
       ))}
     </div>
