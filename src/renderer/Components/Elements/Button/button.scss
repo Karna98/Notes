@@ -124,7 +124,10 @@ button:hover:enabled.round-button {
 // Logout Button.
 button#sidebar-button-logout {
   justify-content: end;
-  font: inherit;
-  color: inherit;
   border: none;
+  font: unset;
+  letter-spacing: unset;
+  color: inherit;
+  backdrop-filter: unset;
+  transition: none;
 }

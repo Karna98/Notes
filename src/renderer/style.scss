@@ -219,17 +219,6 @@ Border
   border-radius: var(--8x);
 }
 
-/*-----
-Icon
------*/
-
-.icon {
-  width: 40px;
-  height: 40px;
-  padding: var(--2x);
-  cursor: pointer;
-}
-
 /*-----     -----     -----
 Body
 -----     -----     -----*/
@@ -244,17 +233,26 @@ body {
   background-size: cover;
 }
 
+div#root {
+  width: inherit;
+  height: inherit;
+}
+
 .body-content {
+  width: inherit;
+  height: inherit;
+}
+
+nav {
   position: relative;
-  margin: var(--2x);
-  width: calc(100vw - var(--4x));
-  height: calc(100vh - var(--4x));
+  width: var(--sidebar-width);
+  height: inherit;
 }
 
 main {
-  margin: var(--2x);
-  min-width: calc(100% - var(--sidebar-width) - var(--4x));
-  height: calc(100% - var(--4x));
+  position: relative;
+  width: calc(100% - var(--sidebar-width));
+  height: inherit;
 }
 
 /*-----
@@ -280,6 +278,6 @@ Scroll Bar
 
 .card {
   border-radius: var(--4x);
-  box-shadow: 2px 2px 12px var(--card-shadow);
+  box-shadow: 0 0 var(--2x) var(--card-shadow);
   background-color: var(--background-light-primary);
 }

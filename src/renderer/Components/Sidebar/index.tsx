@@ -64,7 +64,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="d-flex flex-column card sidebar">
+    <nav className="d-flex flex-column">
       <div className="d-flex flex-row justify-content-center align-items-center">
         <img src={NOTES_LOGO_256} alt="Notes Logo" className="icon" />
       </div>
@@ -103,7 +103,7 @@ const Sidebar = () => {
           <Form id="sidebar-logout-form" submitAction={logoutFormAction} />
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 

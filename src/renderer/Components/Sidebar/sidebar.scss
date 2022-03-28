@@ -6,13 +6,18 @@
  *
 */
 
-.sidebar {
-  margin: var(--2x);
-  min-width: calc(var(--sidebar-width) - var(--4x));
-  height: calc(100% - var(--4x));
+nav {
+  backdrop-filter: blur(var(--4x)) opacity(0.5);
+  background-color: var(--focus-shadow);
+
+  img.icon {
+    width: 50px;
+    height: 50px;
+    padding: var(--2x);
+  }
 
   .links-section {
-    height: 100%;
+    height: calc(100% - 50px);
     padding: var(--x);
     padding-bottom: var(--8x);
   }
@@ -28,26 +33,31 @@
 .other-links {
   width: 100%;
   height: 30%;
+  padding: var(--2x);
 }
 
 .secondary-links {
-  height: calc(70% - var(--2x));
+  height: 70%;
+
+  h5 {
+    cursor: default;
+  }
 }
 
 .other-links {
   height: auto;
 }
 
-.sidebar .links {
-  margin: var(--x) var(--2x);
-  width: calc(100% - var(--4x));
+nav .links {
+  margin: var(--x);
+  width: calc(100% - var(--2x));
   height: calc(35px - var(--2x));
-  padding: var(--2x);
+  padding: var(--2x) var(--4x);
   border-radius: var(--2x);
   text-decoration: none;
-  color: var(--text);
+  color: inherit;
 }
 
-.sidebar .links:hover {
-  box-shadow: inset 0 0 20px var(--card-shadow);
+nav .links:hover {
+  box-shadow: inset 0 0 var(--16x) var(--background-light-primary);
 }
