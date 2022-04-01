@@ -40,6 +40,8 @@ Declarations
   --yellow-core: #ffff00;
   --yellow-light: #fbffe7;
 
+  --orange-core: #ff7f00;
+
   --message-red: #ffdddd;
   --message-green: #c9ffc4;
   --message-blue: #e4e9ff;
@@ -231,6 +233,7 @@ body {
   color: var(--text-dark-secondary);
   background: url('./../assets/background.png') no-repeat fixed center;
   background-size: cover;
+  backdrop-filter: blur(var(--4x));
 }
 
 div#root {
