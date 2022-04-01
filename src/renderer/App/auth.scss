@@ -7,6 +7,28 @@
 */
 
 .auth-card {
+  position: relative;
   width: 400px;
   height: 320px;
+  border-radius: var(--8x);
+  background: var(--background-light-primary);
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: -1;
+    opacity: 0.75;
+    border-radius: var(--8x);
+    filter: blur(var(--x));
+    background: linear-gradient(
+      120deg,
+      var(--red-core) 25%,
+      var(--green-core) 50%,
+      var(--blue-core) 75%
+    );
+  }
 }
