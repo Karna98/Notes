@@ -99,20 +99,20 @@ const Notes = () => {
         <h2>Notes</h2>
 
         <div
-          className="d-flex flex-row justify-content-center align-items-center card"
+          className="d-flex flex-row justify-content-center align-items-center add-note-button"
           role="button"
           onClick={addNoteForm}
           onKeyPress={(event) => event.key === ` ` && addNoteForm()}
           tabIndex={0}
         >
-          Add Note
+          &#x1F7A6; &nbsp; <b>Note</b>
         </div>
       </div>
 
       <div className="d-flex flex-row flex-wrap justify-content-evenly notes-list">
         {currentSpaceState?.notes.map((noteObject: NoteStoreType) => (
           <div
-            className="card note-card"
+            className="note-card"
             key={noteObject._id}
             role="button"
             onClick={() => openNoteForm(noteObject._id)}

@@ -101,13 +101,13 @@ const Credentials = () => {
         <h2>Credentials</h2>
 
         <div
-          className="d-flex flex-row justify-content-center align-items-center card"
+          className="d-flex flex-row justify-content-center align-items-center add-credential-button"
           role="button"
           onClick={addCredentialForm}
           onKeyPress={(event) => event.key === ` ` && addCredentialForm()}
           tabIndex={0}
         >
-          Add Credential
+          &#x1F7A6; &nbsp; <b>Credential</b>
         </div>
       </div>
 
@@ -115,7 +115,7 @@ const Credentials = () => {
         {currentSpaceState?.credentials.map(
           (credentialObject: CredentialStoreType) => (
             <div
-              className="card credential-card"
+              className="credential-card"
               key={credentialObject._id}
               role="button"
               onClick={() => openCredentialForm(credentialObject._id)}
@@ -127,8 +127,7 @@ const Credentials = () => {
               <div className="d-flex flex-row align-items-center credential-heading">
                 <b>Credential #{credentialObject._id}</b>
               </div>
-
-              {credentialObject.credential.title}
+              <p>{credentialObject.credential.title}</p>
             </div>
           )
         )}
