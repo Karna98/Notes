@@ -101,16 +101,8 @@ const NoteForm: React.FC<FormInterface> = ({
       onSubmit={submitForm}
       className="d-flex flex-column justify-content-evenly"
     >
-      <div className="d-flex flex-column justify-content-evenly align-items-center form-inputs">
-        <TextArea
-          {...defaultFormInputs}
-          value={formElementsValue[defaultFormInputs.name]}
-          onChange={handleInputChange}
-        />
-      </div>
-
       {id === `note-form-update` && formValues?.updated_at && (
-        <div className="form-updated-at">
+        <div className="d-flex align-items-center form-updated-at">
           <sub>
             <b>Updated at </b>
             {new Date(formValues?.updated_at as number).toLocaleString(
@@ -122,6 +114,14 @@ const NoteForm: React.FC<FormInterface> = ({
           </sub>
         </div>
       )}
+
+      <div className="d-flex flex-column justify-content-evenly align-items-center form-inputs">
+        <TextArea
+          {...defaultFormInputs}
+          value={formElementsValue[defaultFormInputs.name]}
+          onChange={handleInputChange}
+        />
+      </div>
 
       <div className="d-flex flex-row justify-content-evenly align-items-center form-button">
         <Button

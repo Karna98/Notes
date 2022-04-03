@@ -6,34 +6,38 @@
  *
 */
 
-.textarea-element {
-  --label_width: 100px;
+$lable-width: 100px;
 
+.textarea-element {
+  position: relative;
   width: 100%;
   height: 100%;
+  padding: var(--2x);
 }
 
 .textarea-element label {
-  width: var(--label_width);
+  min-width: $lable-width;
 }
 
 .textarea-element textarea {
   width: 100%;
   height: 100%;
-  padding: var(--4x);
+  padding: var(--2x);
   resize: none;
   outline: none;
   border: none;
-  background-color: transparent;
+  font-family: 'system-ui';
 }
 
 textarea:focus {
-  border-radius: var(--2x);
-  background-color: var(--focus-shadow);
+  background-color: var(--background-light-primary);
+  box-shadow: inset 0 0 0 1px var(--card-shadow);
 }
 
 textarea.textarea-readonly {
-  background: none;
+  padding: 0 var(--x);
   overflow: hidden;
+  box-shadow: none;
+  background: none;
   cursor: pointer;
 }

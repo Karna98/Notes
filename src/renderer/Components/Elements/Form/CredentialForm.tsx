@@ -60,7 +60,7 @@ const formElements: {
     },
     remove: {
       ...getElementBasicAttributes(`button-remove`),
-      label: `❌`,
+      label: `➖`,
       type: `button`,
     },
     reset: {
@@ -324,6 +324,17 @@ const CredentialForm: React.FC<FormInterface> = ({
       onSubmit={submitForm}
       className="d-flex flex-column justify-content-between"
     >
+      {IS_UPDATE_FORM && (
+        <div className="d-flex align-items-center form-updated-at">
+          <sub>
+            <b>Updated at </b>
+            {new Date(formData?.updated_at as number).toLocaleString(`en-IN`, {
+              hourCycle: `h23`,
+            })}
+          </sub>
+        </div>
+      )}
+
       <div className="d-flex flex-column align-items-center form-inputs">
         <div className="credential-title">
           <Input
@@ -352,13 +363,15 @@ const CredentialForm: React.FC<FormInterface> = ({
                 onChange={handleInputChange}
               />
 
-              <Button
-                {...formElements.buttons.remove}
-                onClick={() => {
-                  removeFieldOnClick(index);
-                }}
-                className="round-button"
-              />
+              <div className="d-flex justify-content-center align-items-center dynamic-section-button">
+                <Button
+                  {...formElements.buttons.remove}
+                  onClick={() => {
+                    removeFieldOnClick(index);
+                  }}
+                  className="round-button"
+                />
+              </div>
             </div>
           ))}
 
@@ -369,47 +382,31 @@ const CredentialForm: React.FC<FormInterface> = ({
               onChange={handleInputChange}
             />
 
-            <Button
-              {...formElements.buttons.add}
-              onClick={addFieldOnClick}
-              disabled={disableButtonStatus.add}
-              className="round-button"
-            />
+            <div className="d-flex justify-content-center align-items-center dynamic-section-button">
+              <Button
+                {...formElements.buttons.add}
+                onClick={addFieldOnClick}
+                disabled={disableButtonStatus.add}
+                className="round-button"
+              />
+            </div>
           </div>
         </div>
       </div>
 
-      <hr />
+      <div className="d-flex flex-row justify-content-evenly align-items-center form-button">
+        <Button
+          {...formElements.buttons.reset}
+          onClick={formReset}
+          disabled={disableButtonStatus.save}
+          className="button-type-1"
+        />
 
-      <div>
-        {IS_UPDATE_FORM && (
-          <div className="form-updated-at">
-            <sub>
-              <b>Updated at </b>
-              {new Date(formData?.updated_at as number).toLocaleString(
-                `en-IN`,
-                {
-                  hourCycle: `h23`,
-                }
-              )}
-            </sub>
-          </div>
-        )}
-
-        <div className="d-flex flex-row justify-content-evenly align-items-center form-button">
-          <Button
-            {...formElements.buttons.reset}
-            onClick={formReset}
-            disabled={disableButtonStatus.save}
-            className="button-type-1"
-          />
-
-          <Button
-            {...formElements.buttons.save}
-            disabled={disableButtonStatus.save}
-            className="button-type-2"
-          />
-        </div>
+        <Button
+          {...formElements.buttons.save}
+          disabled={disableButtonStatus.save}
+          className="button-type-2"
+        />
       </div>
     </form>
   );
