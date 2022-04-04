@@ -54,8 +54,7 @@ nav .links {
   height: calc(35px - var(--2x));
   padding: var(--2x) var(--4x);
   border-radius: var(--2x);
-  text-decoration: none;
-  color: inherit;
+  cursor: pointer;
 }
 
 nav .links:hover {

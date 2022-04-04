@@ -117,6 +117,14 @@ interface ModalInterface {
   children: React.ReactNode;
 }
 
+interface DivLinkInterface {
+  id: string;
+  to: string;
+  children: React.ReactNode;
+  className?: string;
+  customFunction?: (id: string) => void;
+}
+
 // ================================================================================
 // Others.
 // ================================================================================

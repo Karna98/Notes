@@ -7,24 +7,19 @@
  */
 
 import { createMessage, IPCRequestObject, resolveReactRoutes } from 'common';
-import { useNavigate } from 'react-router-dom';
-import { Form } from 'renderer/Components';
+import { DivLink, Form } from 'renderer/Components';
 import { useAppDispatch, useAppSelector } from 'renderer/Hooks';
 import { setMessageState } from 'renderer/State';
 import { sendToIpcMain } from 'renderer/util';
 
 const List = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   // Get session value stored in Redux Store.
   const sessionState = useAppSelector((state) => state.session);
 
   // Get spaces value stored in Redux Store.
   const spacesState = useAppSelector((state) => state.spaces);
-
-  const navigateToSpace = (space_id: number) =>
-    navigate(resolveReactRoutes('space', { space_id }));
 
   /**
    * Adds new space.
@@ -63,18 +58,14 @@ const List = () => {
         ) : (
           <>
             {spacesState.list.map((value: SpacesTableInterface) => (
-              <div
+              <DivLink
                 key={value._id}
-                role="link"
-                onClick={() => navigateToSpace(value._id)}
-                onKeyPress={(event) =>
-                  event.key === ` ` && navigateToSpace(value._id)
-                }
-                tabIndex={0}
+                id={`${value._id}`}
+                to={resolveReactRoutes('space', { space_id: value._id })}
                 className="d-flex justify-content-center align-items-center space-card"
               >
                 <h3>{value.space_name}</h3>
-              </div>
+              </DivLink>
             ))}
 
             {spacesState.list.length <
