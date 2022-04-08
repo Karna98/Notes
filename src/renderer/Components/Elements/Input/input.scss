@@ -24,7 +24,7 @@ $input-element-height: 44px;
   padding: var(--x) var(--8x);
   border: none;
   border-radius: var(--4x);
-  box-shadow: inset 0 0 0 1px var(--card-shadow);
+  box-shadow: inset 0 0 0 1px var(--shadow-dark-20);
   outline: none;
   background-color: transparent;
 }
@@ -69,12 +69,12 @@ form#credential-form-update {
         font-size: large;
 
         &:focus {
-          box-shadow: inset 0 0 0 1px var(--card-shadow);
+          box-shadow: inset 0 0 0 1px var(--shadow-dark-20);
         }
       }
 
       &:focus {
-        box-shadow: inset 0 0 0 1px var(--overlay-shadow);
+        box-shadow: inset 0 0 0 1px var(--shadow-dark-40);
       }
     }
   }

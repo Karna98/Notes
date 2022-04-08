@@ -6,119 +6,166 @@
  *
 */
 
-// Basic button style properties.
-button {
-  --button-width: 160px;
-  --button-height: 40px;
+$button-width: 160px;
+$button-height: 40px;
 
-  width: var(--button-width);
-  height: var(--button-height);
+button {
+  position: relative;
+  width: $button-width;
+  height: $button-height;
 
   font-size: medium;
   font-weight: 600;
   letter-spacing: 1px;
 
-  border-radius: calc(var(--button-height) / 2);
-  border: var(--x) solid;
+  border-radius: var(--4x);
+  border: none;
 
-  background-color: transparent;
-  backdrop-filter: blur(var(--16x));
+  background: transparent;
 
   cursor: pointer;
-  transition: all 0.5s;
-}
+  transition: all 0.1s;
 
-button:disabled {
-  box-shadow: none !important;
+  &:disabled {
+    cursor: default;
+    transition: all 0.1s;
+  }
 
-  cursor: default;
-  transition: all 0.5s;
-}
+  &:hover:enabled {
+    color: var(--text-light-primary);
+    transition: all 0.1s;
+  }
 
-button:hover:enabled {
-  color: var(--text-light-primary);
-  transition: all 0.5s;
-}
-
-button:active:focus {
-  box-shadow: none;
-  transition: all 0.5s;
+  &:active:focus {
+    color: var(--text-light-primary);
+    transition: all 0.1s;
+  }
 }
 
 // Button Type-1
-button.button-type-1 {
-  color: var(--red-core);
-  border-color: var(--red-medium);
-  box-shadow: 0 var(--x) var(--x) var(--red-medium);
-}
+.button-type-1 {
+  color: var(--red-medium);
 
-button:disabled.button-type-1 {
-  border-color: var(--red-light);
-}
+  &:disabled {
+    box-shadow: inset 0 0 0 var(--x) var(--red-light);
+  }
 
-button:hover:enabled.button-type-1 {
-  background-color: var(--red-core);
+  &:enabled {
+    color: var(--red-core);
+    box-shadow: inset 0 0 0 var(--x) var(--red-medium);
+    background: var(--red-light);
+  }
+
+  &:hover:enabled {
+    background: var(--red-core);
+  }
+
+  &:active:focus {
+    box-shadow: none;
+    background: var(--red-dark);
+    border: var(--x) solid var(--background-light-primary);
+  }
 }
 
 // Button Type-2
-button.button-type-2 {
-  color: var(--blue-core);
-  border-color: var(--blue-medium);
-  box-shadow: 0 var(--x) var(--x) var(--blue-medium);
-}
+.button-type-2 {
+  color: var(--blue-medium);
 
-button:disabled.button-type-2 {
-  border-color: var(--blue-light);
-}
+  &:disabled {
+    box-shadow: inset 0 0 0 var(--x) var(--blue-light);
+  }
 
-button:hover:enabled.button-type-2 {
-  background-color: var(--blue-core);
+  &:enabled {
+    color: var(--blue-core);
+    box-shadow: inset 0 0 0 var(--x) var(--blue-medium);
+    background: var(--blue-light);
+    filter: brightness(115%);
+  }
+
+  &:hover:enabled {
+    background: var(--blue-core);
+    filter: none;
+  }
+
+  &:active:focus {
+    box-shadow: none;
+    background: var(--blue-dark);
+    border: var(--x) solid var(--background-light-primary);
+  }
 }
 
 // Button Type-3
-button.button-type-3 {
-  color: var(--purple-core);
-  border-color: var(--purple-medium);
-  box-shadow: 0 var(--x) var(--x) var(--purple-medium);
-}
+.button-type-3 {
+  color: var(--purple-medium);
 
-button:disabled.button-type-3 {
-  border-color: var(--purple-light);
-}
+  &:disabled {
+    box-shadow: inset 0 0 0 var(--x) var(--purple-light);
+  }
 
-button:hover:enabled.button-type-3 {
-  background-color: var(--purple-core);
+  &:enabled {
+    color: var(--purple-core);
+    box-shadow: inset 0 0 0 var(--x) var(--purple-medium);
+    background: var(--purple-light);
+  }
+
+  &:hover:enabled {
+    background: var(--purple-core);
+  }
+
+  &:active:focus {
+    box-shadow: none;
+    background: var(--purple-dark);
+    border: var(--x) solid var(--background-light-primary);
+  }
 }
 
 // Button Type-4
-button.button-type-4 {
+.button-type-4 {
+  color: var(--purple-core);
+
+  &:disabled {
+    box-shadow: inset 0 0 0 var(--x) var(--purple-light);
+  }
+
+  &:enabled {
+    color: var(--purple-dark);
+    box-shadow: inset 0 0 0 var(--x) var(--purple-medium);
+    background: linear-gradient(107deg, var(--red-light), var(--blue-light));
+  }
+
+  &:hover:enabled {
+    background: linear-gradient(107deg, var(--red-medium), var(--blue-medium));
+  }
+
+  &:active:focus {
+    box-shadow: none;
+    background: linear-gradient(107deg, var(--red-dark), var(--blue-dark));
+    border: var(--x) solid var(--background-light-primary);
+  }
+}
+
+// Button Type Square
+.button-type-square {
+  width: $button-height;
   border: none;
-  color: var(--text-light-primary);
-  box-shadow: 0 var(--x) var(--x) var(--purple-medium);
-  background: linear-gradient(45deg, var(--red-medium), var(--blue-medium));
+
+  &:disabled {
+    box-shadow: inset 0 0 $button-height var(--shadow-dark-5);
+  }
+
+  &:hover:enabled {
+    box-shadow: inset 0 0 $button-height var(--shadow-dark-20);
+  }
+
+  &:active:focus {
+    box-shadow: inset 0 0 $button-height var(--shadow-dark-40);
+  }
 }
 
-button:disabled.button-type-4 {
-  color: var(--purple-medium);
-  background: linear-gradient(45deg, var(--red-light), var(--blue-light));
-}
-
-button:hover:enabled.button-type-4 {
-  background: linear-gradient(45deg, var(--red-core), var(--blue-core));
-}
-
-// Round Button Type.
-button.round-button {
-  width: var(--button-height);
-  border: none;
-}
-
-button:disabled.round-button {
-  background-color: var(--focus-shadow);
-}
-
-button:hover:enabled.round-button {
-  backdrop-filter: contrast(0.9);
+.button-type-square#credential-button-add,
+.button-type-square#credential-button-remove {
+  width: calc($button-height - 6px);
+  height: calc($button-height - 6px);
 }
 
 // Logout Button.
@@ -130,4 +177,39 @@ button#sidebar-button-logout {
   color: inherit;
   backdrop-filter: unset;
   transition: none;
+}
+
+// Add Note/Credential Button
+div .add-note-button,
+div .add-credential-button {
+  position: relative;
+  width: 120px;
+  height: $button-height;
+  border-radius: var(--4x);
+  background-color: var(--background-light-primary);
+  cursor: pointer;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: -1;
+    opacity: 0.75;
+    border-radius: var(--4x);
+    background: linear-gradient(
+      120deg,
+      var(--red-core) 25%,
+      var(--green-core) 50%,
+      var(--blue-core) 75%
+    );
+    filter: blur(var(--x));
+    transition: all 0.25s;
+  }
+
+  &:hover {
+    box-shadow: 0 0 0 1px var(--shadow-dark-40);
+  }
 }

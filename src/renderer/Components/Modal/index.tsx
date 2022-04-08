@@ -56,7 +56,7 @@ const Modal = ({ onClickClose, title, children }: ModalInterface) => {
               <Button
                 {...formButtons.close}
                 onClick={closeModal}
-                className="round-button"
+                className="button-type-square"
               />
             </div>
           </div>

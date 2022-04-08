@@ -70,7 +70,7 @@ form#credential-form-update {
       width: inherit;
       height: $credential-dynamic-input-height;
       border-radius: var(--2x);
-      background: var(--focus-shadow);
+      background: var(--shadow-dark-5);
 
       .input-element {
         width: calc(100% - $credential-dynamic-input-height);

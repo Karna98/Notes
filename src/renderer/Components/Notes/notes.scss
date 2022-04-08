@@ -28,46 +28,11 @@
   padding: var(--2x);
   border-radius: var(--4x);
   background-color: var(--background-light-primary);
-  box-shadow: 0 0 var(--x) var(--overlay-shadow);
+  box-shadow: 0 0 var(--x) var(--shadow-dark-40);
   cursor: pointer;
 
   &:hover {
-    box-shadow: 0 0 0 1px var(--overlay-shadow),
-      0 0 var(--2x) var(--overlay-shadow);
-  }
-}
-
-.add-note-button {
-  --add-note-btn-height: 40px;
-
-  position: relative;
-  width: 100px;
-  height: var(--add-note-btn-height);
-  border-radius: calc(var(--add-note-btn-height) / 2);
-  background-color: var(--background-light-primary);
-  cursor: pointer;
-
-  &:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    z-index: -1;
-    opacity: 0.75;
-    border-radius: calc(var(--add-note-btn-height) / 2);
-    background: linear-gradient(
-      120deg,
-      var(--red-core) 25%,
-      var(--green-core) 50%,
-      var(--blue-core) 75%
-    );
-    filter: blur(var(--x));
-    transition: all 0.25s;
-  }
-
-  &:hover {
-    box-shadow: 0 0 0 1px var(--overlay-shadow);
+    box-shadow: 0 0 0 1px var(--shadow-dark-40),
+      0 0 var(--2x) var(--shadow-dark-40);
   }
 }

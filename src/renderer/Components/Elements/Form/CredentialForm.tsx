@@ -369,7 +369,7 @@ const CredentialForm: React.FC<FormInterface> = ({
                   onClick={() => {
                     removeFieldOnClick(index);
                   }}
-                  className="round-button"
+                  className="button-type-square"
                 />
               </div>
             </div>
@@ -387,7 +387,7 @@ const CredentialForm: React.FC<FormInterface> = ({
                 {...formElements.buttons.add}
                 onClick={addFieldOnClick}
                 disabled={disableButtonStatus.add}
-                className="round-button"
+                className="button-type-square"
               />
             </div>
           </div>

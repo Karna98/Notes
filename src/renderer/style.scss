@@ -47,12 +47,9 @@ Declarations
   --message-blue: #e4e9ff;
   --message-high-red: #ffc0c0;
 
-  --text: #44475b;
-
-  --white-shadow: rgba(255, 255, 255, 0.2);
-  --focus-shadow: rgba(0, 0, 0, 0.05);
-  --card-shadow: rgba(0, 0, 0, 0.2);
-  --overlay-shadow: rgba(0, 0, 0, 0.4);
+  --shadow-dark-5: rgba(0, 0, 0, 0.05);
+  --shadow-dark-20: rgba(0, 0, 0, 0.2);
+  --shadow-dark-40: rgba(0, 0, 0, 0.4);
 
   // Static Variables.
   --x: 2px;
@@ -284,6 +281,6 @@ Scroll Bar
 
 .card {
   border-radius: var(--4x);
-  box-shadow: 0 0 var(--2x) var(--card-shadow);
+  box-shadow: 0 0 var(--2x) var(--shadow-dark-20);
   background-color: var(--background-light-primary);
 }
