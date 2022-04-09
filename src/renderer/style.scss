@@ -36,6 +36,7 @@ Declarations
 
   --green-core: #00ff00;
   --green-light: #e7ffe4;
+  --green-dark: #076d0d;
 
   --yellow-core: #ffff00;
   --yellow-light: #fbffe7;
@@ -273,14 +274,4 @@ Scroll Bar
     border: 0;
     box-shadow: inset 0 0 var(--8x) var(--text-dark-secondary);
   }
-}
-
-/*
- * Card
- */
-
-.card {
-  border-radius: var(--4x);
-  box-shadow: 0 0 var(--2x) var(--shadow-dark-20);
-  background-color: var(--background-light-primary);
 }
