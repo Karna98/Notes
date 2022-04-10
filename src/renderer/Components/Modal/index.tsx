@@ -37,9 +37,12 @@ const Modal = ({ onClickClose, title, children }: ModalInterface) => {
     ).style.overflowY = `hidden`;
 
     return () => {
-      (
-        document.getElementsByClassName(`spaces`)[0] as HTMLElement
-      ).style.overflowY = `overlay`;
+      const elementByClassNameSpaces = document.getElementsByClassName(
+        `spaces`
+      )[0] as HTMLElement;
+
+      elementByClassNameSpaces &&
+        (elementByClassNameSpaces.style.overflowY = `overlay`);
     };
   }, []);
 
