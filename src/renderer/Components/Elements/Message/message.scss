@@ -8,17 +8,19 @@
 
 $message-width: 300px;
 $message-height: 40px;
-$border-radius: calc(var(--4x) + var(--x));
+$border-radius: var(--2x);
 
 .notification-message {
   position: absolute;
   margin: 0;
   top: var(--4x);
   left: 50%;
+  padding: var(--x);
   min-width: $message-width;
   height: $message-height;
   transform: translate(-50%, 0);
   border-radius: $border-radius;
+  background: var(--background-light-primary);
   z-index: 3;
 }
 
@@ -27,7 +29,6 @@ $border-radius: calc(var(--4x) + var(--x));
   height: 100%;
   color: var(--text-light-primary);
   border-radius: $border-radius;
-  box-shadow: inset 0 0 0 1px var(--background-light-primary);
 
   &:before {
     content: '';
@@ -36,40 +37,44 @@ $border-radius: calc(var(--4x) + var(--x));
     left: 0;
     bottom: 0;
     right: 0;
-    z-index: -1;
+    opacity: 0.8;
     border-radius: $border-radius;
-    filter: blur(var(--x));
+    z-index: -1;
   }
 }
 
 .message-progress {
-  color: var(--blue-light);
+  color: var(--blue-core);
+  box-shadow: inset 0 0 0 1px var(--blue-core);
 
   &:before {
-    background: var(--blue-core);
+    background: var(--blue-light);
   }
 }
 
 .message-success {
   color: var(--green-dark);
+  box-shadow: inset 0 0 0 1px var(--green-dark);
 
   &:before {
-    background: var(--green-core);
+    background: var(--green-light);
   }
 }
 
 .message-error-low {
-  color: var(--red-light);
+  color: var(--red-core);
+  box-shadow: inset 0 0 0 1px var(--red-core);
 
   &:before {
-    background: var(--red-core);
+    background: var(--red-light);
   }
 }
 
 .message-error-high {
-  color: var(--red-light);
+  box-shadow: inset 0 0 0 1px var(--red-dark);
 
   &:before {
-    background: var(--red-dark);
+    opacity: 1;
+    background: var(--red-medium);
   }
 }

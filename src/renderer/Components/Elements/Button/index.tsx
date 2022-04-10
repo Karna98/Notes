@@ -24,14 +24,6 @@ const Button: React.FC<ButtonInterface> = ({
     onClick && onClick();
   };
 
-  /**
-   * Apply class name based on button id.
-   *
-   * @returns {string} Class Names.
-   */
-  const getClassName = () =>
-    `d-flex flex-row align-items-center justify-content-center `;
-
   return (
     <button
       id={id}
@@ -39,7 +31,8 @@ const Button: React.FC<ButtonInterface> = ({
       type={type}
       disabled={disabled}
       className={
-        className === undefined ? getClassName() : getClassName() + className
+        `d-flex flex-row align-items-center justify-content-center ` +
+        (className === undefined ? `` : className)
       }
     >
       {label}
