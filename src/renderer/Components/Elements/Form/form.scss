@@ -19,9 +19,10 @@ form {
   }
 
   .form-inputs {
+    margin: var(--x) 0;
     position: relative;
     width: inherit;
-    height: calc(100% - 60px);
+    height: calc(100% - 60px - var(--x));
     padding: var(--2x);
     overflow-y: overlay;
   }

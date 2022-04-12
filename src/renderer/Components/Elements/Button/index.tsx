@@ -24,19 +24,22 @@ const Button: React.FC<ButtonInterface> = ({
     onClick && onClick();
   };
 
+  className =
+    `d-flex flex-row justify-content-center align-items-center ` +
+    (className === undefined ? `` : className);
+
   return (
-    <button
-      id={id}
-      onClick={onButtonClick}
-      type={type}
-      disabled={disabled}
-      className={
-        `d-flex flex-row align-items-center justify-content-center ` +
-        (className === undefined ? `` : className)
-      }
-    >
-      {label}
-    </button>
+    <div className="button-element">
+      <button
+        id={id}
+        onClick={onButtonClick}
+        type={type}
+        disabled={disabled}
+        className={className}
+      >
+        {label}
+      </button>
+    </div>
   );
 };
 

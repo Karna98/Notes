@@ -8,6 +8,12 @@
 
 $button-width: 160px;
 $button-height: 40px;
+$button-border-radius: calc(var(--2x) + var(--x));
+
+.button-element {
+  position: relative;
+  z-index: 0;
+}
 
 button {
   position: relative;
@@ -18,27 +24,58 @@ button {
   font-weight: 600;
   letter-spacing: 1px;
 
-  border-radius: var(--4x);
+  border-radius: $button-border-radius;
   border: none;
 
   background: transparent;
 
   cursor: pointer;
-  transition: all 0.1s;
+  transition: all 0.25s;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: $button-border-radius;
+    opacity: 0.025;
+    transition: all 0.25s;
+    z-index: -1;
+  }
 
   &:disabled {
     cursor: default;
-    transition: all 0.1s;
+    transition: all 0.25s;
+  }
+
+  &:enabled {
+    &:before {
+      opacity: 0.1;
+      filter: blur(var(--x));
+    }
   }
 
   &:hover:enabled {
     color: var(--text-light-primary);
-    transition: all 0.1s;
+    box-shadow: inset 0 0 0 1px var(--background-light-primary);
+    transition: all 0.25s;
+
+    &:before {
+      opacity: 0.8;
+    }
   }
 
   &:active:focus {
     color: var(--text-light-primary);
-    transition: all 0.1s;
+    box-shadow: inset 0 0 0 var(--x) var(--background-light-primary);
+
+    &:before {
+      filter: blur(calc(var(--x) + 1px));
+    }
+
+    transition: all 0.25s;
   }
 }
 
@@ -46,24 +83,13 @@ button {
 .button-type-1 {
   color: var(--red-medium);
 
-  &:disabled {
-    box-shadow: inset 0 0 0 var(--x) var(--red-light);
+  &:before {
+    background: var(--red-core);
   }
 
   &:enabled {
     color: var(--red-core);
-    box-shadow: inset 0 0 0 var(--x) var(--red-medium);
-    background: var(--red-light);
-  }
-
-  &:hover:enabled {
-    background: var(--red-core);
-  }
-
-  &:active:focus {
-    box-shadow: none;
-    background: var(--red-dark);
-    border: var(--x) solid var(--background-light-primary);
+    box-shadow: inset 0 0 0 1px var(--red-medium);
   }
 }
 
@@ -71,26 +97,13 @@ button {
 .button-type-2 {
   color: var(--blue-medium);
 
-  &:disabled {
-    box-shadow: inset 0 0 0 var(--x) var(--blue-light);
+  &:before {
+    background: var(--blue-core);
   }
 
   &:enabled {
     color: var(--blue-core);
-    box-shadow: inset 0 0 0 var(--x) var(--blue-medium);
-    background: var(--blue-light);
-    filter: brightness(115%);
-  }
-
-  &:hover:enabled {
-    background: var(--blue-core);
-    filter: none;
-  }
-
-  &:active:focus {
-    box-shadow: none;
-    background: var(--blue-dark);
-    border: var(--x) solid var(--background-light-primary);
+    box-shadow: inset 0 0 0 1px var(--blue-medium);
   }
 }
 
@@ -98,49 +111,27 @@ button {
 .button-type-3 {
   color: var(--purple-medium);
 
-  &:disabled {
-    box-shadow: inset 0 0 0 var(--x) var(--purple-light);
+  &:before {
+    background: var(--purple-core);
   }
 
   &:enabled {
     color: var(--purple-core);
-    box-shadow: inset 0 0 0 var(--x) var(--purple-medium);
-    background: var(--purple-light);
-  }
-
-  &:hover:enabled {
-    background: var(--purple-core);
-  }
-
-  &:active:focus {
-    box-shadow: none;
-    background: var(--purple-dark);
-    border: var(--x) solid var(--background-light-primary);
+    box-shadow: inset 0 0 0 1px var(--purple-medium);
   }
 }
 
 // Button Type-4
 .button-type-4 {
-  color: var(--purple-core);
+  color: var(--purple-medium);
 
-  &:disabled {
-    box-shadow: inset 0 0 0 var(--x) var(--purple-light);
+  &:before {
+    background: linear-gradient(107deg, var(--red-core), var(--blue-core));
   }
 
   &:enabled {
     color: var(--purple-dark);
-    box-shadow: inset 0 0 0 var(--x) var(--purple-medium);
-    background: linear-gradient(107deg, var(--red-light), var(--blue-light));
-  }
-
-  &:hover:enabled {
-    background: linear-gradient(107deg, var(--red-medium), var(--blue-medium));
-  }
-
-  &:active:focus {
-    box-shadow: none;
-    background: linear-gradient(107deg, var(--red-dark), var(--blue-dark));
-    border: var(--x) solid var(--background-light-primary);
+    box-shadow: inset 0 0 0 1px var(--purple-dark);
   }
 }
 
@@ -149,34 +140,64 @@ button {
   width: $button-height;
   border: none;
 
-  &:disabled {
-    box-shadow: inset 0 0 $button-height var(--shadow-dark-5);
+  &:before {
+    background: var(--shadow-dark-40);
+  }
+
+  &:enabled {
+    &:before {
+      opacity: 0;
+      filter: none;
+    }
   }
 
   &:hover:enabled {
-    box-shadow: inset 0 0 $button-height var(--shadow-dark-20);
+    box-shadow: none;
+
+    &:before {
+      opacity: 0.3;
+    }
   }
 
   &:active:focus {
-    box-shadow: inset 0 0 $button-height var(--shadow-dark-40);
+    box-shadow: none;
+
+    &:before {
+      opacity: 0.6;
+      filter: none;
+    }
   }
 }
 
 .button-type-square#credential-button-add,
 .button-type-square#credential-button-remove {
-  width: calc($button-height - 6px);
-  height: calc($button-height - 6px);
+  width: calc($button-height - var(--4x));
+  height: calc($button-height - var(--4x));
 }
 
 // Logout Button.
-button#sidebar-button-logout {
-  justify-content: end;
-  border: none;
-  font: unset;
-  letter-spacing: unset;
-  color: inherit;
-  backdrop-filter: unset;
-  transition: none;
+form#sidebar-logout-form .button-element {
+  width: 100%;
+
+  button.links {
+    justify-content: end;
+    color: inherit;
+    font: unset;
+    letter-spacing: unset;
+    transition: none;
+
+    &:hover,
+    &:active {
+      box-shadow: none;
+    }
+  }
+}
+
+// Add New Space Button.
+form#space-form-add {
+  button {
+    width: 100px;
+  }
 }
 
 // Add Note/Credential Button

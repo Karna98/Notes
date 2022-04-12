@@ -43,11 +43,6 @@ Declarations
 
   --orange-core: #ff7f00;
 
-  --message-red: #ffdddd;
-  --message-green: #c9ffc4;
-  --message-blue: #e4e9ff;
-  --message-high-red: #ffc0c0;
-
   --shadow-dark-5: rgba(0, 0, 0, 0.05);
   --shadow-dark-20: rgba(0, 0, 0, 0.2);
   --shadow-dark-40: rgba(0, 0, 0, 0.4);
@@ -193,6 +188,11 @@ Flex
 
 .text-align-center {
   text-align: center;
+}
+
+// Make text unselectable.
+.unselectable {
+  user-select: none;
 }
 
 /*-----     -----     -----

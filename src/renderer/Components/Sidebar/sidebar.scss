@@ -7,8 +7,7 @@
 */
 
 nav {
-  backdrop-filter: blur(var(--4x)) opacity(0.5);
-  background-color: var(--shadow-dark-5);
+  background: var(--shadow-dark-5);
 
   img.icon {
     width: 50px;
@@ -49,14 +48,19 @@ nav {
 }
 
 nav .links {
-  margin: var(--x);
-  width: calc(100% - var(--2x));
+  position: relative;
+  margin: var(--x) 0;
+  width: 100%;
   height: calc(35px - var(--2x));
   padding: var(--2x) var(--4x);
+  border-left: var(--2x) solid transparent;
   border-radius: var(--2x);
+  letter-spacing: 0.5px !important;
   cursor: pointer;
-}
 
-nav .links:hover {
-  box-shadow: inset 0 0 var(--16x) var(--background-light-primary);
+  &:hover,
+  &:active {
+    border-left: var(--2x) solid var(--shadow-dark-40);
+    background: var(--shadow-dark-5) !important;
+  }
 }

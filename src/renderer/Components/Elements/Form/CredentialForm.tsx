@@ -358,11 +358,6 @@ const CredentialForm: React.FC<FormInterface> = ({
               key={index}
               className="d-flex flex-row justify-content-evenly align-items-center dynamic-section"
             >
-              <Input
-                {...createNewInputElement(element, formElementsValue[element])}
-                onChange={handleInputChange}
-              />
-
               <div className="d-flex justify-content-center align-items-center dynamic-section-button">
                 <Button
                   {...formElements.buttons.remove}
@@ -372,6 +367,11 @@ const CredentialForm: React.FC<FormInterface> = ({
                   className="button-type-square"
                 />
               </div>
+
+              <Input
+                {...createNewInputElement(element, formElementsValue[element])}
+                onChange={handleInputChange}
+              />
             </div>
           ))}
 
