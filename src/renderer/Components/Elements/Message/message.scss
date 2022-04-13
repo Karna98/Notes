@@ -30,7 +30,7 @@ $border-radius: var(--2x);
   color: var(--text-light-primary);
   border-radius: $border-radius;
 
-  &:before {
+  &::before {
     content: '';
     position: absolute;
     top: 0;
@@ -47,7 +47,7 @@ $border-radius: var(--2x);
   color: var(--blue-core);
   box-shadow: inset 0 0 0 1px var(--blue-core);
 
-  &:before {
+  &::before {
     background: var(--blue-light);
   }
 }
@@ -56,7 +56,7 @@ $border-radius: var(--2x);
   color: var(--green-dark);
   box-shadow: inset 0 0 0 1px var(--green-dark);
 
-  &:before {
+  &::before {
     background: var(--green-light);
   }
 }
@@ -65,7 +65,7 @@ $border-radius: var(--2x);
   color: var(--red-core);
   box-shadow: inset 0 0 0 1px var(--red-core);
 
-  &:before {
+  &::before {
     background: var(--red-light);
   }
 }
@@ -73,7 +73,7 @@ $border-radius: var(--2x);
 .message-error-high {
   box-shadow: inset 0 0 0 1px var(--red-dark);
 
-  &:before {
+  &::before {
     opacity: 1;
     background: var(--red-medium);
   }
