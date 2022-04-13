@@ -50,7 +50,7 @@ const Modal = ({ onClickClose, title, children }: ModalInterface) => {
     <>
       <div className="d-flex flex-row justify-content-center align-items-center modal-background">
         <div className="modal-box">
-          <div className="d-flex align-items-center modal-top">
+          <div className="d-flex align-items-center modal-top unselectable">
             <div className="d-flex align-items-center modal-title">
               <h4>{title}</h4>
             </div>

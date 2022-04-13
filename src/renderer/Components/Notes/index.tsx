@@ -95,7 +95,7 @@ const Notes = () => {
 
   return (
     <>
-      <div className="d-flex flex-row justify-content-between align-items-center space-header">
+      <div className="d-flex flex-row justify-content-between align-items-center space-header unselectable">
         <h2>Notes</h2>
 
         <div
@@ -109,7 +109,7 @@ const Notes = () => {
         </div>
       </div>
 
-      <div className="d-flex flex-row flex-wrap justify-content-evenly notes-list">
+      <div className="d-flex flex-row flex-wrap justify-content-evenly notes-list unselectable">
         {currentSpaceState?.notes.map((noteObject: NoteStoreType) => (
           <div
             className="note-card"

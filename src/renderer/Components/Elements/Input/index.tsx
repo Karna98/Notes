@@ -36,7 +36,12 @@ const Input: React.FC<InputInterface> = ({
 
   return (
     <div className="d-flex flex-row justify-content-center align-items-center input-element">
-      {label && <label className="d-flex align-items-center">{label}</label>}
+      {label && (
+        <label className="d-flex align-items-center unselectable">
+          {label}
+        </label>
+      )}
+
       <input
         id={id}
         type={type}

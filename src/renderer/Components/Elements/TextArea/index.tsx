@@ -20,7 +20,11 @@ const TextArea: React.FC<TextAreaInputInterface> = ({
 }) => {
   return (
     <div className="d-flex flex-row justify-content-center align-items-center textarea-element">
-      {label && <label className="d-flex align-items-center">{label}</label>}
+      {label && (
+        <label className="d-flex align-items-center unselectable">
+          {label}
+        </label>
+      )}
 
       <textarea
         id={id}

@@ -51,7 +51,7 @@ const Message = () => {
   return createPortal(
     <>
       {messageState.message && (
-        <div className="notification-message">
+        <div className="notification-message unselectable">
           <div className={getClassName()}>
             <b>{messageState.message}</b>
           </div>

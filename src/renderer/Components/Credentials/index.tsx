@@ -97,7 +97,7 @@ const Credentials = () => {
 
   return (
     <>
-      <div className="d-flex flex-row justify-content-between align-items-center space-header">
+      <div className="d-flex flex-row justify-content-between align-items-center space-header unselectable">
         <h2>Credentials</h2>
 
         <div
@@ -111,7 +111,7 @@ const Credentials = () => {
         </div>
       </div>
 
-      <div className="d-flex flex-row flex-wrap justify-content-evenly credentials-list">
+      <div className="d-flex flex-row flex-wrap justify-content-evenly credentials-list unselectable">
         {currentSpaceState?.credentials.map(
           (credentialObject: CredentialStoreType) => (
             <div

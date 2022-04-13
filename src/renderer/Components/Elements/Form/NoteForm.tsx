@@ -102,7 +102,7 @@ const NoteForm: React.FC<FormInterface> = ({
       className="d-flex flex-column justify-content-evenly"
     >
       {id === `note-form-update` && formValues?.updated_at && (
-        <div className="d-flex align-items-center form-updated-at">
+        <div className="d-flex align-items-center form-updated-at unselectable">
           <sub>
             <b>Updated at </b>
             {new Date(formValues?.updated_at as number).toLocaleString(

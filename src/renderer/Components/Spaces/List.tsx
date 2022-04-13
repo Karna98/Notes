@@ -47,12 +47,12 @@ const List = () => {
 
   return (
     <>
-      <div className="d-flex flex-column justify-content-evenly spaces-greeting">
+      <div className="d-flex flex-column justify-content-evenly spaces-greeting unselectable">
         <h2>Hello, {sessionState?.username}</h2>
         <b>Which Space to explore today?</b>
       </div>
 
-      <div className="d-flex flex-row flex-wrap justify-content-evenly align-items-center spaces-list">
+      <div className="d-flex flex-row flex-wrap justify-content-evenly align-items-center spaces-list unselectable">
         {spacesState == null ? (
           <h2> Loading.. </h2>
         ) : (

@@ -41,7 +41,7 @@ const Profile = () => {
       : [];
 
   return (
-    <div className="profile">
+    <div className="profile unselectable">
       <div className="d-flex flex-row align-items-center profile-heading">
         <h1>Profile</h1>
       </div>

@@ -325,7 +325,7 @@ const CredentialForm: React.FC<FormInterface> = ({
       className="d-flex flex-column justify-content-between"
     >
       {IS_UPDATE_FORM && (
-        <div className="d-flex align-items-center form-updated-at">
+        <div className="d-flex align-items-center form-updated-at unselectable">
           <sub>
             <b>Updated at </b>
             {new Date(formData?.updated_at as number).toLocaleString(`en-IN`, {
@@ -364,7 +364,7 @@ const CredentialForm: React.FC<FormInterface> = ({
                   onClick={() => {
                     removeFieldOnClick(index);
                   }}
-                  className="button-type-square"
+                  className="button-type-square unselectable"
                 />
               </div>
 
@@ -387,7 +387,7 @@ const CredentialForm: React.FC<FormInterface> = ({
                 {...formElements.buttons.add}
                 onClick={addFieldOnClick}
                 disabled={disableButtonStatus.add}
-                className="button-type-square"
+                className="button-type-square unselectable"
               />
             </div>
           </div>
