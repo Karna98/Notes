@@ -6,8 +6,61 @@
  *
 */
 
-.sidebar {
-  min-width: var(--sidebar-width);
-  height: 100%;
-  background-color: var(--fluorescent-blue);
+nav {
+  background: var(--shadow-dark-5);
+
+  img.icon {
+    width: 50px;
+    height: 50px;
+    padding: var(--2x);
+  }
+
+  .links-section {
+    height: calc(100% - 50px);
+    padding: var(--x);
+    padding-bottom: var(--8x);
+  }
+}
+
+.main-secondary-links-section {
+  width: 100%;
+  height: 60%;
+}
+
+.main-links,
+.secondary-links,
+.other-links {
+  width: 100%;
+  height: 30%;
+  padding: var(--2x);
+}
+
+.secondary-links {
+  height: 70%;
+
+  h5 {
+    cursor: default;
+  }
+}
+
+.other-links {
+  height: auto;
+}
+
+nav .links {
+  position: relative;
+  margin: var(--x) 0;
+  width: 100%;
+  height: calc(35px - var(--2x));
+  padding: var(--2x) var(--4x);
+  border-left: var(--2x) solid transparent;
+  border-radius: var(--2x);
+  letter-spacing: 0.5px !important;
+  cursor: pointer;
+
+  &:hover,
+  &:active {
+    border-left: var(--2x) solid var(--shadow-dark-40);
+    background: var(--shadow-dark-5) !important;
+  }
 }

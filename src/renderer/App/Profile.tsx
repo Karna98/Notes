@@ -7,6 +7,7 @@
  */
 
 import { useAppSelector } from 'renderer/Hooks';
+import './profile.scss';
 
 const Profile = () => {
   // Get session value stored in Redux Store.
@@ -40,20 +41,23 @@ const Profile = () => {
       : [];
 
   return (
-    <div className="d-flex flex-column">
-      <h2>Profile</h2>
-      <table>
-        <tbody>
-          {profileDetails.map((data: Record<string, string | number>) => (
-            <tr key={data.label}>
-              <td>
-                <b>{data.label}</b>
-              </td>
-              <td>{data.value}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="profile unselectable">
+      <div className="d-flex flex-row align-items-center profile-heading">
+        <h1>Profile</h1>
+      </div>
+
+      {profileDetails.map((data: Record<string, string | number>) => (
+        <div
+          key={data.label}
+          className="d-flex flex-row justify-content-between profile-details"
+        >
+          <p className="detail-label">
+            <b>{data.label}</b>
+          </p>
+
+          <p className="detail-value">{data.value}</p>
+        </div>
+      ))}
     </div>
   );
 };

@@ -6,80 +6,72 @@
  *
  */
 
-import { IPCRequestObject } from 'common';
-import { Link } from 'react-router-dom';
-import { Form } from 'renderer/Components';
-import { useAppSelector } from 'renderer/Hooks';
+import { createMessage, IPCRequestObject, resolveReactRoutes } from 'common';
+import { DivLink, Form } from 'renderer/Components';
+import { useAppDispatch, useAppSelector } from 'renderer/Hooks';
+import { setMessageState } from 'renderer/State';
 import { sendToIpcMain } from 'renderer/util';
 
 const List = () => {
+  const dispatch = useAppDispatch();
+
   // Get session value stored in Redux Store.
   const sessionState = useAppSelector((state) => state.session);
 
   // Get spaces value stored in Redux Store.
   const spacesState = useAppSelector((state) => state.spaces);
 
-  // Form Elements.
-  const formElements: FormElementsInterface = {
-    input: [
-      {
-        id: 'spaces-space_name',
-        name: 'space_name',
-        type: 'text',
-        placeholder: 'New Space',
-        required: true,
-        value: '',
-      },
-    ],
-    button: [
-      {
-        id: 'add-space',
-        label: 'Add',
-      },
-    ],
-  };
-
   /**
    * Adds new space.
    *
    * @param formData Form fields value.
    */
-  const formSubmitAction = (formData: Record<string, unknown>) => {
-    sendToIpcMain(IPCRequestObject(`spaces-add`, formData));
+  const formSubmitAction = (formData?: Record<string, unknown>) => {
+    if (
+      formData &&
+      spacesState?.list.some(
+        ({ space_name }) => space_name === formData.space_name
+      )
+    )
+      // Check if new space name already exists.
+      dispatch(
+        setMessageState(
+          createMessage(
+            `client-error`,
+            `Space with name "${formData.space_name}" already exists.`
+          )
+        )
+      );
+    else sendToIpcMain(IPCRequestObject(`spaces-add`, formData));
   };
 
   return (
     <>
-      <div className="spaces-top">
-        <h4>Hey, {sessionState?.username}</h4>
-        <b>Which space you want to dive in ?</b>
+      <div className="d-flex flex-column justify-content-evenly spaces-greeting unselectable">
+        <h2>Hello, {sessionState?.username}</h2>
+        <b>Which Space to explore today?</b>
       </div>
 
-      <div className="d-flex flex-row flex-wrap justify-content-evenly align-items-center spaces-content">
+      <div className="d-flex flex-row flex-wrap justify-content-evenly align-items-center spaces-list unselectable">
         {spacesState == null ? (
-          <div> Loading.. </div>
+          <h2> Loading.. </h2>
         ) : (
           <>
             {spacesState.list.map((value: SpacesTableInterface) => (
-              <Link
-                to={`${value._id}`}
+              <DivLink
                 key={value._id}
+                id={`${value._id}`}
+                to={resolveReactRoutes('space', { space_id: value._id })}
                 className="d-flex justify-content-center align-items-center space-card"
-                aria-disabled
               >
-                {value.space_name}
-              </Link>
+                <h3>{value.space_name}</h3>
+              </DivLink>
             ))}
+
             {spacesState.list.length <
               (spacesState.metaData.SPACES_MAX_COUNT_ALLOWED as number) && (
-              <div>
-                <Form
-                  id="form-add-space"
-                  method="POST"
-                  elements={formElements}
-                  submitAction={formSubmitAction}
-                  reset={true}
-                />
+              <div className="d-flex justify-content-center align-items-center space-card-form">
+                <Form id="space-form-add" submitAction={formSubmitAction} />
               </div>
             )}
           </>

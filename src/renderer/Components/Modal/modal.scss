@@ -1,0 +1,47 @@
+/**
+ * modal.scss 
+ * 
+ * Description:
+ *    Styles for Modal Component.
+ *
+*/
+
+$modal-top: 50px;
+
+.modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--shadow-dark-40);
+}
+
+.modal-box {
+  position: relative;
+  width: 550px;
+  height: 550px;
+  padding: var(--2x);
+  border-radius: var(--4x);
+  background-color: var(--background-light-secondary);
+}
+
+.modal-top {
+  width: 100%;
+  height: $modal-top;
+
+  .modal-title {
+    width: calc(100% - $modal-top);
+    height: inherit;
+    padding: 0 var(--4x);
+  }
+}
+
+.modal-close {
+  width: $modal-top;
+  height: $modal-top;
+}
+
+.modal-body {
+  height: calc(100% - $modal-top);
+}

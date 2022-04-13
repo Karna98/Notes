@@ -6,8 +6,231 @@
  *
 */
 
+$button-width: 160px;
+$button-height: 40px;
+$button-border-radius: calc(var(--2x) + var(--x));
+
 .button-element {
-  min-width: 100px;
-  margin: 4px;
-  padding: 4px;
+  position: relative;
+  z-index: 0;
+}
+
+button {
+  position: relative;
+  width: $button-width;
+  height: $button-height;
+
+  font-size: medium;
+  font-weight: 600;
+  letter-spacing: 1px;
+
+  border-radius: $button-border-radius;
+  border: none;
+
+  background: transparent;
+
+  cursor: pointer;
+  transition: all 0.25s;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: $button-border-radius;
+    opacity: 0.025;
+    transition: all 0.25s;
+    z-index: -1;
+  }
+
+  &:disabled {
+    cursor: default;
+    transition: all 0.25s;
+  }
+
+  &:enabled {
+    &::before {
+      opacity: 0.1;
+      filter: blur(var(--x));
+    }
+  }
+
+  &:hover:enabled {
+    color: var(--text-light-primary);
+    box-shadow: inset 0 0 0 1px var(--background-light-primary);
+    transition: all 0.25s;
+
+    &::before {
+      opacity: 0.8;
+    }
+  }
+
+  &:active:focus {
+    color: var(--text-light-primary);
+    box-shadow: inset 0 0 0 var(--x) var(--background-light-primary);
+
+    &::before {
+      filter: blur(calc(var(--x) + 1px));
+    }
+
+    transition: all 0.25s;
+  }
+}
+
+// Button Type-1
+.button-type-1 {
+  color: var(--red-medium);
+
+  &::before {
+    background: var(--red-core);
+  }
+
+  &:enabled {
+    color: var(--red-core);
+    box-shadow: inset 0 0 0 1px var(--red-medium);
+  }
+}
+
+// Button Type-2
+.button-type-2 {
+  color: var(--blue-medium);
+
+  &::before {
+    background: var(--blue-core);
+  }
+
+  &:enabled {
+    color: var(--blue-core);
+    box-shadow: inset 0 0 0 1px var(--blue-medium);
+  }
+}
+
+// Button Type-3
+.button-type-3 {
+  color: var(--purple-medium);
+
+  &::before {
+    background: var(--purple-core);
+  }
+
+  &:enabled {
+    color: var(--purple-core);
+    box-shadow: inset 0 0 0 1px var(--purple-medium);
+  }
+}
+
+// Button Type-4
+.button-type-4 {
+  color: var(--purple-medium);
+
+  &::before {
+    background: linear-gradient(107deg, var(--red-core), var(--blue-core));
+  }
+
+  &:enabled {
+    color: var(--purple-dark);
+    box-shadow: inset 0 0 0 1px var(--purple-dark);
+  }
+}
+
+// Button Type Square
+.button-type-square {
+  width: $button-height;
+  border: none;
+
+  &::before {
+    background: var(--shadow-dark-40);
+  }
+
+  &:enabled {
+    &::before {
+      opacity: 0;
+      filter: none;
+    }
+  }
+
+  &:hover:enabled {
+    box-shadow: none;
+
+    &::before {
+      opacity: 0.3;
+    }
+  }
+
+  &:active:focus {
+    box-shadow: none;
+
+    &::before {
+      opacity: 0.6;
+      filter: none;
+    }
+  }
+}
+
+.button-type-square#credential-button-add,
+.button-type-square#credential-button-remove {
+  width: calc($button-height - var(--4x));
+  height: calc($button-height - var(--4x));
+}
+
+// Logout Button.
+form#sidebar-logout-form .button-element {
+  width: 100%;
+
+  button.links {
+    justify-content: end;
+    color: inherit;
+    font: unset;
+    letter-spacing: unset;
+    transition: none;
+
+    &:hover,
+    &:active {
+      box-shadow: none;
+    }
+  }
+}
+
+// Add New Space Button.
+form#space-form-add {
+  button {
+    width: 100px;
+  }
+}
+
+// Add Note/Credential Button
+div .add-note-button,
+div .add-credential-button {
+  position: relative;
+  width: 120px;
+  height: $button-height;
+  border-radius: var(--4x);
+  background-color: var(--background-light-primary);
+  cursor: pointer;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: -1;
+    opacity: 0.75;
+    border-radius: var(--4x);
+    background: linear-gradient(
+      120deg,
+      var(--red-core) 25%,
+      var(--green-core) 50%,
+      var(--blue-core) 75%
+    );
+    filter: blur(var(--x));
+    transition: all 0.25s;
+  }
+
+  &:hover {
+    box-shadow: 0 0 0 1px var(--shadow-dark-40);
+  }
 }

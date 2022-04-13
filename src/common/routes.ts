@@ -12,6 +12,7 @@ const definedRoutes: Record<string, string> = {
   'auth-register': 'AUTH:REGISTER',
   'auth-status': 'AUTH:STATUS',
   'credentials-add': 'CREDENTIALS:ADD',
+  'credentials-update': 'CREDENTIALS:UPDATE',
   'notes-add': 'NOTES:ADD',
   'notes-update': 'NOTES:UPDATE',
   'spaces-add': 'SPACES:ADD',
@@ -27,6 +28,7 @@ const reactRoutes: Record<string, string> = {
   auth_register: '/auth/register',
   profile: '/profile',
   spaces: '/spaces',
+  space: '/spaces/{space_id}',
   notes: '/spaces/{space_id}/notes',
   credentials: '/spaces/{space_id}/credentials',
 };

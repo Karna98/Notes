@@ -34,6 +34,7 @@ const spacesSlice = createSlice({
       setBrowserStorage(action.payload);
       return { ...action.payload };
     },
+
     // Add new Space.
     addSpaceState: (state, action: PayloadAction<SpacesTableInterface>) => {
       if (state != null) {
@@ -50,11 +51,13 @@ const spacesSlice = createSlice({
         state.list = updatedSpacesList;
       }
     },
+
     // Clear Spaces.
     clearSpacesState: () => {
       clearBrowserStorage();
       return null;
     },
+
     // Set Spaces.
     setCurrentSpaceState: (state, action: PayloadAction<SpaceInterface>) => {
       if (state != null) {
@@ -68,6 +71,7 @@ const spacesSlice = createSlice({
         Object.assign(state, updatedCurrentSpaceState);
       }
     },
+
     // Add new Note.
     addNoteState: (state, action: PayloadAction<NotesTableInterface>) => {
       const { space_id, ...newNote } = action.payload;
@@ -93,6 +97,7 @@ const spacesSlice = createSlice({
         state.currentSpace.notes = updatedNotesList;
       }
     },
+
     // Update Note.
     updateNoteState: (state, action: PayloadAction<NoteStoreType>) => {
       if (state != null && state.currentSpace !== undefined) {
@@ -117,6 +122,7 @@ const spacesSlice = createSlice({
         }
       }
     },
+
     // Add new Credential.
     addCredentialState: (
       state,
@@ -150,6 +156,36 @@ const spacesSlice = createSlice({
         Object.assign(state?.currentSpace?.credentials, updatedCredentialsList);
       }
     },
+
+    // Update Credential.
+    updateCredentialState: (
+      state,
+      action: PayloadAction<CredentialStoreType>
+    ) => {
+      if (state != null && state.currentSpace !== undefined) {
+        const indexOfCredential = state.currentSpace.credentials.findIndex(
+          (credential: CredentialStoreType) =>
+            credential._id == action.payload._id
+        );
+
+        if (indexOfCredential != -1) {
+          const currentSpaceCredential: CredentialStoreType[] =
+            state.currentSpace.credentials;
+
+          currentSpaceCredential[indexOfCredential] = action.payload;
+
+          setBrowserStorage({
+            ...state,
+            currentSpace: {
+              ...state.currentSpace,
+              credentials: currentSpaceCredential,
+            },
+          });
+
+          Object.assign(state.currentSpace.credentials, currentSpaceCredential);
+        }
+      }
+    },
   },
 });
 
@@ -160,6 +196,7 @@ export const {
   clearSpacesState,
   setSpacesState,
   setCurrentSpaceState,
+  updateCredentialState,
   updateNoteState,
 } = spacesSlice.actions;
 

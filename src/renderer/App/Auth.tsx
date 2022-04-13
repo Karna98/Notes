@@ -26,7 +26,7 @@ const Auth = () => {
   ];
 
   return (
-    <div className="d-flex flex-column align-items-center justify-content-center auth">
+    <div className="auth-card">
       <Routes>
         {routeList.map((route) => (
           <Route key={route.name} path={route.path} element={route.element} />

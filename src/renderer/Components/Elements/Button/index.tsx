@@ -8,8 +8,14 @@
 
 import './button.scss';
 
-const Button: React.FC<ButtonInterface> = (props) => {
-  const { id, label, onClick, type = 'submit', disabled = false } = props;
+const Button: React.FC<ButtonInterface> = ({
+  disabled = false,
+  id,
+  label,
+  onClick,
+  className,
+  type = `submit`,
+}) => {
   /**
    * Executes onClick() on Button Click.
    */
@@ -18,16 +24,22 @@ const Button: React.FC<ButtonInterface> = (props) => {
     onClick && onClick();
   };
 
+  className =
+    `d-flex flex-row justify-content-center align-items-center ` +
+    (className === undefined ? `` : className);
+
   return (
-    <button
-      id={id}
-      className={'d-flex button-element justify-content-center'}
-      onClick={onButtonClick}
-      type={type}
-      disabled={disabled}
-    >
-      {label}
-    </button>
+    <div className="button-element">
+      <button
+        id={id}
+        onClick={onButtonClick}
+        type={type}
+        disabled={disabled}
+        className={className}
+      >
+        {label}
+      </button>
+    </div>
   );
 };
 

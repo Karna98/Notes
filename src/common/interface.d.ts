@@ -88,27 +88,41 @@ interface TextAreaInputInterface extends ElementInterface {
   placeholder?: string;
   required?: boolean;
   onChange?: React.ChangeEventHandler<HTMLTextAreaElement> | undefined;
+  readonly?: boolean;
+  tabIndex?: number;
 }
 
 interface ButtonInterface extends Omit<ElementInterface, 'name' | 'value'> {
   name?: string;
   type?: 'submit' | 'button' | 'reset';
+  className?: string;
   disabled?: boolean;
   onClick?: () => void;
 }
 
 interface FormInterface {
   id: string;
-  elements: FormElementsInterface;
-  submitAction: (form: Record<string, unknown>) => void;
-  method?: 'POST' | 'GET';
+  submitAction: (form?: Record<string, unknown>) => void;
   formValues?: Record<string, unknown>;
-  reset?: boolean;
 }
 
 interface FormElementsInterface {
   input?: InputInterface[];
   button?: ButtonInterface[];
+}
+
+interface ModalInterface {
+  onClickClose: (value: boolean) => void;
+  title: string;
+  children: React.ReactNode;
+}
+
+interface DivLinkInterface {
+  id: string;
+  to: string;
+  children: React.ReactNode;
+  className?: string;
+  customFunction?: (id: string) => void;
 }
 
 // ================================================================================
@@ -129,6 +143,5 @@ interface SpaceInterface {
 
 interface ElementObjectInterface {
   name: string;
-  element: string;
   value: string | number | readonly string[] | undefined;
 }

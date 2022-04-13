@@ -13,27 +13,25 @@ import './spaces.scss';
 
 const routeList = [
   {
-    name: 'Spaces Page',
-    path: '/',
+    name: `Spaces Page`,
+    path: `/`,
     element: <List />,
   },
   {
-    name: 'Space Page',
+    name: `Space Page`,
     path: `:space_id/*`,
     element: <Space />,
   },
 ];
 
-const Spaces = () => {
-  return (
-    <div className="spaces-body">
-      <Routes>
-        {routeList.map((route) => (
-          <Route key={route.name} path={route.path} element={route.element} />
-        ))}
-      </Routes>
-    </div>
-  );
-};
+const Spaces = () => (
+  <div className="spaces">
+    <Routes>
+      {routeList.map((route) => (
+        <Route key={route.name} path={route.path} element={route.element} />
+      ))}
+    </Routes>
+  </div>
+);
 
 export default Spaces;

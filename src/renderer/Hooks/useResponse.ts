@@ -18,6 +18,7 @@ import {
   setMessageState,
   setSessionState,
   setSpacesState,
+  updateCredentialState,
   updateNoteState,
 } from 'renderer/State';
 import { sendToIpcMain } from 'renderer/util';
@@ -119,6 +120,14 @@ const useResponse = () => {
           );
         } else if (response.status == 500) {
           // If Credential is not added successfully.
+          dispatchMessage(dispatch, response.status, response.message);
+        }
+        break;
+
+      case 'credentials-update':
+        if (response.status == 200) {
+          dispatch(updateCredentialState(response.data as CredentialStoreType));
+        } else if (response.status == 500) {
           dispatchMessage(dispatch, response.status, response.message);
         }
         break;
