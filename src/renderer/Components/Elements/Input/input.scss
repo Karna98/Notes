@@ -6,20 +6,76 @@
  *
 */
 
+$lable-width: 150px;
+$input-element-height: 44px;
+
 .input-element {
-  --label_width: 100px;
-  width: calc(100% - var(--2x));
-  padding: var(--2x) 0;
+  width: 100%;
+  padding: var(--2x);
 }
 
 .input-element label {
-  min-width: var(--label_width);
+  width: $lable-width;
 }
 
 .input-element input {
-  width: calc(80% - var(--16x));
-  height: 24px;
-  padding: var(--2x) var(--8x);
-  border-radius: var(--8x);
+  min-width: calc(100% - $lable-width);
+  height: calc($input-element-height - var(--4x));
+  padding: var(--x) var(--8x);
+  border: none;
+  border-radius: var(--4x);
+  box-shadow: inset 0 0 0 1px var(--shadow-dark-20);
   outline: none;
+  background-color: transparent;
+}
+
+.auth-card form .input-element {
+  width: 80%;
+
+  input {
+    width: 100%;
+
+    &#auth-username:focus {
+      box-shadow: inset 0 0 0 1px var(--red-core);
+    }
+
+    &#auth-password:focus,
+    &#auth-retype_password:focus {
+      box-shadow: inset 0 0 0 1px var(--blue-core);
+    }
+  }
+}
+
+form#space-form-add .input-element {
+  input {
+    &#spaces-space_name:focus {
+      box-shadow: inset 0 0 0 1px var(--purple-core);
+    }
+  }
+}
+
+form#credential-form-add,
+form#credential-form-update {
+  .input-element {
+    input {
+      width: 100%;
+      border-radius: var(--2x);
+      background: var(--background-light-primary);
+      box-shadow: none;
+
+      &#credential-title {
+        padding: var(--x) var(--2x);
+        height: 42px;
+        font-size: large;
+
+        &:focus {
+          box-shadow: inset 0 0 0 1px var(--shadow-dark-20);
+        }
+      }
+
+      &:focus {
+        box-shadow: inset 0 0 0 1px var(--shadow-dark-40);
+      }
+    }
+  }
 }

@@ -26,11 +26,13 @@ const Auth = () => {
   ];
 
   return (
-    <Routes>
-      {routeList.map((route) => (
-        <Route key={route.name} path={route.path} element={route.element} />
-      ))}
-    </Routes>
+    <div className="auth-card">
+      <Routes>
+        {routeList.map((route) => (
+          <Route key={route.name} path={route.path} element={route.element} />
+        ))}
+      </Routes>
+    </div>
   );
 };
 

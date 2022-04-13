@@ -21,15 +21,14 @@ const Login = () => {
    * @param formData Form fields value
    */
   const formSubmitAction = (formData?: Record<string, unknown>): void => {
-    dispatch(setMessageState(createMessage(0, `Checking Credentials ..`)));
+    dispatch(
+      setMessageState(createMessage(`progress`, `Checking Credentials ..`))
+    );
+
     sendToIpcMain(IPCRequestObject(`auth-login`, formData));
   };
 
-  return (
-    <div className="auth-card">
-      <Form id="auth-form-login" submitAction={formSubmitAction} />
-    </div>
-  );
+  return <Form id="auth-form-login" submitAction={formSubmitAction} />;
 };
 
 export default Login;

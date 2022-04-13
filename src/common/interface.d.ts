@@ -89,11 +89,13 @@ interface TextAreaInputInterface extends ElementInterface {
   required?: boolean;
   onChange?: React.ChangeEventHandler<HTMLTextAreaElement> | undefined;
   readonly?: boolean;
+  tabIndex?: number;
 }
 
 interface ButtonInterface extends Omit<ElementInterface, 'name' | 'value'> {
   name?: string;
   type?: 'submit' | 'button' | 'reset';
+  className?: string;
   disabled?: boolean;
   onClick?: () => void;
 }
@@ -111,7 +113,16 @@ interface FormElementsInterface {
 
 interface ModalInterface {
   onClickClose: (value: boolean) => void;
+  title: string;
   children: React.ReactNode;
+}
+
+interface DivLinkInterface {
+  id: string;
+  to: string;
+  children: React.ReactNode;
+  className?: string;
+  customFunction?: (id: string) => void;
 }
 
 // ================================================================================

@@ -97,21 +97,21 @@ const Credentials = () => {
 
   return (
     <>
-      <div className="d-flex flex-row justify-content-between align-items-center credential-form-section">
+      <div className="d-flex flex-row justify-content-between align-items-center space-header unselectable">
         <h2>Credentials</h2>
 
         <div
-          className="d-flex flex-row justify-content-center align-items-center credential-card"
+          className="d-flex flex-row justify-content-center align-items-center add-credential-button"
           role="button"
           onClick={addCredentialForm}
           onKeyPress={(event) => event.key === ` ` && addCredentialForm()}
           tabIndex={0}
         >
-          Add Credential
+          &#x1F7A6; &nbsp; <b>Credential</b>
         </div>
       </div>
 
-      <div className="d-flex flex-row flex-wrap justify-content-evenly credentials-list">
+      <div className="d-flex flex-row flex-wrap justify-content-evenly credentials-list unselectable">
         {currentSpaceState?.credentials.map(
           (credentialObject: CredentialStoreType) => (
             <div
@@ -124,23 +124,23 @@ const Credentials = () => {
               }
               tabIndex={0}
             >
-              <div className="d-flex flex-row align-items-center note-form-heading">
-                <b>
-                  <i>Credential #{credentialObject._id}</i>
-                </b>
+              <div className="d-flex flex-row align-items-center credential-heading">
+                <b>Credential #{credentialObject._id}</b>
               </div>
-
-              <hr />
-
-              {credentialObject.credential.title}
+              <p>{credentialObject.credential.title}</p>
             </div>
           )
         )}
       </div>
 
       {modalState && (
-        <Modal onClickClose={(value: boolean) => setModalState(value)}>
-          <div className="d-flex flex-column justify-content-center align-items-center credential-form-modal">
+        <Modal
+          onClickClose={(value: boolean) => setModalState(value)}
+          title={
+            modalFormType ? `Credential #${formDetails?._id}` : `New Credential`
+          }
+        >
+          <div className="d-flex flex-column justify-content-center align-items-center credential-modal">
             {modalFormType ? (
               <Form
                 id="credential-form-update"

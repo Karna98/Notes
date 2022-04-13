@@ -9,7 +9,7 @@
 //  Mapped Status Code. { Status : Status-Number}
 const statusCode: Record<string, number> = {
   // intialized
-  initialize: -1,
+  progress: 0,
   // success, creation-success
   success: 200,
   // bad-request, unauthorized

@@ -126,6 +126,7 @@ const AuthForm: React.FC<FormInterface> = ({ id, submitAction }) => {
             ? formButtons.register
             : formButtons.login)}
           disabled={buttonDisabled}
+          className="button-type-4"
         />
       </div>
     </form>

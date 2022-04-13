@@ -95,21 +95,21 @@ const Notes = () => {
 
   return (
     <>
-      <div className="d-flex flex-row justify-content-between align-items-center note-form-section">
+      <div className="d-flex flex-row justify-content-between align-items-center space-header unselectable">
         <h2>Notes</h2>
 
         <div
-          className="d-flex flex-row justify-content-center align-items-center note-card"
+          className="d-flex flex-row justify-content-center align-items-center add-note-button"
           role="button"
           onClick={addNoteForm}
           onKeyPress={(event) => event.key === ` ` && addNoteForm()}
           tabIndex={0}
         >
-          Add Note
+          &#x1F7A6; &nbsp; <b>Note</b>
         </div>
       </div>
 
-      <div className="d-flex flex-row flex-wrap justify-content-evenly notes-list">
+      <div className="d-flex flex-row flex-wrap justify-content-evenly notes-list unselectable">
         {currentSpaceState?.notes.map((noteObject: NoteStoreType) => (
           <div
             className="note-card"
@@ -121,18 +121,15 @@ const Notes = () => {
             }
             tabIndex={0}
           >
-            <div className="d-flex flex-row align-items-center note-form-heading">
-              <b>
-                <i>Note #{noteObject._id}</i>
-              </b>
+            <div className="d-flex flex-row align-items-center note-heading">
+              <b>Note #{noteObject._id}</b>
             </div>
-
-            <hr />
 
             <TextArea
               id={`note-${noteObject._id}`}
               name={`note-${noteObject._id}`}
               value={noteObject.note}
+              tabIndex={-1}
               readonly
             />
           </div>
@@ -140,18 +137,19 @@ const Notes = () => {
       </div>
 
       {modalState && (
-        <Modal onClickClose={(value: boolean) => setModalState(value)}>
-          <div className="d-flex flex-column justify-content-center align-items-center note-form-modal">
-            {modalFormType ? (
-              <Form
-                id="note-form-update"
-                submitAction={updateNoteFormAction}
-                formValues={formDetails}
-              />
-            ) : (
-              <Form id="note-form-add" submitAction={addNoteFormAction} />
-            )}
-          </div>
+        <Modal
+          onClickClose={(value: boolean) => setModalState(value)}
+          title={modalFormType ? `Note #${formDetails?._id}` : `New Note`}
+        >
+          {modalFormType ? (
+            <Form
+              id="note-form-update"
+              submitAction={updateNoteFormAction}
+              formValues={formDetails}
+            />
+          ) : (
+            <Form id="note-form-add" submitAction={addNoteFormAction} />
+          )}
         </Modal>
       )}
     </>

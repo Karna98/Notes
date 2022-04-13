@@ -60,7 +60,7 @@ const formElements: {
     },
     remove: {
       ...getElementBasicAttributes(`button-remove`),
-      label: `❌`,
+      label: `➖`,
       type: `button`,
     },
     reset: {
@@ -318,97 +318,97 @@ const CredentialForm: React.FC<FormInterface> = ({
   };
 
   return (
-    <>
-      <div className="d-flex flex-row align-items-center credential-form-heading">
-        <i>
-          <h4>
-            {id === `credential-form-update`
-              ? `Credential #${formData?._id}`
-              : `New Credential`}
-          </h4>
-        </i>
-      </div>
+    <form
+      id={id}
+      method="POST"
+      onSubmit={submitForm}
+      className="d-flex flex-column justify-content-between"
+    >
+      {IS_UPDATE_FORM && (
+        <div className="d-flex align-items-center form-updated-at unselectable">
+          <sub>
+            <b>Updated at </b>
+            {new Date(formData?.updated_at as number).toLocaleString(`en-IN`, {
+              hourCycle: `h23`,
+            })}
+          </sub>
+        </div>
+      )}
 
-      <form
-        id={id}
-        method="POST"
-        onSubmit={submitForm}
-        className="d-flex flex-column justify-content-between"
-      >
-        <div className="d-flex flex-column align-items-center form-inputs">
+      <div className="d-flex flex-column align-items-center form-inputs">
+        <div className="credential-title">
           <Input
             {...(formElements.defaultInput[0] as InputInterface)}
             value={formElementsValue[formElements.defaultInput[0].name]}
             onChange={handleInputChange}
           />
+        </div>
 
+        <div className="credential-description">
           <TextArea
             {...formElements.defaultInput[1]}
             value={formElementsValue[formElements.defaultInput[1].name]}
             onChange={handleInputChange}
           />
+        </div>
 
+        <div className="d-flex flex-column justify-content-evenly align-items-center form-dynamic-section">
           {dynamicFormElementsList.map((element: string, index: number) => (
             <div
               key={index}
               className="d-flex flex-row justify-content-evenly align-items-center dynamic-section"
             >
+              <div className="d-flex justify-content-center align-items-center dynamic-section-button">
+                <Button
+                  {...formElements.buttons.remove}
+                  onClick={() => {
+                    removeFieldOnClick(index);
+                  }}
+                  className="button-type-square unselectable"
+                />
+              </div>
+
               <Input
                 {...createNewInputElement(element, formElementsValue[element])}
                 onChange={handleInputChange}
               />
-              <Button
-                {...formElements.buttons.remove}
-                onClick={() => {
-                  removeFieldOnClick(index);
-                }}
-              />
             </div>
           ))}
-        </div>
-        <div>
-          <hr />
-          {IS_UPDATE_FORM && (
-            <sub>
-              <b>Updated at </b>
-              {new Date(formData?.updated_at as number).toLocaleString(
-                `en-IN`,
-                {
-                  hourCycle: `h23`,
-                }
-              )}
-            </sub>
-          )}
 
-          <div className="d-flex flex-row justify-content-evenly align-items-center form-dynamic-inputs">
+          <div className="d-flex flex-row justify-content-evenly align-items-center dynamic-section">
             <Input
               {...formElements.newFieldInput}
               value={formElementsValue[formElements.newFieldInput.name]}
               onChange={handleInputChange}
             />
 
-            <Button
-              {...formElements.buttons.add}
-              onClick={addFieldOnClick}
-              disabled={disableButtonStatus.add}
-            />
-          </div>
-
-          <div className="d-flex flex-row justify-content-evenly align-items-center form-button">
-            <Button
-              {...formElements.buttons.reset}
-              onClick={formReset}
-              disabled={disableButtonStatus.save}
-            />
-
-            <Button
-              {...formElements.buttons.save}
-              disabled={disableButtonStatus.save}
-            />
+            <div className="d-flex justify-content-center align-items-center dynamic-section-button">
+              <Button
+                {...formElements.buttons.add}
+                onClick={addFieldOnClick}
+                disabled={disableButtonStatus.add}
+                className="button-type-square unselectable"
+              />
+            </div>
           </div>
         </div>
-      </form>
-    </>
+      </div>
+
+      <div className="d-flex flex-row justify-content-evenly align-items-center form-button">
+        <Button
+          {...formElements.buttons.reset}
+          onClick={formReset}
+          disabled={disableButtonStatus.save}
+          className="button-type-1"
+        />
+
+        <Button
+          {...formElements.buttons.save}
+          disabled={disableButtonStatus.save}
+          className="button-type-2"
+        />
+      </div>
+    </form>
   );
 };
 

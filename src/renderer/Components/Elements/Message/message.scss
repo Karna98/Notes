@@ -6,16 +6,75 @@
  *
 */
 
-.message-card {
+$message-width: 300px;
+$message-height: 40px;
+$border-radius: var(--2x);
+
+.notification-message {
   position: absolute;
   margin: 0;
   top: var(--4x);
   left: 50%;
-  max-width: 500px;
-  min-height: 24px;
-  padding: var(--2x) var(--8x);
+  padding: var(--x);
+  min-width: $message-width;
+  height: $message-height;
   transform: translate(-50%, 0);
-  z-index: 1;
-  background-color: var(--turquoise-blue);
-  border-radius: var(--8x);
+  border-radius: $border-radius;
+  background: var(--background-light-primary);
+  z-index: 3;
+}
+
+.message-card {
+  position: relative;
+  height: 100%;
+  color: var(--text-light-primary);
+  border-radius: $border-radius;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0.8;
+    border-radius: $border-radius;
+    z-index: -1;
+  }
+}
+
+.message-progress {
+  color: var(--blue-core);
+  box-shadow: inset 0 0 0 1px var(--blue-core);
+
+  &::before {
+    background: var(--blue-light);
+  }
+}
+
+.message-success {
+  color: var(--green-dark);
+  box-shadow: inset 0 0 0 1px var(--green-dark);
+
+  &::before {
+    background: var(--green-light);
+  }
+}
+
+.message-error-low {
+  color: var(--red-core);
+  box-shadow: inset 0 0 0 1px var(--red-core);
+
+  &::before {
+    background: var(--red-light);
+  }
+}
+
+.message-error-high {
+  box-shadow: inset 0 0 0 1px var(--red-dark);
+
+  &::before {
+    opacity: 1;
+    background: var(--red-medium);
+  }
 }

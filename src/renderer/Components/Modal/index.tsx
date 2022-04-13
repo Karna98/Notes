@@ -20,7 +20,7 @@ const formButtons: Record<string, ButtonInterface> = {
   },
 };
 
-const Modal = ({ onClickClose, children }: ModalInterface) => {
+const Modal = ({ onClickClose, title, children }: ModalInterface) => {
   /**
    * Close Modal on click.
    */
@@ -35,15 +35,35 @@ const Modal = ({ onClickClose, children }: ModalInterface) => {
     (
       document.getElementsByClassName(`spaces`)[0] as HTMLElement
     ).style.overflowY = `hidden`;
+
+    return () => {
+      const elementByClassNameSpaces = document.getElementsByClassName(
+        `spaces`
+      )[0] as HTMLElement;
+
+      elementByClassNameSpaces &&
+        (elementByClassNameSpaces.style.overflowY = `overlay`);
+    };
   }, []);
 
   return createPortal(
     <>
       <div className="d-flex flex-row justify-content-center align-items-center modal-background">
         <div className="modal-box">
-          <div className="d-flex flex-row justify-content-center align-items-center modal-close">
-            <Button {...formButtons.close} onClick={closeModal} />
+          <div className="d-flex align-items-center modal-top unselectable">
+            <div className="d-flex align-items-center modal-title">
+              <h4>{title}</h4>
+            </div>
+
+            <div className="d-flex flex-row justify-content-center align-items-center modal-close">
+              <Button
+                {...formButtons.close}
+                onClick={closeModal}
+                className="button-type-square"
+              />
+            </div>
           </div>
+
           <div className="d-flex flex-row justify-content-center align-items-center modal-body">
             {children}
           </div>

@@ -38,7 +38,7 @@ const LogoutForm: React.FC<FormInterface> = ({ id, submitAction }) => {
   return (
     <form id={id} method="POST" onSubmit={submitForm}>
       <div className="d-flex flex-row justify-content-evenly align-items-center">
-        <Button {...formButtons.logout} />
+        <Button {...formButtons.logout} className="links" />
       </div>
     </form>
   );

@@ -6,9 +6,8 @@
  *
  */
 
-import { createMessage, IPCRequestObject } from 'common';
-import { Link } from 'react-router-dom';
-import { Form } from 'renderer/Components';
+import { createMessage, IPCRequestObject, resolveReactRoutes } from 'common';
+import { DivLink, Form } from 'renderer/Components';
 import { useAppDispatch, useAppSelector } from 'renderer/Hooks';
 import { setMessageState } from 'renderer/State';
 import { sendToIpcMain } from 'renderer/util';
@@ -38,7 +37,7 @@ const List = () => {
       dispatch(
         setMessageState(
           createMessage(
-            -1,
+            `client-error`,
             `Space with name "${formData.space_name}" already exists.`
           )
         )
@@ -48,32 +47,30 @@ const List = () => {
 
   return (
     <>
-      <div className="d-flex flex-column justify-content-evenly spaces-greeting">
-        <h3>Hello, {sessionState?.username}.</h3>
-        <p>
-          <b>Which Space to explore today?</b>
-        </p>
+      <div className="d-flex flex-column justify-content-evenly spaces-greeting unselectable">
+        <h2>Hello, {sessionState?.username}</h2>
+        <b>Which Space to explore today?</b>
       </div>
 
-      <div className="d-flex flex-row flex-wrap justify-content-evenly align-items-center spaces-list">
+      <div className="d-flex flex-row flex-wrap justify-content-evenly align-items-center spaces-list unselectable">
         {spacesState == null ? (
           <h2> Loading.. </h2>
         ) : (
           <>
             {spacesState.list.map((value: SpacesTableInterface) => (
-              <Link
-                to={`${value._id}`}
+              <DivLink
                 key={value._id}
+                id={`${value._id}`}
+                to={resolveReactRoutes('space', { space_id: value._id })}
                 className="d-flex justify-content-center align-items-center space-card"
-                aria-disabled
               >
-                {value.space_name}
-              </Link>
+                <h3>{value.space_name}</h3>
+              </DivLink>
             ))}
 
             {spacesState.list.length <
               (spacesState.metaData.SPACES_MAX_COUNT_ALLOWED as number) && (
-              <div className="d-flex flex-column justify-content-evenly align-items-center space-card">
+              <div className="d-flex justify-content-center align-items-center space-card-form">
                 <Form id="space-form-add" submitAction={formSubmitAction} />
               </div>
             )}

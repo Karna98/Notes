@@ -8,10 +8,11 @@
 
 import NOTES_LOGO_256 from 'assets/logo/png/256x256.png';
 import { resolveReactRoutes } from 'common';
-import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { DivLink, Form } from 'renderer/Components';
 import { useAppDispatch, useAppSelector } from 'renderer/Hooks';
 import { clearSessionState, clearSpacesState } from 'renderer/State';
-import { Form } from '..';
 import './sidebar.scss';
 
 const Sidebar = () => {
@@ -54,6 +55,9 @@ const Sidebar = () => {
     ],
   };
 
+  // Local State to track the current Sidebar link selected.
+  const [currentSelection, setCurrentSelection] = useState(links.main[0].title);
+
   /**
    * Submit Logout form.
    */
@@ -63,20 +67,49 @@ const Sidebar = () => {
     dispatch(clearSpacesState());
   };
 
+  /**
+   * Set recently clicked Link.
+   *
+   * @param selectedLink Link recently clicked.
+   */
+  const linkOnClick = (selectedLink: string) => {
+    setCurrentSelection(selectedLink);
+  };
+
+  /**
+   * Return Element <DivLink/>.
+   *
+   * @param title Link Label.
+   * @param url  Link URL
+   * @returns {void}
+   */
+  const customDevLink = (title: string, url: string) => (
+    <DivLink
+      key={title}
+      id={title}
+      to={url}
+      customFunction={linkOnClick}
+      className="links"
+    >
+      {currentSelection === title ? <b>{title}</b> : title}
+    </DivLink>
+  );
+
   return (
-    <div className="d-flex flex-column sidebar">
+    <nav className="d-flex flex-column">
       <div className="d-flex flex-row justify-content-center align-items-center">
-        <img src={NOTES_LOGO_256} alt="Notes Logo" className="icon" />
+        <img
+          src={NOTES_LOGO_256}
+          alt="Notes Logo"
+          className="icon unselectable"
+          draggable={false}
+        />
       </div>
 
-      <div className="d-flex flex-column justify-content-between align-items-center links-section">
+      <div className="d-flex flex-column justify-content-between align-items-center links-section unselectable">
         <div className="d-flex flex-column align-items-center main-secondary-links-section">
           <div className="d-flex flex-column align-items-center main-links">
-            {links.main.map((link) => (
-              <Link key={link?.title} to={link.URI}>
-                {link?.title}
-              </Link>
-            ))}
+            {links.main.map((link) => customDevLink(link?.title, link.URI))}
           </div>
 
           {location.pathname.startsWith(resolveReactRoutes(`spaces`) + `/`) && (
@@ -84,26 +117,20 @@ const Sidebar = () => {
               <h5>{currentSpaceDetails?.space_name}</h5>
 
               {space_id &&
-                links.secondary.map((link) => (
-                  <Link key={link?.title} to={link.URI}>
-                    {link?.title}
-                  </Link>
-                ))}
+                links.secondary.map((link) =>
+                  customDevLink(link?.title, link.URI)
+                )}
             </div>
           )}
         </div>
 
         <div className="d-flex flex-column align-items-center other-links">
-          {links.others.map((link) => (
-            <Link key={link?.title} to={link.URI}>
-              {link?.title}
-            </Link>
-          ))}
+          {links.others.map((link) => customDevLink(link?.title, link.URI))}
 
           <Form id="sidebar-logout-form" submitAction={logoutFormAction} />
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 

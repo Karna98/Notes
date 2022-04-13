@@ -9,12 +9,18 @@
 .spaces {
   width: 100%;
   height: 100%;
+  padding-bottom: var(--8x);
   overflow-y: overlay;
-}
 
-.spaces .spaces-greeting {
-  width: 100%;
-  height: 80px;
+  .spaces-greeting {
+    margin: 0 var(--8x);
+    height: 100px;
+  }
+
+  .space-header {
+    margin: 0 var(--8x);
+    height: 60px;
+  }
 }
 
 .space-greeting {
@@ -22,25 +28,96 @@
 }
 
 .spaces-list {
+  margin-top: var(--4x);
   width: 100%;
 
-  a {
-    text-decoration: none;
+  .space-card,
+  .space-card-form {
+    margin: var(--4x) 0;
   }
 
-  .space-card {
-    margin: var(--4x);
+  .space-card:nth-child(6n) {
+    &::before {
+      box-shadow: inset 0 0 150px var(--orange-core);
+    }
+  }
+
+  .space-card:nth-child(6n + 1) {
+    &::before {
+      box-shadow: inset 0 0 150px var(--blue-core);
+    }
+  }
+
+  .space-card:nth-child(6n + 2) {
+    &::before {
+      box-shadow: inset 0 0 150px var(--green-core);
+    }
+  }
+
+  .space-card:nth-child(6n + 3) {
+    &::before {
+      box-shadow: inset 0 0 150px var(--red-core);
+    }
+  }
+
+  .space-card:nth-child(6n + 4) {
+    &::before {
+      box-shadow: inset 0 0 150px var(--purple-core);
+    }
+  }
+
+  .space-card:nth-child(6n + 5) {
+    &::before {
+      box-shadow: inset 0 0 150px var(--yellow-core);
+    }
   }
 }
 
-.space-card {
-  width: calc(250px - var(--4x));
-  height: calc(200px - var(--4x));
-  padding: var(--2x);
-  border-radius: var(--4x);
-  background-color: var(--fluorescent-blue);
+.space-card,
+.space-card-form {
+  position: relative;
+  width: 225px;
+  height: 225px;
+  border-radius: var(--8x);
+  box-shadow: 0 0 var(--2x) var(--shadow-dark-20),
+    inset 0 0 0 2px var(--background-light-primary);
+  cursor: pointer;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: -1;
+    opacity: 0.25;
+    border-radius: var(--8x);
+    filter: blur(var(--x));
+    transition: all 0.5s;
+  }
+
+  &:hover {
+    &::before {
+      opacity: 0.7;
+      transition: all 0.55s;
+    }
+  }
 }
 
-.space-card:hover {
-  background-color: var(--turquoise-blue);
+.space-card-form {
+  cursor: inherit;
+
+  &::before {
+    opacity: 0.8;
+    box-shadow: inset 0 0 150px var(--background-light-primary) !important;
+    transition: none;
+  }
+
+  &:hover {
+    &::before {
+      opacity: 0.8;
+      transition: none;
+    }
+  }
 }
