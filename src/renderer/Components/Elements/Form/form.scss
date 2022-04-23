@@ -86,7 +86,9 @@ form#credential-form-update {
   }
 }
 
-form#credential-form-update {
+form#credential-form-update,
+form#auth-pin-form-setup,
+form#auth-pin-form-verify {
   .form-inputs {
     height: calc(100% - 80px);
   }

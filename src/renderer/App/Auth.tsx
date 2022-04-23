@@ -7,7 +7,7 @@
  */
 
 import { Route, Routes } from 'react-router-dom';
-import { Login, Register } from 'renderer/Components';
+import { AuthPin, Login, Register } from 'renderer/Components';
 import './auth.scss';
 
 const Auth = () => {
@@ -22,6 +22,11 @@ const Auth = () => {
       name: 'Register',
       path: `/register`,
       element: <Register />,
+    },
+    {
+      name: 'Login Pin',
+      path: '/l-pin',
+      element: <AuthPin />,
     },
   ];
 

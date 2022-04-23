@@ -6,8 +6,9 @@
  *
  */
 
+import AuthPin from './AuthPin';
 import Login from './Login';
 import Register from './Register';
 
 // Re-exporting default exports as named exports.
-export { Login, Register };
+export { AuthPin, Login, Register };

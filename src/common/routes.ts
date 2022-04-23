@@ -26,6 +26,7 @@ const reactRoutes: Record<string, string> = {
   auth: '/auth',
   auth_login: '/auth/login',
   auth_register: '/auth/register',
+  auth_pin: '/auth/l-pin',
   profile: '/profile',
   spaces: '/spaces',
   space: '/spaces/{space_id}',

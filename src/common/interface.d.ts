@@ -77,11 +77,11 @@ interface ElementInterface {
   value?: string | number | readonly string[] | undefined;
 }
 
-interface InputInterface extends ElementInterface {
-  type?: React.HTMLInputTypeAttribute | undefined;
-  placeholder?: string;
-  required?: boolean;
-  onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
+interface InputInterface extends Partial<HTMLInputElement> {
+  name: string;
+  label?: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 interface TextAreaInputInterface extends ElementInterface {
