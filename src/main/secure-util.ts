@@ -57,8 +57,10 @@ const cryptBcryptHash = (key: string) => {
  * @param hash Hash value to be compared with.
  * @returns {boolean} Returns Status of key matches the hash or not.
  */
-const cryptBcryptCompare = (key: string, hash: string) => {
+const cryptBcryptCompare = (key: string, hash: string, keyHashed = false) => {
+  if (keyHashed) return bcryptCompareSync(key, hash);
+
   return bcryptCompareSync(cryptoHash(key), hash);
 };
 
-export { cryptBcryptCompare, cryptBcryptHash };
+export { bcryptHash, cryptBcryptCompare, cryptBcryptHash, cryptoHash };

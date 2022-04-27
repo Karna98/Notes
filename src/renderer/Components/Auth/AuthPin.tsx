@@ -8,7 +8,7 @@
 
 import { createMessage, IPCRequestObject } from 'common';
 import { Form } from 'renderer/Components';
-import { useAppDispatch } from 'renderer/Hooks';
+import { useAppDispatch, useAppSelector } from 'renderer/Hooks';
 import { setMessageState } from 'renderer/State';
 import { sendToIpcMain } from 'renderer/util';
 
@@ -20,8 +20,8 @@ const FORM_VERIFY = BASE_IDENTIFIER + `-` + `form-verify`;
 const AuthPin = () => {
   const dispatch = useAppDispatch();
 
-  // If PIN is already set.
-  const pinSetupStatus = false;
+  // Get session value stored in Redux Store.
+  const sessionState = useAppSelector((state) => state.session);
 
   /**
    * Submit Auth PIN form.
@@ -31,14 +31,17 @@ const AuthPin = () => {
   const formSubmitAction = (formData?: Record<string, unknown>): void => {
     dispatch(setMessageState(createMessage(`progress`, `Verifying PIN ..`)));
 
-    // @TODO : Write Backend Functionality.
-    console.log(formData);
-    false && sendToIpcMain(IPCRequestObject(`auth-pin-login`, formData));
+    sendToIpcMain(
+      IPCRequestObject(`auth-pin-login`, {
+        ...sessionState,
+        l_pin: formData?.pin,
+      })
+    );
   };
 
   return (
     <Form
-      id={pinSetupStatus ? FORM_VERIFY : FORM_SETUP}
+      id={sessionState?.lPinStatus ? FORM_VERIFY : FORM_SETUP}
       submitAction={formSubmitAction}
     />
   );

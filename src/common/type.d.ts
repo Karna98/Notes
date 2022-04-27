@@ -9,12 +9,16 @@
 type OptionalExceptFor<T, TRequired extends keyof T> = Partial<T> &
   Pick<T, TRequired>;
 
+type SubRequestResponseType = Pick<IPCRequestInterface, 'data'> & {
+  message: MessageInterface | undefined;
+};
+
 type AuthCredentialType = Pick<UsersTableInteface, 'username' | 'password'>;
 
 type SessionType = Pick<
   UsersTableInteface,
-  '_id' | 'username' | 'created_at' | 'last_logged_in'
->;
+  '_id' | 'username' | 'password' | 'l_pin' | 'created_at' | 'last_logged_in'
+> & { lPinStatus: boolean };
 
 type NoteStoreType = Pick<NotesTableInterface, '_id' | 'note' | 'updated_at'>;
 
