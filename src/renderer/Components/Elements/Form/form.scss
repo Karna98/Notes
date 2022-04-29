@@ -93,3 +93,15 @@ form#auth-pin-form-verify {
     height: calc(100% - 80px);
   }
 }
+
+form#auth-pin-form-setup,
+form#auth-pin-form-verify {
+  .form-title {
+    margin-top: 20px;
+    height: 40px;
+  }
+
+  .form-inputs {
+    height: calc(100% - 80px - 60px);
+  }
+}

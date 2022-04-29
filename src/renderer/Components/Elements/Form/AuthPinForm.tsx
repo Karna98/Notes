@@ -161,6 +161,10 @@ const AuthPinForm: React.FC<FormInterface> = ({ id, submitAction }) => {
 
   return (
     <form id={id} method="POST" onSubmit={submitForm}>
+      <div className="d-flex flex-row justify-content-evenly align-items-center form-title">
+        <h4>{formType === FORM_TYPE_SETUP ? `SETUP PIN` : `VERIFY PIN`}</h4>
+      </div>
+
       <div className="d-flex flex-row justify-content-evenly align-items-center form-inputs">
         {formElements.inputs.map(
           (elementObject: InputInterface, index: number) => (
