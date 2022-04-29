@@ -8,7 +8,8 @@
 
 import { createMessage, IPCResponseObject, resolveRoute } from '../common';
 import CONSTANTS from './constants';
-import { cryptBcryptCompare, cryptBcryptHash } from './secure-util';
+import { cryptBcryptCompare, cryptBcryptHash, cryptoHash } from './secure-util';
+import { resolveAuthPin } from './service';
 import database from './sql';
 
 // Temporary Types.
@@ -26,8 +27,6 @@ type CredentialsRequestDataType = OptionalExceptFor<
   '_id' | 'space_id' | 'credential'
 >;
 
-type resolvedSubRequestType = { data: unknown; message: MessageInterface };
-
 /**
  * Handles Authentication related requests.
  *
@@ -38,7 +37,7 @@ type resolvedSubRequestType = { data: unknown; message: MessageInterface };
 const authRequest = (
   requestType: string[],
   requestData: AuthCredentialType
-): resolvedSubRequestType => {
+): SubRequestResponseType => {
   let result: unknown, message: MessageInterface;
 
   switch (requestType[1]) {
@@ -83,16 +82,12 @@ const authRequest = (
         cryptBcryptCompare(requestData.password, registeredUsers.password);
 
       if (loginStatus) {
-        // Update Last Login time.
-        database.updateUser(
-          { last_logged_in: Date.now() },
-          registeredUsers._id
-        );
-
         // Create Session Object.
         result = {
           _id: registeredUsers._id,
           username: requestData.username,
+          password: cryptoHash(requestData.password),
+          lPinStatus: registeredUsers.l_pin != null,
           created_at: registeredUsers.created_at,
           last_logged_in: registeredUsers.last_logged_in,
         };
@@ -100,7 +95,7 @@ const authRequest = (
 
       message = loginStatus
         ? // Login Successful.
-          createMessage('success', 'Login Successful.')
+          createMessage('success')
         : // Login Failure.
           createMessage('client-error', 'Wrong Credentials.');
       break;
@@ -123,7 +118,7 @@ const authRequest = (
 const spacesRequest = (
   requestType: string[],
   requestData: SpacesRequestDataType
-): resolvedSubRequestType => {
+): SubRequestResponseType => {
   let result: unknown, message: MessageInterface;
 
   switch (requestType[1]) {
@@ -221,7 +216,7 @@ const spacesRequest = (
 const notesRequest = (
   requestType: string[],
   requestData: NotesRequestDataType
-): resolvedSubRequestType => {
+): SubRequestResponseType => {
   let result: unknown, message: MessageInterface;
 
   switch (requestType[1]) {
@@ -284,7 +279,7 @@ const notesRequest = (
 const credentialsRequest = (
   requestType: string[],
   requestData: CredentialsRequestDataType
-): resolvedSubRequestType => {
+): SubRequestResponseType => {
   let result: unknown, message: MessageInterface;
 
   switch (requestType[1]) {
@@ -346,7 +341,10 @@ const credentialsRequest = (
  * @returns {IPCResponseObject} IPC Response Object to be sent to renderer process.
  */
 const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
-  let resolvedSubRequest: resolvedSubRequestType;
+  let resolvedSubRequest: SubRequestResponseType = {
+    data: undefined,
+    message: undefined,
+  };
 
   // Resolve Request URI
   const requestSubURI = resolveRoute(request.URI);
@@ -356,6 +354,14 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
       resolvedSubRequest = authRequest(
         requestSubURI,
         <AuthCredentialType>request.data
+      );
+      break;
+
+    case `AUTH_PIN`:
+      resolveAuthPin(
+        requestSubURI,
+        request.data as SessionType,
+        resolvedSubRequest
       );
       break;
 
@@ -388,6 +394,13 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
       console.log(`Invalid Request`);
       break;
   }
+
+  // If message is still undefined then throw client error.
+  if (resolvedSubRequest.message == undefined)
+    resolvedSubRequest.message = createMessage(
+      'client-error',
+      'Invalid Request'
+    );
 
   return IPCResponseObject(
     request.URI,

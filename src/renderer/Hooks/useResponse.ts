@@ -69,10 +69,21 @@ const useResponse = () => {
 
         if (response.status == 200) {
           dispatch(setSessionState(response.data as SessionType));
-          sendToIpcMain(IPCRequestObject(`spaces-get`));
 
-          // Redirect to Spaces page.
-          navigate(resolveReactRoutes('spaces'));
+          // Redirect to Auth PIN.
+          navigate(resolveReactRoutes('auth_pin'));
+        }
+        break;
+
+      case 'auth-pin-login':
+        // Set Message to be displayed.
+        dispatchMessage(dispatch, response.status as number, response.message);
+
+        if (response.status == 200) {
+          dispatch(setSessionState(response.data as SessionType));
+
+          // Get list of spaces.
+          sendToIpcMain(IPCRequestObject(`spaces-get`));
         }
         break;
 

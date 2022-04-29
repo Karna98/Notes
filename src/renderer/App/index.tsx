@@ -27,7 +27,8 @@ const App = () => {
    *
    * @returns {boolean} Status of Session created or not.
    */
-  const isAuthenticated = (): boolean => !(sessionState === null);
+  const isAuthenticated = (): boolean =>
+    sessionState != null && sessionState.l_pin != undefined;
 
   /**
    * Return Protected Route element.
@@ -87,7 +88,7 @@ const App = () => {
 
   return (
     <div className="d-flex flex-row justify-content-center body-content">
-      {sessionState !== null && <Sidebar />}
+      {isAuthenticated() && <Sidebar />}
 
       <main className="d-flex flex-column justify-content-center align-items-center">
         <Message />
