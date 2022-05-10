@@ -15,10 +15,19 @@ type SubRequestResponseType = Pick<IPCRequestInterface, 'data'> & {
 
 type AuthCredentialType = Pick<UsersTableInteface, 'username' | 'password'>;
 
+type PinStatusType = { lPinStatus: boolean; sPinStatus: boolean };
+
 type SessionType = Pick<
   UsersTableInteface,
-  '_id' | 'username' | 'password' | 'l_pin' | 'created_at' | 'last_logged_in'
-> & { lPinStatus: boolean };
+  | '_id'
+  | 'username'
+  | 'password'
+  | 'l_pin'
+  | 's_pin'
+  | 'created_at'
+  | 'last_logged_in'
+> &
+  PinStatusType;
 
 type NoteStoreType = Pick<NotesTableInterface, '_id' | 'note' | 'updated_at'>;
 
@@ -30,4 +39,8 @@ type CredentialStoreType = Omit<
     title: string;
     secure: ElementObjectInterface[];
   };
+};
+
+type AuthPinRequestType = SessionType & {
+  data: CredentialStoreType;
 };

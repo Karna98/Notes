@@ -190,11 +190,16 @@ const getUsers = (): UsersTableInteface => {
 
 /**
  * Update user details in Database.
+ *
+ * @param value Array of data to be updated.
+ * @returns {number} Returns status of update user.
  */
-const updateUser = (value: Record<string, unknown>, id: number) => {
+const updateUser = (value: Record<string, unknown>, id: number): number => {
   const db = dbInstance();
-  db.prepare(updateUserStatement(value)).run({ id });
+  const results = db.prepare(updateUserStatement(value)).run({ id });
   db.close();
+
+  return results.changes;
 };
 
 /**

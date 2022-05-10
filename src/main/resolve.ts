@@ -88,6 +88,7 @@ const authRequest = (
           username: requestData.username,
           password: cryptoHash(requestData.password),
           lPinStatus: registeredUsers.l_pin != null,
+          sPinStatus: registeredUsers.s_pin != null,
           created_at: registeredUsers.created_at,
           last_logged_in: registeredUsers.last_logged_in,
         };
@@ -360,7 +361,7 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
     case `AUTH_PIN`:
       resolveAuthPin(
         requestSubURI,
-        request.data as SessionType,
+        request.data as AuthPinRequestType,
         resolvedSubRequest
       );
       break;

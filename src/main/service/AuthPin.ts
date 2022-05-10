@@ -12,7 +12,7 @@ import database from './../sql';
 
 const authPin = (
   requestType: string[],
-  requestData: SessionType,
+  requestData: AuthPinRequestType,
   resolvedSubRequest: SubRequestResponseType
 ): void => {
   switch (requestType[1]) {
@@ -78,6 +78,79 @@ const authPin = (
         requestData.lPinStatus = true;
 
         resolvedSubRequest.data = requestData;
+      }
+
+      break;
+
+    case `CREDENTIAL`:
+      // Hashed Credential PIN
+      let credentialPinHashed;
+
+      if (requestData.l_pin != undefined)
+        credentialPinHashed = cryptoHash(requestData.l_pin + requestData.s_pin);
+      else credentialPinHashed = requestData.s_pin;
+
+      switch (requestType[2]) {
+        case `SETUP`:
+          // Update Credential PIN.
+          const updateStatus = database.updateUser(
+            {
+              s_pin: bcryptHash(credentialPinHashed),
+            },
+            requestData._id
+          );
+
+          if (updateStatus) {
+            resolvedSubRequest.data = {
+              s_pin: credentialPinHashed,
+              sPinStatus: true,
+            };
+
+            resolvedSubRequest.message = createMessage(
+              'success',
+              'PIN set successfully.'
+            );
+          } else
+            resolvedSubRequest.message = createMessage(
+              'server-error',
+              'Error while setting PIN.'
+            );
+
+          break;
+
+        case `VERIFY`:
+          let pinVerifyStatus = true;
+
+          if (requestData.l_pin != undefined) {
+            const registeredUsers = database.getUsers();
+
+            pinVerifyStatus = cryptBcryptCompare(
+              credentialPinHashed,
+              registeredUsers.s_pin,
+              true
+            );
+          }
+
+          if (pinVerifyStatus) {
+            // If PIN matches.
+
+            resolvedSubRequest.message = createMessage('success');
+            resolvedSubRequest.data = {
+              s_pin: credentialPinHashed,
+              data: requestData.data,
+            };
+          } else {
+            // IF PIN mismatched.
+            resolvedSubRequest.message = createMessage(
+              'client-error',
+              'Invalid PIN.'
+            );
+          }
+
+          break;
+
+        default:
+          break;
       }
 
       break;

@@ -18,8 +18,10 @@ import {
   setMessageState,
   setSessionState,
   setSpacesState,
+  setVolatileState,
   updateCredentialState,
   updateNoteState,
+  updateSessionState,
 } from 'renderer/State';
 import { sendToIpcMain } from 'renderer/util';
 import { useAppDispatch } from '.';
@@ -84,6 +86,41 @@ const useResponse = () => {
 
           // Get list of spaces.
           sendToIpcMain(IPCRequestObject(`spaces-get`));
+        }
+        break;
+
+      case 'auth-pin-credential-setup':
+        if (response.status == 200)
+          dispatch(
+            updateSessionState({
+              ...(response.data as AuthPinRequestType),
+            })
+          );
+
+        // Set Message to be displayed.
+        dispatchMessage(dispatch, response.status as number, response.message);
+
+        break;
+
+      case 'auth-pin-credential-verify':
+        if (response.status == 200) {
+          const responseData = response.data as AuthPinRequestType;
+
+          if (responseData?.s_pin != undefined)
+            dispatch(
+              updateSessionState({
+                s_pin: responseData?.s_pin,
+              })
+            );
+
+          dispatch(setVolatileState(responseData.data as CredentialStoreType));
+        } else {
+          // Set Message to be displayed.
+          dispatchMessage(
+            dispatch,
+            response.status as number,
+            response.message
+          );
         }
         break;
 

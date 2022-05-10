@@ -125,17 +125,20 @@ class Main {
       }
     });
 
-    ipcMain.on('toMain', (_event: Electron.IpcMainEvent, args: string) => {
-      const responseObject = resolveRequest(JSON.parse(args));
+    ipcMain.on(
+      CONSTANTS.ALLOWED_CHANNEL_BUS.TO[0],
+      (_event: Electron.IpcMainEvent, args: string) => {
+        const responseObject = resolveRequest(JSON.parse(args));
 
-      if (responseObject != null) {
-        // If Response object is created, send it as response
-        this?.mainWindow?.webContents.send(
-          `fromMain`,
-          JSON.stringify(responseObject)
-        );
+        if (responseObject != null) {
+          // If Response object is created, send it as response
+          this?.mainWindow?.webContents.send(
+            CONSTANTS.ALLOWED_CHANNEL_BUS.FROM[0],
+            JSON.stringify(responseObject)
+          );
+        }
       }
-    });
+    );
   }
 }
 

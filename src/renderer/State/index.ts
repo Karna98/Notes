@@ -14,12 +14,15 @@ import reducer, {
   clearMessageState,
   clearSessionState,
   clearSpacesState,
+  clearVolatileState,
   setCurrentSpaceState,
   setMessageState,
   setSessionState,
   setSpacesState,
+  setVolatileState,
   updateCredentialState,
   updateNoteState,
+  updateSessionState,
 } from './reducer';
 import store from './store';
 
@@ -39,12 +42,15 @@ export {
   clearMessageState,
   clearSessionState,
   clearSpacesState,
+  clearVolatileState,
   setMessageState,
   setCurrentSpaceState,
   setSessionState,
   setSpacesState,
+  setVolatileState,
   updateCredentialState,
   updateNoteState,
+  updateSessionState,
 };
 
 // Default export of State of Redux store.
