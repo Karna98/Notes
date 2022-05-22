@@ -84,11 +84,9 @@ const authPin = (
 
     case `CREDENTIAL`:
       // Hashed Credential PIN
-      let credentialPinHashed;
-
-      if (requestData.l_pin != undefined)
-        credentialPinHashed = cryptoHash(requestData.l_pin + requestData.s_pin);
-      else credentialPinHashed = requestData.s_pin;
+      const credentialPinHashed = cryptoHash(
+        requestData.l_pin + requestData.s_pin
+      );
 
       switch (requestType[2]) {
         case `SETUP`:
@@ -115,30 +113,27 @@ const authPin = (
               'server-error',
               'Error while setting PIN.'
             );
-
           break;
 
         case `VERIFY`:
           let pinVerifyStatus = true;
 
-          if (requestData.l_pin != undefined) {
-            const registeredUsers = database.getUsers();
+          const registeredUsers = database.getUsers();
 
-            pinVerifyStatus = cryptBcryptCompare(
-              credentialPinHashed,
-              registeredUsers.s_pin,
-              true
-            );
-          }
+          pinVerifyStatus = cryptBcryptCompare(
+            credentialPinHashed,
+            registeredUsers.s_pin,
+            true
+          );
 
           if (pinVerifyStatus) {
             // If PIN matches.
 
-            resolvedSubRequest.message = createMessage('success');
             resolvedSubRequest.data = {
               s_pin: credentialPinHashed,
-              data: requestData.data,
             };
+
+            resolvedSubRequest.message = createMessage('success');
           } else {
             // IF PIN mismatched.
             resolvedSubRequest.message = createMessage(
@@ -146,13 +141,11 @@ const authPin = (
               'Invalid PIN.'
             );
           }
-
           break;
 
         default:
           break;
       }
-
       break;
 
     default:

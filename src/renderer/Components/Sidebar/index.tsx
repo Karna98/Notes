@@ -12,7 +12,11 @@ import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DivLink, Form } from 'renderer/Components';
 import { useAppDispatch, useAppSelector } from 'renderer/Hooks';
-import { clearSessionState, clearSpacesState } from 'renderer/State';
+import {
+  clearSessionState,
+  clearSpacesState,
+  clearVolatileState,
+} from 'renderer/State';
 import './sidebar.scss';
 
 const Sidebar = () => {
@@ -65,6 +69,7 @@ const Sidebar = () => {
     // Clear all redux stores on logout.
     dispatch(clearSessionState());
     dispatch(clearSpacesState());
+    dispatch(clearVolatileState());
   };
 
   /**

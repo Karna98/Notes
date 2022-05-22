@@ -124,10 +124,7 @@ const spacesSlice = createSlice({
     },
 
     // Add new Credential.
-    addCredentialState: (
-      state,
-      action: PayloadAction<CredentialsTableInterface>
-    ) => {
+    addCredentialState: (state, action: PayloadAction<CredentialDataType>) => {
       const { space_id, ...newCredential } = action.payload;
 
       if (
@@ -135,13 +132,8 @@ const spacesSlice = createSlice({
         state.currentSpace !== undefined &&
         state.currentSpace.space_id == space_id
       ) {
-        const newCredentialObject: CredentialStoreType = {
-          ...newCredential,
-          credential: JSON.parse(newCredential.credential),
-        };
-
-        const updatedCredentialsList: CredentialStoreType[] = [
-          newCredentialObject,
+        const updatedCredentialsList: CredentialDataType[] = [
+          newCredential,
           ...state.currentSpace.credentials,
         ];
 
@@ -160,16 +152,16 @@ const spacesSlice = createSlice({
     // Update Credential.
     updateCredentialState: (
       state,
-      action: PayloadAction<CredentialStoreType>
+      action: PayloadAction<CredentialDataType>
     ) => {
       if (state != null && state.currentSpace !== undefined) {
         const indexOfCredential = state.currentSpace.credentials.findIndex(
-          (credential: CredentialStoreType) =>
+          (credential: CredentialDataType) =>
             credential._id == action.payload._id
         );
 
         if (indexOfCredential != -1) {
-          const currentSpaceCredential: CredentialStoreType[] =
+          const currentSpaceCredential: CredentialDataType[] =
             state.currentSpace.credentials;
 
           currentSpaceCredential[indexOfCredential] = action.payload;

@@ -6,7 +6,12 @@
  *
  */
 
-import { createMessage, IPCRequestObject, resolveReactRoutes } from 'common';
+import {
+  CONSTANT,
+  createMessage,
+  IPCRequestObject,
+  resolveReactRoutes,
+} from 'common';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dispatch } from 'redux';
@@ -89,7 +94,7 @@ const useResponse = () => {
         }
         break;
 
-      case 'auth-pin-credential-setup':
+      case CONSTANT.ROUTE.AUTH.CRED.SETUP:
         if (response.status == 200)
           dispatch(
             updateSessionState({
@@ -99,10 +104,9 @@ const useResponse = () => {
 
         // Set Message to be displayed.
         dispatchMessage(dispatch, response.status as number, response.message);
-
         break;
 
-      case 'auth-pin-credential-verify':
+      case CONSTANT.ROUTE.AUTH.CRED.VERIFY:
         if (response.status == 200) {
           const responseData = response.data as AuthPinRequestType;
 
@@ -113,7 +117,8 @@ const useResponse = () => {
               })
             );
 
-          dispatch(setVolatileState(responseData.data as CredentialStoreType));
+          if (responseData.data != undefined)
+            dispatch(setVolatileState(responseData.data as CredentialDataType));
         } else {
           // Set Message to be displayed.
           dispatchMessage(
@@ -161,19 +166,18 @@ const useResponse = () => {
         }
         break;
 
-      case 'credentials-add':
-        if (response.status == 200) {
-          dispatch(
-            addCredentialState(response.data as CredentialsTableInterface)
-          );
-        } else if (response.status == 500) {
+      case CONSTANT.ROUTE.CRED.ADD:
+        if (response.status == 200)
+          dispatch(addCredentialState(response.data as CredentialDataType));
+        else if (response.status == 500) {
           // If Credential is not added successfully.
           dispatchMessage(dispatch, response.status, response.message);
         }
         break;
 
-      case 'credentials-update':
+      case CONSTANT.ROUTE.CRED.UPDATE:
         if (response.status == 200) {
+          dispatch(setVolatileState(response.data as CredentialDataType));
           dispatch(updateCredentialState(response.data as CredentialStoreType));
         } else if (response.status == 500) {
           dispatchMessage(dispatch, response.status, response.message);

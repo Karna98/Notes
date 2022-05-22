@@ -79,7 +79,7 @@ const formElements: {
  */
 const populateDefaultFormValues = (formData: CredentialStoreType) => ({
   title: formData.credential.title,
-  ...formData.credential.secure.reduce(
+  ...formData.credential.secure?.reduce(
     (previousElementObject, { name, ...otherAttributes }) => ({
       ...previousElementObject,
       [name]: otherAttributes.value,
@@ -281,7 +281,7 @@ const CredentialForm: React.FC<FormInterface> = ({
     // Preventing the page from reloading
     event.preventDefault();
 
-    const finalformValues: CredentialStoreType = {
+    const finalformValues: CredentialDataType = {
       _id: formData?._id as number,
       credential: {
         title: formElementsValue.title,
@@ -291,7 +291,7 @@ const CredentialForm: React.FC<FormInterface> = ({
     };
 
     dynamicFormElementsList.map((field: string) => {
-      finalformValues.credential.secure.push({
+      finalformValues.credential.secure?.push({
         name: field,
         value: formElementsValue[field],
       });

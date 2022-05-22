@@ -9,7 +9,7 @@
 import { createMessage, IPCResponseObject, resolveRoute } from '../common';
 import CONSTANTS from './constants';
 import { cryptBcryptCompare, cryptBcryptHash, cryptoHash } from './secure-util';
-import { resolveAuthPin } from './service';
+import { resolveAuthPin, resolveCredential } from './service';
 import database from './sql';
 
 // Temporary Types.
@@ -20,11 +20,6 @@ type SpacesRequestDataType =
 type NotesRequestDataType = OptionalExceptFor<
   NotesTableInterface,
   '_id' | 'space_id' | 'note'
->;
-
-type CredentialsRequestDataType = OptionalExceptFor<
-  CredentialsTableInterface,
-  '_id' | 'space_id' | 'credential'
 >;
 
 /**
@@ -180,12 +175,15 @@ const spacesRequest = (
       );
 
       // Converting to type of CredentialStoreType[] from CredentialsTableInterface[].
-      const credentialsListMapped: CredentialStoreType[] = credentialsList.map(
-        ({ _id, credential, updated_at }: CredentialsTableInterface) => ({
-          _id,
-          credential: JSON.parse(credential),
-          updated_at,
-        })
+      const credentialsListMapped: CredentialDataType[] = credentialsList.map(
+        ({ _id, credential, updated_at }: CredentialsTableInterface) => {
+          const parsedCredential: CredentialBodyType = JSON.parse(credential);
+          return {
+            _id,
+            credential: { title: parsedCredential.title },
+            updated_at,
+          } as CredentialDataType;
+        }
       );
 
       // Get all data related to Space ID.
@@ -271,71 +269,6 @@ const notesRequest = (
 };
 
 /**
- * Handles Credentials related requests.
- *
- * @param requestType
- * @param requestData
- * @returns {{data, message}} Data/Result and message regarding the request fulfillment.
- */
-const credentialsRequest = (
-  requestType: string[],
-  requestData: CredentialsRequestDataType
-): SubRequestResponseType => {
-  let result: unknown, message: MessageInterface;
-
-  switch (requestType[1]) {
-    case `ADD`:
-      const createStatus = database.createNewCredential(
-        requestData.space_id,
-        JSON.stringify(requestData.credential)
-      );
-
-      message = createStatus.changes
-        ? // Credential Added Successfully.
-          createMessage('success')
-        : // Error while updating Credential.
-          createMessage('server-error', `Error while adding credential.`);
-
-      if (createStatus.changes) {
-        // Get newly inserted Credential.
-        result = database.getCredentialWithId(createStatus.lastInsertRowid);
-      }
-      break;
-
-    case `UPDATE`:
-      // Update Credential.
-      const updateStatus = database.updateCredential(
-        {
-          credential: JSON.stringify(requestData.credential),
-          updated_at: requestData.updated_at,
-        },
-        requestData._id
-      );
-
-      message = updateStatus
-        ? // Credential updated Successfully.
-          createMessage('success')
-        : // Error while updating Credential.
-          createMessage('server-error', `Error while saving credential.`);
-
-      if (updateStatus)
-        result = {
-          _id: requestData._id,
-          credential: requestData.credential,
-          updated_at: requestData.updated_at,
-        };
-      break;
-
-    default:
-      // Invalid Sub Request.
-      message = createMessage('client-error', 'Invalid Request');
-      break;
-  }
-
-  return { data: result, message };
-};
-
-/**
  * This functions resolves all the request received from renderer on main process.
  *
  * @param request
@@ -359,11 +292,21 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
       break;
 
     case `AUTH_PIN`:
-      resolveAuthPin(
-        requestSubURI,
-        request.data as AuthPinRequestType,
-        resolvedSubRequest
-      );
+      const requestData = request.data as AuthPinRequestType;
+
+      if (requestData.l_pin != undefined)
+        resolveAuthPin(requestSubURI, requestData, resolvedSubRequest);
+
+      if (
+        requestData.data != undefined &&
+        (requestData.l_pin == undefined ||
+          resolvedSubRequest.message?.status == 200)
+      )
+        resolveCredential(
+          [``, `GET`],
+          request.data as CredentialRequestType,
+          resolvedSubRequest
+        );
       break;
 
     case `SPACES`:
@@ -381,9 +324,10 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
       break;
 
     case `CREDENTIALS`:
-      resolvedSubRequest = credentialsRequest(
+      resolveCredential(
         requestSubURI,
-        <CredentialsRequestDataType>request.data
+        request.data as CredentialRequestType,
+        resolvedSubRequest
       );
       break;
 
@@ -392,7 +336,6 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
         data: -1,
         message: createMessage('client-error', 'Invalid Request'),
       };
-      console.log(`Invalid Request`);
       break;
   }
 

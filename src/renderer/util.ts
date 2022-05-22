@@ -6,6 +6,8 @@
  *
  */
 
+import { IPCRequestObject } from 'common';
+
 /**
  * Sends data to Main Process.
  *
@@ -17,6 +19,16 @@ const sendToIpcMain = (data: IPCRequestInterface) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+/**
+ * Sent to Main Wrapper Function.
+ *
+ * @param route
+ * @param data
+ */
+const sendToMainWrapper = (route: string, data: object | unknown) => {
+  sendToIpcMain(IPCRequestObject(route, data));
 };
 
 /*
@@ -91,4 +103,4 @@ const removeItem = (type: 'local' | 'session', STORE_KEY: string) => {
 
 const browserStorage = { getValue, setValue, removeItem };
 
-export { sendToIpcMain, browserStorage };
+export { browserStorage, sendToIpcMain, sendToMainWrapper };

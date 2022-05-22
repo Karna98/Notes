@@ -138,7 +138,7 @@ interface SpacesInterface {
 interface SpaceInterface {
   space_id: number;
   notes: NoteStoreType[];
-  credentials: CredentialStoreType[];
+  credentials: CredentialDataType[];
 }
 
 interface ElementObjectInterface {
