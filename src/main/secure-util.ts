@@ -27,7 +27,6 @@ import {
 const SALT_ROUNDS = 10;
 
 const ENC_DEC_ALGORITHM = `aes-256-ctr`;
-const ENC_DEC_IV = randomBytes(16);
 const ENC_DEC_SEPERATOR = `$`;
 
 /**
@@ -81,15 +80,17 @@ const cryptBcryptCompare = (key: string, hash: string, keyHashed = false) => {
  * @returns {string} Encrypted Data
  */
 const encryptData = (key: string, data: string): string => {
+  const cipherIV = randomBytes(16);
+
   const cipher = createCipheriv(
     ENC_DEC_ALGORITHM,
     scryptSync(key, 'N0TE$', 32),
-    ENC_DEC_IV
+    cipherIV
   );
 
   const encrypted = Buffer.concat([cipher.update(data), cipher.final()]);
 
-  return [ENC_DEC_IV.toString(`hex`), encrypted.toString(`hex`)].join(
+  return [cipherIV.toString(`hex`), encrypted.toString(`hex`)].join(
     ENC_DEC_SEPERATOR
   );
 };
