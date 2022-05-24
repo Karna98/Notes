@@ -6,15 +6,12 @@
  *
  */
 
+import { CONSTANT, createMessage } from '../../common';
 import { decryptData, encryptData } from '../secure-util';
-import { createMessage } from '../../common';
 import database from './../sql';
 
-const CONSTANT = {
-  ADD: `ADD`,
-  UPDATE: `UPDATE`,
-  GET: `GET`,
-};
+// Constant Endpoint String.
+const { ENDPOINT } = CONSTANT;
 
 /**
  * Handles Credentials related requests.
@@ -31,7 +28,7 @@ const credential = (
   let payloadRequestData;
 
   switch (requestType[1]) {
-    case CONSTANT.ADD:
+    case ENDPOINT.ADD:
       payloadRequestData = requestData.data as CredentialDataType;
 
       const newCredentialBody = {
@@ -71,7 +68,7 @@ const credential = (
           createMessage('server-error', `Error while adding credential.`);
       break;
 
-    case CONSTANT.UPDATE:
+    case ENDPOINT.UPDATE:
       payloadRequestData = requestData.data as CredentialDataType;
 
       const updatedCredential = {
@@ -100,7 +97,7 @@ const credential = (
           createMessage('server-error', `Error while saving credential.`);
       break;
 
-    case CONSTANT.GET:
+    case ENDPOINT.GET:
       payloadRequestData = requestData.data as number;
 
       const encryptionKey =

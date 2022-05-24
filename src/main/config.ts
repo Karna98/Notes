@@ -1,5 +1,5 @@
 /**
- * constants.ts
+ * config.ts
  *
  * Description:
  *    Declaring all static values for Main Process.

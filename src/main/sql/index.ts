@@ -9,7 +9,7 @@
 import Database from 'better-sqlite3';
 import { existsSync as fsExistsSync } from 'fs';
 import { resolve as pathResolve } from 'path';
-import CONSTANTS from '../constants';
+import CONFIG from '../config';
 import { updateDatabaseSchema } from './migrations';
 import {
   createCredentialStatement,
@@ -38,9 +38,7 @@ import { schemaVersionMismatch, setClientSchemaVersion } from './util';
  * @returns {boolean} Returns status of database file exists or not.
  */
 const checkIfDbExsts = (): boolean => {
-  return fsExistsSync(
-    pathResolve(CONSTANTS.PATH.DATABASE, CONSTANTS.DATABASE_NAME)
-  );
+  return fsExistsSync(pathResolve(CONFIG.PATH.DATABASE, CONFIG.DATABASE_NAME));
 };
 
 /**
@@ -49,14 +47,14 @@ const checkIfDbExsts = (): boolean => {
  * @returns {Database} db Database Object
  */
 const dbInstance = (): Database.Database => {
-  const databaseOptions = CONSTANTS.IS_DEVELOPMENT_MODE
+  const databaseOptions = CONFIG.IS_DEVELOPMENT_MODE
     ? {
         verbose: console.log,
       }
     : {};
 
   const db = new Database(
-    pathResolve(CONSTANTS.PATH.DATABASE, CONSTANTS.DATABASE_NAME),
+    pathResolve(CONFIG.PATH.DATABASE, CONFIG.DATABASE_NAME),
     databaseOptions
   );
 

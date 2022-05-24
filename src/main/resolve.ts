@@ -6,8 +6,13 @@
  *
  */
 
-import { createMessage, IPCResponseObject, resolveRoute } from '../common';
-import CONSTANTS from './constants';
+import {
+  CONSTANT,
+  createMessage,
+  IPCResponseObject,
+  resolveRoute,
+} from '../common';
+import CONFIG from './config';
 import { cryptBcryptCompare, cryptBcryptHash, cryptoHash } from './secure-util';
 import { resolveAuthPin, resolveCredential } from './service';
 import database from './sql';
@@ -21,6 +26,9 @@ type NotesRequestDataType = OptionalExceptFor<
   NotesTableInterface,
   '_id' | 'space_id' | 'note'
 >;
+
+// Constant Endpoint String.
+const { ENDPOINT } = CONSTANT;
 
 /**
  * Handles Authentication related requests.
@@ -36,7 +44,7 @@ const authRequest = (
   let result: unknown, message: MessageInterface;
 
   switch (requestType[1]) {
-    case `STATUS`:
+    case ENDPOINT.STATUS:
       // Check if database exists
       if (database.checkIfDbExsts()) {
         // Update database if Schema is outdated.
@@ -52,7 +60,7 @@ const authRequest = (
       }
       break;
 
-    case `REGISTER`:
+    case ENDPOINT.REGISTER:
       // Intialize Database.
       !database.checkIfDbExsts() && database.init();
 
@@ -69,7 +77,7 @@ const authRequest = (
 
       break;
 
-    case `LOGIN`:
+    case ENDPOINT.LOGIN:
       const registeredUsers = database.getUsers();
 
       const loginStatus =
@@ -118,10 +126,10 @@ const spacesRequest = (
   let result: unknown, message: MessageInterface;
 
   switch (requestType[1]) {
-    case `GET`:
+    case ENDPOINT.GET:
       result = {
         metaData: {
-          SPACES_MAX_COUNT_ALLOWED: CONSTANTS.SPACES_MAX_COUNT_ALLOWED,
+          SPACES_MAX_COUNT_ALLOWED: CONFIG.SPACES_MAX_COUNT_ALLOWED,
         },
         // Get all spaces.
         list: database.getSpaces(),
@@ -130,7 +138,7 @@ const spacesRequest = (
       message = createMessage('success');
       break;
 
-    case `ADD`:
+    case ENDPOINT.ADD:
       requestData = requestData as Pick<SpacesTableInterface, 'space_name'>;
 
       const createStatus = database.createNewSpace(requestData.space_name);
@@ -153,7 +161,7 @@ const spacesRequest = (
       }
       break;
 
-    case `GET_SPACE`:
+    case ENDPOINT.GET_SPACE:
       requestData = requestData as Pick<SpacesTableInterface, '_id'>;
 
       // Get all Notes.
@@ -219,7 +227,7 @@ const notesRequest = (
   let result: unknown, message: MessageInterface;
 
   switch (requestType[1]) {
-    case `ADD`:
+    case ENDPOINT.ADD:
       const createStatus = database.createNewNote(
         requestData.space_id,
         requestData.note
@@ -237,7 +245,7 @@ const notesRequest = (
       }
       break;
 
-    case `UPDATE`:
+    case ENDPOINT.UPDATE:
       // Update note.
       const updateStatus = database.updateNote(
         { note: requestData.note, updated_at: requestData.updated_at },
@@ -284,14 +292,14 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
   const requestSubURI = resolveRoute(request.URI);
 
   switch (requestSubURI[0]) {
-    case `AUTH`:
+    case ENDPOINT.AUTH:
       resolvedSubRequest = authRequest(
         requestSubURI,
         <AuthCredentialType>request.data
       );
       break;
 
-    case `AUTH_PIN`:
+    case ENDPOINT.AUTH_PIN:
       const requestData = request.data as AuthPinRequestType;
 
       if (requestData.l_pin != undefined)
@@ -309,21 +317,21 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
         );
       break;
 
-    case `SPACES`:
+    case ENDPOINT.SPACES:
       resolvedSubRequest = spacesRequest(
         requestSubURI,
         <SpacesRequestDataType>request.data
       );
       break;
 
-    case `NOTES`:
+    case ENDPOINT.NOTES:
       resolvedSubRequest = notesRequest(
         requestSubURI,
         <NotesRequestDataType>request.data
       );
       break;
 
-    case `CREDENTIALS`:
+    case ENDPOINT.CREDENTIAL:
       resolveCredential(
         requestSubURI,
         request.data as CredentialRequestType,

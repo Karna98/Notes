@@ -6,9 +6,12 @@
  *
  */
 
-import { createMessage } from '../../common';
+import { CONSTANT, createMessage } from '../../common';
 import { bcryptHash, cryptBcryptCompare, cryptoHash } from '../secure-util';
 import database from './../sql';
+
+// Constant Endpoint String.
+const { ENDPOINT } = CONSTANT;
 
 const authPin = (
   requestType: string[],
@@ -17,7 +20,7 @@ const authPin = (
 ): void => {
   switch (requestType[1]) {
     // PIN Flow for Login.
-    case `LOGIN`:
+    case ENDPOINT.LOGIN:
       const loginPin = requestData.password + requestData.l_pin;
 
       // Hashed login PIN
@@ -82,14 +85,14 @@ const authPin = (
 
       break;
 
-    case `CREDENTIAL`:
+    case ENDPOINT.CREDENTIAL:
       // Hashed Credential PIN
       const credentialPinHashed = cryptoHash(
         requestData.l_pin + requestData.s_pin
       );
 
       switch (requestType[2]) {
-        case `SETUP`:
+        case ENDPOINT.SETUP:
           // Update Credential PIN.
           const updateStatus = database.updateUser(
             {
@@ -115,7 +118,7 @@ const authPin = (
             );
           break;
 
-        case `VERIFY`:
+        case ENDPOINT.VERIFY:
           let pinVerifyStatus = true;
 
           const registeredUsers = database.getUsers();
