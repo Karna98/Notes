@@ -6,13 +6,141 @@
  *
  */
 
-import { IPCRequestObject } from 'common';
-import { useEffect, useState } from 'react';
+import { CONSTANT } from 'common';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Form, Modal } from 'renderer/Components';
-import { useAppSelector } from 'renderer/Hooks';
-import { sendToIpcMain } from 'renderer/util';
+import { useAppDispatch, useAppSelector } from 'renderer/Hooks';
+import { clearVolatileState } from 'renderer/State';
+import { sendToMainWrapper } from 'renderer/util';
 import './credentials.scss';
+
+const BASE_IDENTIFIER = `auth-pin`;
+
+const FORM_AUTH_SETUP = BASE_IDENTIFIER + `-` + `form-setup`;
+const FORM_AUTH_VERIFY = BASE_IDENTIFIER + `-` + `form-verify`;
+
+const FORM_CRED_ADD = `credential-form-add`;
+const FORM_CRED_UPDATE = `credential-form-update`;
+
+const FORMS: Record<string, Partial<FormInterface>> = {
+  CRED_ADD: {
+    id: FORM_CRED_ADD,
+    submitAction: undefined,
+  },
+  CRED_UPDATE: {
+    id: FORM_CRED_UPDATE,
+    submitAction: undefined,
+  },
+  CRED_AUTH_SETUP: {
+    id: FORM_AUTH_SETUP,
+    submitAction: undefined,
+  },
+  CRED_AUTH_VERIFY: {
+    id: FORM_AUTH_VERIFY,
+    submitAction: undefined,
+  },
+};
+
+/**
+ * Credential Auth Component.
+ *
+ * @param props
+ * @returns React Component
+ */
+const CredentialAuthComponent = ({
+  formAttributes,
+  setModalState,
+  sessionState,
+  currentCredentialId,
+}: {
+  formAttributes: FormInterface;
+  setModalState: React.Dispatch<React.SetStateAction<boolean>>;
+  sessionState: SessionType | null;
+  currentCredentialId?: number;
+}) => {
+  /**
+   * Submit Cred Auth PIN form.
+   *
+   * @param formData Form fields value
+   */
+  const credPinSubmitAction = (formData?: Record<string, unknown>): void => {
+    sendToMainWrapper(CONSTANT.ROUTE.AUTH.CRED.SETUP, {
+      _id: sessionState?._id,
+      l_pin: sessionState?.l_pin,
+      s_pin: formData?.pin,
+    });
+  };
+
+  /**
+   * Verify Cred Auth PIN form
+   *
+   * @param formData Form fields value
+   */
+  const credPinVerifyAction = (formData?: Record<string, unknown>): void => {
+    const dataObject =
+      sessionState?.s_pin === undefined
+        ? {
+            l_pin: sessionState?.l_pin,
+            s_pin: formData?.pin,
+            data: currentCredentialId != -1 ? currentCredentialId : undefined,
+          }
+        : {
+            s_pin: sessionState?.s_pin,
+            data: currentCredentialId,
+          };
+
+    sendToMainWrapper(CONSTANT.ROUTE.AUTH.CRED.VERIFY, dataObject);
+  };
+
+  formAttributes.submitAction =
+    formAttributes.id === FORM_AUTH_SETUP
+      ? credPinSubmitAction
+      : credPinVerifyAction;
+
+  return (
+    <Modal title="" onClickClose={(value: boolean) => setModalState(value)}>
+      <Form {...(formAttributes as FormInterface)} />
+    </Modal>
+  );
+};
+
+/**
+ * Credential Form Component.
+ *
+ * @param props
+ * @returns React Component
+ */
+const CredentialFormComponent = ({
+  formAttributes,
+  setModalState,
+  formDetails,
+}: {
+  formAttributes: FormInterface;
+  setModalState: React.Dispatch<React.SetStateAction<boolean>>;
+  formDetails?: CredentialDataType;
+}) => {
+  const dispatch = useAppDispatch();
+
+  return (
+    <Modal
+      onClickClose={(value: boolean) => {
+        setModalState(value);
+        formAttributes.id === FORM_CRED_UPDATE &&
+          dispatch(clearVolatileState());
+      }}
+      title={
+        formAttributes.id === FORM_CRED_ADD
+          ? `New Credential`
+          : `Credential #${formDetails?._id}`
+      }
+    >
+      <div className="d-flex flex-column justify-content-center align-items-center credential-modal">
+        <Form {...formAttributes} formValues={formDetails} />
+      </div>
+    </Modal>
+  );
+};
 
 const Credentials = () => {
   // Modal State (Open or CLose).
@@ -21,28 +149,22 @@ const Credentials = () => {
   // Type of Form. {Add_Credential: 0, Update_Credential: 1}.
   const [modalFormType, setModalFormType] = useState(0);
 
-  // Form details opened in Modal.
-  const [formDetails, setFormDetails] = useState({} as CredentialStoreType);
+  // Current Credential open in Modal.
+  const [currentCredential, setCurrentCredential] = useState(-1);
 
   // Get current Space ID.
   const { space_id } = useParams();
+
+  // Get session value stored in Redux Store.
+  const sessionState = useAppSelector((state) => state.session);
+
+  // Get session value stored in Redux Store.
+  const volatileState = useAppSelector((state) => state.volatile);
 
   // Get current space details.
   const currentSpaceState = useAppSelector(
     (state) => state.spaces?.currentSpace
   );
-
-  /**
-   * Get Credential for provided ID.
-   *
-   * @param credentialId Credential ID.
-   * @returns {CredentialStoreType} Credential.
-   */
-  const getCredentialWithId = (credentialId: number) => {
-    return currentSpaceState?.credentials.filter(
-      ({ _id }: CredentialStoreType) => _id == Number(credentialId)
-    )[0];
-  };
 
   /**
    * Update states to add new Credential.
@@ -53,13 +175,20 @@ const Credentials = () => {
   };
 
   /**
-   * Update states to update Credential.
+   * Open Credential to view or update.
    *
    * @param credentialId Credential ID to be updated.
    */
   const openCredentialForm = (credentialId: number) => {
     setModalFormType(1);
-    setFormDetails(getCredentialWithId(credentialId) as CredentialStoreType);
+    setCurrentCredential(credentialId);
+
+    if (sessionState?.s_pin != undefined)
+      sendToMainWrapper(CONSTANT.ROUTE.AUTH.CRED.VERIFY, {
+        s_pin: sessionState?.s_pin,
+        data: credentialId,
+      });
+
     setModalState(!modalState);
   };
 
@@ -69,12 +198,13 @@ const Credentials = () => {
    * @param formData Form fields value.
    */
   const addCredentialFormAction = (formData?: Record<string, unknown>) => {
-    sendToIpcMain(
-      IPCRequestObject(`credentials-add`, {
+    sendToMainWrapper(CONSTANT.ROUTE.CRED.ADD, {
+      s_pin: sessionState?.s_pin,
+      data: {
         ...formData,
         space_id: Number(space_id),
-      })
-    );
+      },
+    });
 
     setModalState(!modalState);
   };
@@ -85,15 +215,14 @@ const Credentials = () => {
    * @param formData Form fields value.
    */
   const updateCredentialFormAction = (formData?: Record<string, unknown>) => {
-    sendToIpcMain(IPCRequestObject(`credentials-update`, formData));
+    sendToMainWrapper(CONSTANT.ROUTE.CRED.UPDATE, {
+      s_pin: sessionState?.s_pin,
+      data: formData,
+    });
   };
 
-  useEffect(() => {
-    modalState &&
-      setFormDetails(
-        getCredentialWithId(formDetails._id) as CredentialStoreType
-      );
-  }, [currentSpaceState]);
+  FORMS.CRED_ADD.submitAction = addCredentialFormAction;
+  FORMS.CRED_UPDATE.submitAction = updateCredentialFormAction;
 
   return (
     <>
@@ -113,7 +242,7 @@ const Credentials = () => {
 
       <div className="d-flex flex-row flex-wrap justify-content-evenly credentials-list unselectable">
         {currentSpaceState?.credentials.map(
-          (credentialObject: CredentialStoreType) => (
+          (credentialObject: CredentialDataType) => (
             <div
               className="credential-card"
               key={credentialObject._id}
@@ -133,29 +262,36 @@ const Credentials = () => {
         )}
       </div>
 
-      {modalState && (
-        <Modal
-          onClickClose={(value: boolean) => setModalState(value)}
-          title={
-            modalFormType ? `Credential #${formDetails?._id}` : `New Credential`
-          }
-        >
-          <div className="d-flex flex-column justify-content-center align-items-center credential-modal">
-            {modalFormType ? (
-              <Form
-                id="credential-form-update"
-                submitAction={updateCredentialFormAction}
-                formValues={formDetails}
+      {modalState &&
+        (sessionState?.sPinStatus ? (
+          sessionState?.s_pin === undefined ? (
+            <CredentialAuthComponent
+              formAttributes={FORMS.CRED_AUTH_VERIFY as FormInterface}
+              setModalState={setModalState}
+              sessionState={sessionState}
+              currentCredentialId={currentCredential}
+            />
+          ) : modalFormType == 0 ? (
+            <CredentialFormComponent
+              formAttributes={FORMS.CRED_ADD as FormInterface}
+              setModalState={setModalState}
+            />
+          ) : (
+            volatileState._id != -1 && (
+              <CredentialFormComponent
+                formAttributes={FORMS.CRED_UPDATE as FormInterface}
+                setModalState={setModalState}
+                formDetails={volatileState as CredentialDataType}
               />
-            ) : (
-              <Form
-                id="credential-form-add"
-                submitAction={addCredentialFormAction}
-              />
-            )}
-          </div>
-        </Modal>
-      )}
+            )
+          )
+        ) : (
+          <CredentialAuthComponent
+            formAttributes={FORMS.CRED_AUTH_SETUP as FormInterface}
+            setModalState={setModalState}
+            sessionState={sessionState}
+          />
+        ))}
     </>
   );
 };

@@ -8,12 +8,14 @@
 
 // Mapped Routes. { Simple-Route : Normalized-Route}
 const definedRoutes: Record<string, string> = {
+  'auth-status': 'AUTH:STATUS',
   'auth-login': 'AUTH:LOGIN',
   'auth-register': 'AUTH:REGISTER',
-  'auth-status': 'AUTH:STATUS',
   'auth-pin-login': 'AUTH_PIN:LOGIN',
-  'credentials-add': 'CREDENTIALS:ADD',
-  'credentials-update': 'CREDENTIALS:UPDATE',
+  'auth-pin-credential-setup': 'AUTH_PIN:CREDENTIAL:SETUP',
+  'auth-pin-credential-verify': 'AUTH_PIN:CREDENTIAL:VERIFY',
+  'credential-add': 'CREDENTIAL:ADD',
+  'credential-update': 'CREDENTIAL:UPDATE',
   'notes-add': 'NOTES:ADD',
   'notes-update': 'NOTES:UPDATE',
   'spaces-add': 'SPACES:ADD',

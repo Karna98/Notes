@@ -7,3 +7,4 @@
  */
 
 export { resolveAuthPin } from './AuthPin';
+export { resolveCredential } from './Credential';

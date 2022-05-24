@@ -6,18 +6,21 @@
  *
  */
 
-import { createMessage } from '../../common';
+import { CONSTANT, createMessage } from '../../common';
 import { bcryptHash, cryptBcryptCompare, cryptoHash } from '../secure-util';
 import database from './../sql';
 
+// Constant Endpoint String.
+const { ENDPOINT } = CONSTANT;
+
 const authPin = (
   requestType: string[],
-  requestData: SessionType,
+  requestData: AuthPinRequestType,
   resolvedSubRequest: SubRequestResponseType
 ): void => {
   switch (requestType[1]) {
     // PIN Flow for Login.
-    case `LOGIN`:
+    case ENDPOINT.LOGIN:
       const loginPin = requestData.password + requestData.l_pin;
 
       // Hashed login PIN
@@ -80,6 +83,72 @@ const authPin = (
         resolvedSubRequest.data = requestData;
       }
 
+      break;
+
+    case ENDPOINT.CREDENTIAL:
+      // Hashed Credential PIN
+      const credentialPinHashed = cryptoHash(
+        requestData.l_pin + requestData.s_pin
+      );
+
+      switch (requestType[2]) {
+        case ENDPOINT.SETUP:
+          // Update Credential PIN.
+          const updateStatus = database.updateUser(
+            {
+              s_pin: bcryptHash(credentialPinHashed),
+            },
+            requestData._id
+          );
+
+          if (updateStatus) {
+            resolvedSubRequest.data = {
+              s_pin: credentialPinHashed,
+              sPinStatus: true,
+            };
+
+            resolvedSubRequest.message = createMessage(
+              'success',
+              'PIN set successfully.'
+            );
+          } else
+            resolvedSubRequest.message = createMessage(
+              'server-error',
+              'Error while setting PIN.'
+            );
+          break;
+
+        case ENDPOINT.VERIFY:
+          let pinVerifyStatus = true;
+
+          const registeredUsers = database.getUsers();
+
+          pinVerifyStatus = cryptBcryptCompare(
+            credentialPinHashed,
+            registeredUsers.s_pin,
+            true
+          );
+
+          if (pinVerifyStatus) {
+            // If PIN matches.
+
+            resolvedSubRequest.data = {
+              s_pin: credentialPinHashed,
+            };
+
+            resolvedSubRequest.message = createMessage('success');
+          } else {
+            // IF PIN mismatched.
+            resolvedSubRequest.message = createMessage(
+              'client-error',
+              'Invalid PIN.'
+            );
+          }
+          break;
+
+        default:
+          break;
+      }
       break;
 
     default:

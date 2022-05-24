@@ -6,7 +6,12 @@
  *
  */
 
-import { createMessage, IPCRequestObject, resolveReactRoutes } from 'common';
+import {
+  CONSTANT,
+  createMessage,
+  IPCRequestObject,
+  resolveReactRoutes,
+} from 'common';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dispatch } from 'redux';
@@ -18,8 +23,10 @@ import {
   setMessageState,
   setSessionState,
   setSpacesState,
+  setVolatileState,
   updateCredentialState,
   updateNoteState,
+  updateSessionState,
 } from 'renderer/State';
 import { sendToIpcMain } from 'renderer/util';
 import { useAppDispatch } from '.';
@@ -87,6 +94,41 @@ const useResponse = () => {
         }
         break;
 
+      case CONSTANT.ROUTE.AUTH.CRED.SETUP:
+        if (response.status == 200)
+          dispatch(
+            updateSessionState({
+              ...(response.data as AuthPinRequestType),
+            })
+          );
+
+        // Set Message to be displayed.
+        dispatchMessage(dispatch, response.status as number, response.message);
+        break;
+
+      case CONSTANT.ROUTE.AUTH.CRED.VERIFY:
+        if (response.status == 200) {
+          const responseData = response.data as AuthPinRequestType;
+
+          if (responseData?.s_pin != undefined)
+            dispatch(
+              updateSessionState({
+                s_pin: responseData?.s_pin,
+              })
+            );
+
+          if (responseData.data != undefined)
+            dispatch(setVolatileState(responseData.data as CredentialDataType));
+        } else {
+          // Set Message to be displayed.
+          dispatchMessage(
+            dispatch,
+            response.status as number,
+            response.message
+          );
+        }
+        break;
+
       case 'spaces-get':
         if (response.status == 200)
           dispatch(setSpacesState(response.data as SpacesInterface));
@@ -124,19 +166,18 @@ const useResponse = () => {
         }
         break;
 
-      case 'credentials-add':
-        if (response.status == 200) {
-          dispatch(
-            addCredentialState(response.data as CredentialsTableInterface)
-          );
-        } else if (response.status == 500) {
+      case CONSTANT.ROUTE.CRED.ADD:
+        if (response.status == 200)
+          dispatch(addCredentialState(response.data as CredentialDataType));
+        else if (response.status == 500) {
           // If Credential is not added successfully.
           dispatchMessage(dispatch, response.status, response.message);
         }
         break;
 
-      case 'credentials-update':
+      case CONSTANT.ROUTE.CRED.UPDATE:
         if (response.status == 200) {
+          dispatch(setVolatileState(response.data as CredentialDataType));
           dispatch(updateCredentialState(response.data as CredentialStoreType));
         } else if (response.status == 500) {
           dispatchMessage(dispatch, response.status, response.message);

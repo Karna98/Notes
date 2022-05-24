@@ -1,5 +1,5 @@
 /**
- * constants.ts
+ * config.ts
  *
  * Description:
  *    Declaring all static values for Main Process.
@@ -25,9 +25,16 @@ const DATABASE_NAME = `${IS_DEVELOPMENT_MODE ? `notes_dev` : `notes`}.sqlite`;
 // Maximum number of Spaces allowed.
 const SPACES_MAX_COUNT_ALLOWED = 4;
 
+// IPC Channel BUS
+const ALLOWED_CHANNEL_BUS = {
+  TO: [`toMain`],
+  FROM: [`fromMain`],
+};
+
 export default {
-  SPACES_MAX_COUNT_ALLOWED,
+  ALLOWED_CHANNEL_BUS,
   DATABASE_NAME,
-  PATH,
   IS_DEVELOPMENT_MODE,
+  PATH,
+  SPACES_MAX_COUNT_ALLOWED,
 };

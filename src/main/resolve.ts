@@ -6,10 +6,15 @@
  *
  */
 
-import { createMessage, IPCResponseObject, resolveRoute } from '../common';
-import CONSTANTS from './constants';
+import {
+  CONSTANT,
+  createMessage,
+  IPCResponseObject,
+  resolveRoute,
+} from '../common';
+import CONFIG from './config';
 import { cryptBcryptCompare, cryptBcryptHash, cryptoHash } from './secure-util';
-import { resolveAuthPin } from './service';
+import { resolveAuthPin, resolveCredential } from './service';
 import database from './sql';
 
 // Temporary Types.
@@ -22,10 +27,8 @@ type NotesRequestDataType = OptionalExceptFor<
   '_id' | 'space_id' | 'note'
 >;
 
-type CredentialsRequestDataType = OptionalExceptFor<
-  CredentialsTableInterface,
-  '_id' | 'space_id' | 'credential'
->;
+// Constant Endpoint String.
+const { ENDPOINT } = CONSTANT;
 
 /**
  * Handles Authentication related requests.
@@ -41,7 +44,7 @@ const authRequest = (
   let result: unknown, message: MessageInterface;
 
   switch (requestType[1]) {
-    case `STATUS`:
+    case ENDPOINT.STATUS:
       // Check if database exists
       if (database.checkIfDbExsts()) {
         // Update database if Schema is outdated.
@@ -57,7 +60,7 @@ const authRequest = (
       }
       break;
 
-    case `REGISTER`:
+    case ENDPOINT.REGISTER:
       // Intialize Database.
       !database.checkIfDbExsts() && database.init();
 
@@ -74,7 +77,7 @@ const authRequest = (
 
       break;
 
-    case `LOGIN`:
+    case ENDPOINT.LOGIN:
       const registeredUsers = database.getUsers();
 
       const loginStatus =
@@ -88,6 +91,7 @@ const authRequest = (
           username: requestData.username,
           password: cryptoHash(requestData.password),
           lPinStatus: registeredUsers.l_pin != null,
+          sPinStatus: registeredUsers.s_pin != null,
           created_at: registeredUsers.created_at,
           last_logged_in: registeredUsers.last_logged_in,
         };
@@ -122,10 +126,10 @@ const spacesRequest = (
   let result: unknown, message: MessageInterface;
 
   switch (requestType[1]) {
-    case `GET`:
+    case ENDPOINT.GET:
       result = {
         metaData: {
-          SPACES_MAX_COUNT_ALLOWED: CONSTANTS.SPACES_MAX_COUNT_ALLOWED,
+          SPACES_MAX_COUNT_ALLOWED: CONFIG.SPACES_MAX_COUNT_ALLOWED,
         },
         // Get all spaces.
         list: database.getSpaces(),
@@ -134,7 +138,7 @@ const spacesRequest = (
       message = createMessage('success');
       break;
 
-    case `ADD`:
+    case ENDPOINT.ADD:
       requestData = requestData as Pick<SpacesTableInterface, 'space_name'>;
 
       const createStatus = database.createNewSpace(requestData.space_name);
@@ -157,7 +161,7 @@ const spacesRequest = (
       }
       break;
 
-    case `GET_SPACE`:
+    case ENDPOINT.GET_SPACE:
       requestData = requestData as Pick<SpacesTableInterface, '_id'>;
 
       // Get all Notes.
@@ -179,12 +183,15 @@ const spacesRequest = (
       );
 
       // Converting to type of CredentialStoreType[] from CredentialsTableInterface[].
-      const credentialsListMapped: CredentialStoreType[] = credentialsList.map(
-        ({ _id, credential, updated_at }: CredentialsTableInterface) => ({
-          _id,
-          credential: JSON.parse(credential),
-          updated_at,
-        })
+      const credentialsListMapped: CredentialDataType[] = credentialsList.map(
+        ({ _id, credential, updated_at }: CredentialsTableInterface) => {
+          const parsedCredential: CredentialBodyType = JSON.parse(credential);
+          return {
+            _id,
+            credential: { title: parsedCredential.title },
+            updated_at,
+          } as CredentialDataType;
+        }
       );
 
       // Get all data related to Space ID.
@@ -220,7 +227,7 @@ const notesRequest = (
   let result: unknown, message: MessageInterface;
 
   switch (requestType[1]) {
-    case `ADD`:
+    case ENDPOINT.ADD:
       const createStatus = database.createNewNote(
         requestData.space_id,
         requestData.note
@@ -238,7 +245,7 @@ const notesRequest = (
       }
       break;
 
-    case `UPDATE`:
+    case ENDPOINT.UPDATE:
       // Update note.
       const updateStatus = database.updateNote(
         { note: requestData.note, updated_at: requestData.updated_at },
@@ -270,71 +277,6 @@ const notesRequest = (
 };
 
 /**
- * Handles Credentials related requests.
- *
- * @param requestType
- * @param requestData
- * @returns {{data, message}} Data/Result and message regarding the request fulfillment.
- */
-const credentialsRequest = (
-  requestType: string[],
-  requestData: CredentialsRequestDataType
-): SubRequestResponseType => {
-  let result: unknown, message: MessageInterface;
-
-  switch (requestType[1]) {
-    case `ADD`:
-      const createStatus = database.createNewCredential(
-        requestData.space_id,
-        JSON.stringify(requestData.credential)
-      );
-
-      message = createStatus.changes
-        ? // Credential Added Successfully.
-          createMessage('success')
-        : // Error while updating Credential.
-          createMessage('server-error', `Error while adding credential.`);
-
-      if (createStatus.changes) {
-        // Get newly inserted Credential.
-        result = database.getCredentialWithId(createStatus.lastInsertRowid);
-      }
-      break;
-
-    case `UPDATE`:
-      // Update Credential.
-      const updateStatus = database.updateCredential(
-        {
-          credential: JSON.stringify(requestData.credential),
-          updated_at: requestData.updated_at,
-        },
-        requestData._id
-      );
-
-      message = updateStatus
-        ? // Credential updated Successfully.
-          createMessage('success')
-        : // Error while updating Credential.
-          createMessage('server-error', `Error while saving credential.`);
-
-      if (updateStatus)
-        result = {
-          _id: requestData._id,
-          credential: requestData.credential,
-          updated_at: requestData.updated_at,
-        };
-      break;
-
-    default:
-      // Invalid Sub Request.
-      message = createMessage('client-error', 'Invalid Request');
-      break;
-  }
-
-  return { data: result, message };
-};
-
-/**
  * This functions resolves all the request received from renderer on main process.
  *
  * @param request
@@ -350,39 +292,50 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
   const requestSubURI = resolveRoute(request.URI);
 
   switch (requestSubURI[0]) {
-    case `AUTH`:
+    case ENDPOINT.AUTH:
       resolvedSubRequest = authRequest(
         requestSubURI,
         <AuthCredentialType>request.data
       );
       break;
 
-    case `AUTH_PIN`:
-      resolveAuthPin(
-        requestSubURI,
-        request.data as SessionType,
-        resolvedSubRequest
-      );
+    case ENDPOINT.AUTH_PIN:
+      const requestData = request.data as AuthPinRequestType;
+
+      if (requestData.l_pin != undefined)
+        resolveAuthPin(requestSubURI, requestData, resolvedSubRequest);
+
+      if (
+        requestData.data != undefined &&
+        (requestData.l_pin == undefined ||
+          resolvedSubRequest.message?.status == 200)
+      )
+        resolveCredential(
+          [``, `GET`],
+          request.data as CredentialRequestType,
+          resolvedSubRequest
+        );
       break;
 
-    case `SPACES`:
+    case ENDPOINT.SPACES:
       resolvedSubRequest = spacesRequest(
         requestSubURI,
         <SpacesRequestDataType>request.data
       );
       break;
 
-    case `NOTES`:
+    case ENDPOINT.NOTES:
       resolvedSubRequest = notesRequest(
         requestSubURI,
         <NotesRequestDataType>request.data
       );
       break;
 
-    case `CREDENTIALS`:
-      resolvedSubRequest = credentialsRequest(
+    case ENDPOINT.CREDENTIAL:
+      resolveCredential(
         requestSubURI,
-        <CredentialsRequestDataType>request.data
+        request.data as CredentialRequestType,
+        resolvedSubRequest
       );
       break;
 
@@ -391,7 +344,6 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
         data: -1,
         message: createMessage('client-error', 'Invalid Request'),
       };
-      console.log(`Invalid Request`);
       break;
   }
 
