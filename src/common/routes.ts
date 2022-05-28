@@ -6,23 +6,6 @@
  *
  */
 
-// Mapped Routes. { Simple-Route : Normalized-Route}
-const definedRoutes: Record<string, string> = {
-  'auth-status': 'AUTH:STATUS',
-  'auth-login': 'AUTH:LOGIN',
-  'auth-register': 'AUTH:REGISTER',
-  'auth-pin-login': 'AUTH_PIN:LOGIN',
-  'auth-pin-credential-setup': 'AUTH_PIN:CREDENTIAL:SETUP',
-  'auth-pin-credential-verify': 'AUTH_PIN:CREDENTIAL:VERIFY',
-  'credential-add': 'CREDENTIAL:ADD',
-  'credential-update': 'CREDENTIAL:UPDATE',
-  'notes-add': 'NOTES:ADD',
-  'notes-update': 'NOTES:UPDATE',
-  'spaces-add': 'SPACES:ADD',
-  'spaces-get': 'SPACES:GET',
-  'spaces-get-space': 'SPACES:GET_SPACE',
-};
-
 // Mapped React Routes
 const reactRoutes: Record<string, string> = {
   root: '/',
@@ -35,18 +18,6 @@ const reactRoutes: Record<string, string> = {
   space: '/spaces/{space_id}',
   notes: '/spaces/{space_id}/notes',
   credentials: '/spaces/{space_id}/credentials',
-};
-
-/**
- * Gets Normalized Route of Simple Route and splits Normalized Route on ':'.
- *
- * @param route Simple Route
- * @returns {[]} Array of splitted Normalized Route.
- */
-const resolveRoute = (route: string): string[] => {
-  if (definedRoutes.hasOwnProperty(route))
-    return definedRoutes[route].split(':');
-  else throw new Error('Invalid Route Request.');
 };
 
 /**
@@ -70,4 +41,4 @@ const resolveReactRoutes = (
   } else throw new Error('Invalid Route Request.');
 };
 
-export { resolveReactRoutes, resolveRoute };
+export { resolveReactRoutes };

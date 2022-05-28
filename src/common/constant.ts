@@ -19,9 +19,9 @@ const ROUTE = {
     REGISTER: `auth-register`,
   },
   AUTH_PIN: {
-    LOGIN: 'auth-pin-login',
-    CRED_SETUP: `auth-pin-credential-setup`,
-    CRED_VERIFY: `auth-pin-credential-verify`,
+    LOGIN: 'auth_pin-login',
+    CRED_SETUP: `auth_pin-credential-setup`,
+    CRED_VERIFY: `auth_pin-credential-verify`,
   },
   CRED: {
     ADD: `credential-add`,
@@ -34,7 +34,7 @@ const ROUTE = {
   SPACE: {
     STATUS: `spaces-get`,
     ADD: `spaces-add`,
-    GET: `spaces-get-space`,
+    GET: `spaces-get_space`,
   },
 };
 

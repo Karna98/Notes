@@ -6,16 +6,12 @@
  *
  */
 
-import {
-  CONSTANT,
-  createMessage,
-  IPCResponseObject,
-  resolveRoute,
-} from '../common';
+import { CONSTANT, createMessage, IPCResponseObject } from '../common';
 import CONFIG from './config';
 import { cryptBcryptCompare, cryptBcryptHash, cryptoHash } from './secure-util';
 import { resolveAuthPin, resolveCredential } from './service';
 import database from './sql';
+import { resolveURI } from './util';
 
 // Temporary Types.
 type SpacesRequestDataType =
@@ -289,7 +285,7 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
   };
 
   // Resolve Request URI
-  const requestSubURI = resolveRoute(request.URI);
+  const requestSubURI = resolveURI(request.URI);
 
   switch (requestSubURI[0]) {
     case ENDPOINT.AUTH:
