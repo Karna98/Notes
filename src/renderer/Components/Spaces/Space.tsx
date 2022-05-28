@@ -6,7 +6,7 @@
  *
  */
 
-import { IPCRequestObject, resolveReactRoutes } from 'common';
+import { CONSTANT, IPCRequestObject, resolveReactRoutes } from 'common';
 import { useEffect } from 'react';
 import { Route, Routes, useParams } from 'react-router-dom';
 import { Credentials, Notes } from 'renderer/Components';
@@ -57,7 +57,7 @@ const Space = () => {
       spacesState.currentSpace.space_id != Number(space_id)
     )
       sendToIpcMain(
-        IPCRequestObject(`spaces-get-space`, { _id: Number(space_id) })
+        IPCRequestObject(CONSTANT.ROUTE.SPACE.GET, { _id: Number(space_id) })
       );
   }, []);
 

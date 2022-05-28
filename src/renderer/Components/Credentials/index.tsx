@@ -65,7 +65,7 @@ const CredentialAuthComponent = ({
    * @param formData Form fields value
    */
   const credPinSubmitAction = (formData?: Record<string, unknown>): void => {
-    sendToMainWrapper(CONSTANT.ROUTE.AUTH.CRED.SETUP, {
+    sendToMainWrapper(CONSTANT.ROUTE.AUTH_PIN.CRED_SETUP, {
       _id: sessionState?._id,
       l_pin: sessionState?.l_pin,
       s_pin: formData?.pin,
@@ -90,7 +90,7 @@ const CredentialAuthComponent = ({
             data: currentCredentialId,
           };
 
-    sendToMainWrapper(CONSTANT.ROUTE.AUTH.CRED.VERIFY, dataObject);
+    sendToMainWrapper(CONSTANT.ROUTE.AUTH_PIN.CRED_VERIFY, dataObject);
   };
 
   formAttributes.submitAction =
@@ -184,7 +184,7 @@ const Credentials = () => {
     setCurrentCredential(credentialId);
 
     if (sessionState?.s_pin != undefined)
-      sendToMainWrapper(CONSTANT.ROUTE.AUTH.CRED.VERIFY, {
+      sendToMainWrapper(CONSTANT.ROUTE.AUTH_PIN.CRED_VERIFY, {
         s_pin: sessionState?.s_pin,
         data: credentialId,
       });

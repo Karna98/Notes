@@ -6,7 +6,12 @@
  *
  */
 
-import { createMessage, IPCRequestObject, resolveReactRoutes } from 'common';
+import {
+  CONSTANT,
+  createMessage,
+  IPCRequestObject,
+  resolveReactRoutes,
+} from 'common';
 import { DivLink, Form } from 'renderer/Components';
 import { useAppDispatch, useAppSelector } from 'renderer/Hooks';
 import { setMessageState } from 'renderer/State';
@@ -42,7 +47,7 @@ const List = () => {
           )
         )
       );
-    else sendToIpcMain(IPCRequestObject(`spaces-add`, formData));
+    else sendToIpcMain(IPCRequestObject(CONSTANT.ROUTE.SPACE.ADD, formData));
   };
 
   return (

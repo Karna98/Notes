@@ -6,7 +6,7 @@
  *
  */
 
-import { createMessage, IPCRequestObject } from 'common';
+import { CONSTANT, createMessage, IPCRequestObject } from 'common';
 import { Form } from 'renderer/Components';
 import { useAppDispatch, useAppSelector } from 'renderer/Hooks';
 import { setMessageState } from 'renderer/State';
@@ -32,7 +32,7 @@ const AuthPin = () => {
     dispatch(setMessageState(createMessage(`progress`, `Verifying PIN ..`)));
 
     sendToIpcMain(
-      IPCRequestObject(`auth-pin-login`, {
+      IPCRequestObject(CONSTANT.ROUTE.AUTH_PIN.LOGIN, {
         ...sessionState,
         l_pin: formData?.pin,
       })

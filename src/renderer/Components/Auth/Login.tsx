@@ -6,7 +6,7 @@
  *
  */
 
-import { createMessage, IPCRequestObject } from 'common';
+import { CONSTANT, createMessage, IPCRequestObject } from 'common';
 import { Form } from 'renderer/Components';
 import { useAppDispatch } from 'renderer/Hooks';
 import { setMessageState } from 'renderer/State';
@@ -25,7 +25,7 @@ const Login = () => {
       setMessageState(createMessage(`progress`, `Checking Credentials ..`))
     );
 
-    sendToIpcMain(IPCRequestObject(`auth-login`, formData));
+    sendToIpcMain(IPCRequestObject(CONSTANT.ROUTE.AUTH.LOGIN, formData));
   };
 
   return <Form id="auth-form-login" submitAction={formSubmitAction} />;

@@ -6,16 +6,35 @@
  *
  */
 
+// IPC Channel BUS
+const CHANNEL_BUS = {
+  TO: [`toMain`],
+  FROM: [`fromMain`],
+};
+
 const ROUTE = {
   AUTH: {
-    CRED: {
-      SETUP: `auth-pin-credential-setup`,
-      VERIFY: `auth-pin-credential-verify`,
-    },
+    STATUS: `auth-status`,
+    LOGIN: `auth-login`,
+    REGISTER: `auth-register`,
+  },
+  AUTH_PIN: {
+    LOGIN: 'auth-pin-login',
+    CRED_SETUP: `auth-pin-credential-setup`,
+    CRED_VERIFY: `auth-pin-credential-verify`,
   },
   CRED: {
     ADD: `credential-add`,
     UPDATE: `credential-update`,
+  },
+  NOTE: {
+    ADD: `notes-add`,
+    UPDATE: `notes-update`,
+  },
+  SPACE: {
+    STATUS: `spaces-get`,
+    ADD: `spaces-add`,
+    GET: `spaces-get-space`,
   },
 };
 
@@ -37,4 +56,4 @@ const ENDPOINT = {
   VERIFY: `VERIFY`,
 };
 
-export default { ROUTE, ENDPOINT };
+export default { CHANNEL_BUS, ROUTE, ENDPOINT };

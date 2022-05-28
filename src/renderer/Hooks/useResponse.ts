@@ -53,7 +53,7 @@ const useResponse = () => {
 
   const resolveResponse = (response: IPCResponseInterface) => {
     switch (response.URI) {
-      case 'auth-status':
+      case CONSTANT.ROUTE.AUTH.STATUS:
         // Based on auth-status, Login or Register Page will be displayed.
         response.status == 200 && response.data == 0
           ? // Register Page
@@ -62,7 +62,7 @@ const useResponse = () => {
             navigate(resolveReactRoutes('auth_login'));
         break;
 
-      case 'auth-register':
+      case CONSTANT.ROUTE.AUTH.REGISTER:
         // Display response message.
         dispatchMessage(dispatch, response.status as number, response.message);
 
@@ -70,7 +70,7 @@ const useResponse = () => {
         response.status == 200 && navigate(resolveReactRoutes('auth_login'));
         break;
 
-      case 'auth-login':
+      case CONSTANT.ROUTE.AUTH.LOGIN:
         // Set Message to be displayed.
         dispatchMessage(dispatch, response.status as number, response.message);
 
@@ -82,7 +82,7 @@ const useResponse = () => {
         }
         break;
 
-      case 'auth-pin-login':
+      case CONSTANT.ROUTE.AUTH_PIN.LOGIN:
         // Set Message to be displayed.
         dispatchMessage(dispatch, response.status as number, response.message);
 
@@ -90,11 +90,11 @@ const useResponse = () => {
           dispatch(setSessionState(response.data as SessionType));
 
           // Get list of spaces.
-          sendToIpcMain(IPCRequestObject(`spaces-get`));
+          sendToIpcMain(IPCRequestObject(CONSTANT.ROUTE.SPACE.STATUS));
         }
         break;
 
-      case CONSTANT.ROUTE.AUTH.CRED.SETUP:
+      case CONSTANT.ROUTE.AUTH_PIN.CRED_SETUP:
         if (response.status == 200)
           dispatch(
             updateSessionState({
@@ -106,7 +106,7 @@ const useResponse = () => {
         dispatchMessage(dispatch, response.status as number, response.message);
         break;
 
-      case CONSTANT.ROUTE.AUTH.CRED.VERIFY:
+      case CONSTANT.ROUTE.AUTH_PIN.CRED_VERIFY:
         if (response.status == 200) {
           const responseData = response.data as AuthPinRequestType;
 
@@ -129,12 +129,12 @@ const useResponse = () => {
         }
         break;
 
-      case 'spaces-get':
+      case CONSTANT.ROUTE.SPACE.STATUS:
         if (response.status == 200)
           dispatch(setSpacesState(response.data as SpacesInterface));
         break;
 
-      case 'spaces-add':
+      case CONSTANT.ROUTE.SPACE.ADD:
         if (response.status == 200) {
           dispatchMessage(dispatch, response.status, response.message);
           dispatch(addSpaceState(response.data as SpacesTableInterface));
@@ -144,12 +144,12 @@ const useResponse = () => {
         }
         break;
 
-      case 'spaces-get-space':
+      case CONSTANT.ROUTE.SPACE.GET:
         if (response.status == 200)
           dispatch(setCurrentSpaceState(response.data as SpaceInterface));
         break;
 
-      case 'notes-add':
+      case CONSTANT.ROUTE.NOTE.ADD:
         if (response.status == 200) {
           dispatch(addNoteState(response.data as NotesTableInterface));
         } else if (response.status == 500) {
@@ -158,7 +158,7 @@ const useResponse = () => {
         }
         break;
 
-      case 'notes-update':
+      case CONSTANT.ROUTE.NOTE.UPDATE:
         if (response.status == 200) {
           dispatch(updateNoteState(response.data as NoteStoreType));
         } else if (response.status == 500) {
@@ -187,9 +187,12 @@ const useResponse = () => {
   };
 
   useEffect(() => {
-    window.NotesAPI.receive(`fromMain`, (response: string) => {
-      resolveResponse(JSON.parse(response));
-    });
+    window.NotesAPI.receive(
+      CONSTANT.CHANNEL_BUS.FROM[0],
+      (response: string) => {
+        resolveResponse(JSON.parse(response));
+      }
+    );
   }, []);
 };
 

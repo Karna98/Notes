@@ -5,7 +5,7 @@
  *    Base file for all the pages to be rendered.
  */
 
-import { IPCRequestObject, resolveReactRoutes } from 'common';
+import { CONSTANT, IPCRequestObject, resolveReactRoutes } from 'common';
 import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Message, Sidebar, Spaces } from 'renderer/Components';
@@ -55,7 +55,7 @@ const App = () => {
 
   useEffect(() => {
     // Get Auth Status.
-    sendToIpcMain(IPCRequestObject(`auth-status`));
+    sendToIpcMain(IPCRequestObject(CONSTANT.ROUTE.AUTH.STATUS));
   }, []);
 
   // List of Routes.

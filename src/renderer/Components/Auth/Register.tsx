@@ -6,7 +6,7 @@
  *
  */
 
-import { createMessage, IPCRequestObject } from 'common';
+import { CONSTANT, createMessage, IPCRequestObject } from 'common';
 import { Form } from 'renderer/Components';
 import { useAppDispatch } from 'renderer/Hooks';
 import { setMessageState } from 'renderer/State';
@@ -27,7 +27,7 @@ const Register = () => {
       dispatch(
         setMessageState(createMessage(`progress`, `Registering User...`))
       );
-      sendToIpcMain(IPCRequestObject(`auth-register`, formData));
+      sendToIpcMain(IPCRequestObject(CONSTANT.ROUTE.AUTH.REGISTER, formData));
     } else {
       // Passored & Retype Password Mismatch.
       dispatch(

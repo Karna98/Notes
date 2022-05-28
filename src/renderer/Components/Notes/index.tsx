@@ -6,7 +6,7 @@
  *
  */
 
-import { IPCRequestObject } from 'common';
+import { CONSTANT, IPCRequestObject } from 'common';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Form, Modal, TextArea } from 'renderer/Components';
@@ -70,7 +70,7 @@ const Notes = () => {
    */
   const addNoteFormAction = (formData?: Record<string, unknown>) => {
     sendToIpcMain(
-      IPCRequestObject(`notes-add`, {
+      IPCRequestObject(CONSTANT.ROUTE.NOTE.ADD, {
         ...formData,
         space_id: Number(space_id),
       })
@@ -85,7 +85,7 @@ const Notes = () => {
    * @param formData Form fields value.
    */
   const updateNoteFormAction = (formData?: Record<string, unknown>) => {
-    sendToIpcMain(IPCRequestObject(`notes-update`, formData));
+    sendToIpcMain(IPCRequestObject(CONSTANT.ROUTE.NOTE.UPDATE, formData));
   };
 
   useEffect(() => {
