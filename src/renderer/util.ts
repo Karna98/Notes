@@ -27,7 +27,7 @@ const sendToIpcMain = (data: IPCRequestInterface) => {
  * @param route
  * @param data
  */
-const sendToMainWrapper = (route: string, data: object | unknown) => {
+const sendToMainWrapper = (route: string, data?: object | unknown) => {
   sendToIpcMain(IPCRequestObject(route, data));
 };
 
@@ -103,4 +103,4 @@ const removeItem = (type: 'local' | 'session', STORE_KEY: string) => {
 
 const browserStorage = { getValue, setValue, removeItem };
 
-export { browserStorage, sendToIpcMain, sendToMainWrapper };
+export { browserStorage, sendToMainWrapper };

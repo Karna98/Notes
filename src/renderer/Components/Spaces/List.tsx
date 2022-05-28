@@ -6,16 +6,11 @@
  *
  */
 
-import {
-  CONSTANT,
-  createMessage,
-  IPCRequestObject,
-  resolveReactRoutes,
-} from 'common';
+import { CONSTANT, createMessage, resolveReactRoutes } from 'common';
 import { DivLink, Form } from 'renderer/Components';
 import { useAppDispatch, useAppSelector } from 'renderer/Hooks';
 import { setMessageState } from 'renderer/State';
-import { sendToIpcMain } from 'renderer/util';
+import { sendToMainWrapper } from 'renderer/util';
 
 const List = () => {
   const dispatch = useAppDispatch();
@@ -47,7 +42,7 @@ const List = () => {
           )
         )
       );
-    else sendToIpcMain(IPCRequestObject(CONSTANT.ROUTE.SPACE.ADD, formData));
+    else sendToMainWrapper(CONSTANT.ROUTE.SPACE.ADD, formData);
   };
 
   return (

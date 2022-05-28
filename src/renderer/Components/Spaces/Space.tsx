@@ -6,12 +6,12 @@
  *
  */
 
-import { CONSTANT, IPCRequestObject, resolveReactRoutes } from 'common';
+import { CONSTANT, resolveReactRoutes } from 'common';
 import { useEffect } from 'react';
 import { Route, Routes, useParams } from 'react-router-dom';
 import { Credentials, Notes } from 'renderer/Components';
 import { useAppSelector } from 'renderer/Hooks';
-import { sendToIpcMain } from 'renderer/util';
+import { sendToMainWrapper } from 'renderer/util';
 
 const Space = () => {
   // Get spaces value stored in Redux Store.
@@ -56,9 +56,7 @@ const Space = () => {
       spacesState?.currentSpace === undefined ||
       spacesState.currentSpace.space_id != Number(space_id)
     )
-      sendToIpcMain(
-        IPCRequestObject(CONSTANT.ROUTE.SPACE.GET, { _id: Number(space_id) })
-      );
+      sendToMainWrapper(CONSTANT.ROUTE.SPACE.GET, { _id: Number(space_id) });
   }, []);
 
   return (

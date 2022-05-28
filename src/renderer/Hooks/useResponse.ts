@@ -6,12 +6,7 @@
  *
  */
 
-import {
-  CONSTANT,
-  createMessage,
-  IPCRequestObject,
-  resolveReactRoutes,
-} from 'common';
+import { CONSTANT, createMessage, resolveReactRoutes } from 'common';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dispatch } from 'redux';
@@ -28,7 +23,7 @@ import {
   updateNoteState,
   updateSessionState,
 } from 'renderer/State';
-import { sendToIpcMain } from 'renderer/util';
+import { sendToMainWrapper } from 'renderer/util';
 import { useAppDispatch } from '.';
 
 /**
@@ -90,7 +85,7 @@ const useResponse = () => {
           dispatch(setSessionState(response.data as SessionType));
 
           // Get list of spaces.
-          sendToIpcMain(IPCRequestObject(CONSTANT.ROUTE.SPACE.STATUS));
+          sendToMainWrapper(CONSTANT.ROUTE.SPACE.STATUS);
         }
         break;
 
