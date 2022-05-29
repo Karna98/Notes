@@ -8,8 +8,7 @@
 
 import { CONSTANT, createMessage, IPCResponseObject } from '../common';
 import CONFIG from './config';
-import { cryptBcryptCompare, cryptBcryptHash, cryptoHash } from './secure-util';
-import { resolveAuthPin, resolveCredential } from './service';
+import { resolveAuth, resolveAuthPin, resolveCredential } from './service';
 import database from './sql';
 import { resolveURI } from './util';
 
@@ -25,88 +24,6 @@ type NotesRequestDataType = OptionalExceptFor<
 
 // Constant Endpoint String.
 const { ENDPOINT } = CONSTANT;
-
-/**
- * Handles Authentication related requests.
- *
- * @param requestType
- * @param requestData
- * @returns {{data, message}} Data/Result and message regarding the request fulfillment.
- */
-const authRequest = (
-  requestType: string[],
-  requestData: AuthCredentialType
-): SubRequestResponseType => {
-  let result: unknown, message: MessageInterface;
-
-  switch (requestType[1]) {
-    case ENDPOINT.STATUS:
-      // Check if database exists
-      if (database.checkIfDbExsts()) {
-        // Update database if Schema is outdated.
-        database.updateDatabase();
-
-        // Get Users Count from Database.
-        result = database.getUsersCount();
-        message = createMessage('success');
-      } else {
-        // Set result to 0 if no Database found.
-        result = 0;
-        message = createMessage('success');
-      }
-      break;
-
-    case ENDPOINT.REGISTER:
-      // Intialize Database.
-      !database.checkIfDbExsts() && database.init();
-
-      result = database.createNewUser(
-        cryptBcryptHash(requestData.username),
-        cryptBcryptHash(requestData.password)
-      );
-
-      message = result
-        ? // Registration Successful.
-          createMessage('success', 'User Registered Successfully.')
-        : // Registration Failure.
-          createMessage('server-error', 'User Registration failed.');
-
-      break;
-
-    case ENDPOINT.LOGIN:
-      const registeredUsers = database.getUsers();
-
-      const loginStatus =
-        cryptBcryptCompare(requestData.username, registeredUsers.username) &&
-        cryptBcryptCompare(requestData.password, registeredUsers.password);
-
-      if (loginStatus) {
-        // Create Session Object.
-        result = {
-          _id: registeredUsers._id,
-          username: requestData.username,
-          password: cryptoHash(requestData.password),
-          lPinStatus: registeredUsers.l_pin != null,
-          sPinStatus: registeredUsers.s_pin != null,
-          created_at: registeredUsers.created_at,
-          last_logged_in: registeredUsers.last_logged_in,
-        };
-      }
-
-      message = loginStatus
-        ? // Login Successful.
-          createMessage('success')
-        : // Login Failure.
-          createMessage('client-error', 'Wrong Credentials.');
-      break;
-
-    default:
-      // Invalid Sub Request.
-      message = createMessage('client-error', 'Invalid Request');
-      break;
-  }
-  return { data: result, message };
-};
 
 /**
  * Handles Spaces related requests.
@@ -285,13 +202,14 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
   };
 
   // Resolve Request URI
-  const requestSubURI = resolveURI(request.URI);
+  const requestSubURI: string[] = resolveURI(request.URI);
 
   switch (requestSubURI[0]) {
     case ENDPOINT.AUTH:
-      resolvedSubRequest = authRequest(
+      resolveAuth(
         requestSubURI,
-        <AuthCredentialType>request.data
+        request.data as AuthCredentialType,
+        resolvedSubRequest
       );
       break;
 
