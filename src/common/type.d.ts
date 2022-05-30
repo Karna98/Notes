@@ -26,6 +26,8 @@ type CredentialRequestType = {
   data: CredentialDataType | number;
 };
 
+type SpaceRequestType = Pick<SpacesTableInterface, '_id' | 'space_name'>;
+
 /**
  * RESPONSE TYPES
  */
@@ -72,6 +74,6 @@ type KeyValuePairType = {
   value: string | number | readonly string[] | undefined;
 };
 
-type AuthCredentialType = Pick<UsersTableInteface, 'username' | 'password'>;
+type AuthRequestType = Pick<UsersTableInteface, 'username' | 'password'>;
 
 type PinStatusType = { lPinStatus: boolean; sPinStatus: boolean };

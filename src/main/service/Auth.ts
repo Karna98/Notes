@@ -26,7 +26,7 @@ const { ENDPOINT } = CONSTANT;
  */
 const resolveAuth = (
   requestType: string[],
-  requestData: AuthCredentialType,
+  requestData: AuthRequestType,
   resolvedSubRequest: SubRequestResponseType
 ): void => {
   switch (requestType[1]) {

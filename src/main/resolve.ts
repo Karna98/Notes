@@ -7,15 +7,16 @@
  */
 
 import { CONSTANT, createMessage, IPCResponseObject } from '../common';
-import CONFIG from './config';
-import { resolveAuth, resolveAuthPin, resolveCredential } from './service';
+import {
+  resolveAuth,
+  resolveAuthPin,
+  resolveCredential,
+  resolveSpace,
+} from './service';
 import database from './sql';
 import { resolveURI } from './util';
 
 // Temporary Types.
-type SpacesRequestDataType =
-  | Pick<SpacesTableInterface, 'space_name'>
-  | Pick<SpacesTableInterface, '_id'>;
 
 type NotesRequestDataType = OptionalExceptFor<
   NotesTableInterface,
@@ -24,107 +25,6 @@ type NotesRequestDataType = OptionalExceptFor<
 
 // Constant Endpoint String.
 const { ENDPOINT } = CONSTANT;
-
-/**
- * Handles Spaces related requests.
- *
- * @param requestType
- * @param requestData
- * @returns {{data, message}} Data/Result and message regarding the request fulfillment.
- */
-const spacesRequest = (
-  requestType: string[],
-  requestData: SpacesRequestDataType
-): SubRequestResponseType => {
-  let result: unknown, message: MessageInterface;
-
-  switch (requestType[1]) {
-    case ENDPOINT.GET:
-      result = {
-        metaData: {
-          SPACES_MAX_COUNT_ALLOWED: CONFIG.SPACES_MAX_COUNT_ALLOWED,
-        },
-        // Get all spaces.
-        list: database.getSpaces(),
-      };
-
-      message = createMessage('success');
-      break;
-
-    case ENDPOINT.ADD:
-      requestData = requestData as Pick<SpacesTableInterface, 'space_name'>;
-
-      const createStatus = database.createNewSpace(requestData.space_name);
-
-      message = createStatus.changes
-        ? // Space Added Successfully.
-          createMessage(
-            'success',
-            `${requestData.space_name} Space added successfully.`
-          )
-        : // Error while adding Space.
-          createMessage(
-            'server-error',
-            `Error while adding ${requestData.space_name} Space.`
-          );
-
-      if (createStatus.changes) {
-        // Get newly inserted Space.
-        result = database.getSpaceWithId(createStatus.lastInsertRowid);
-      }
-      break;
-
-    case ENDPOINT.GET_SPACE:
-      requestData = requestData as Pick<SpacesTableInterface, '_id'>;
-
-      // Get all Notes.
-      const notesList: NotesTableInterface[] = database.getNotes(
-        requestData._id
-      );
-
-      // Get all Credentials.
-      const credentialsList: CredentialsTableInterface[] =
-        database.getCredentials(requestData._id);
-
-      // Converting to type of NoteStoreType[] from NotesTableInterface[].
-      const notesListMapped: NoteStoreType[] = notesList.map(
-        ({ _id, note, updated_at }: NotesTableInterface) => ({
-          _id,
-          note,
-          updated_at,
-        })
-      );
-
-      // Converting to type of CredentialStoreType[] from CredentialsTableInterface[].
-      const credentialsListMapped: CredentialDataType[] = credentialsList.map(
-        ({ _id, credential, updated_at }: CredentialsTableInterface) => {
-          const parsedCredential: CredentialBodyType = JSON.parse(credential);
-          return {
-            _id,
-            credential: { title: parsedCredential.title },
-            updated_at,
-          } as CredentialDataType;
-        }
-      );
-
-      // Get all data related to Space ID.
-      result = {
-        space_id: requestData._id,
-        notes: notesListMapped,
-        credentials: credentialsListMapped,
-      };
-
-      message = createMessage('success');
-      break;
-
-    default:
-      // Invalid Sub Request.
-      message = createMessage('client-error', 'Invalid Request');
-      break;
-  }
-
-  return { data: result, message };
-};
 
 /**
  * Handles Notes related requests.
@@ -208,7 +108,7 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
     case ENDPOINT.AUTH:
       resolveAuth(
         requestSubURI,
-        request.data as AuthCredentialType,
+        request.data as AuthRequestType,
         resolvedSubRequest
       );
       break;
@@ -225,17 +125,33 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
           resolvedSubRequest.message?.status == 200)
       )
         resolveCredential(
-          [``, `GET`],
+          [``, ENDPOINT.GET],
           request.data as CredentialRequestType,
           resolvedSubRequest
         );
       break;
 
     case ENDPOINT.SPACES:
-      resolvedSubRequest = spacesRequest(
+      resolveSpace(
         requestSubURI,
-        <SpacesRequestDataType>request.data
+        request.data as SpaceRequestType,
+        resolvedSubRequest
       );
+
+      if (
+        requestSubURI[1] === ENDPOINT.GET_SPACE &&
+        resolvedSubRequest.data != undefined
+      ) {
+        // Populate Notes for respective Space
+        //  @TODO
+
+        // Populate Credentials for respective Space
+        resolveCredential(
+          [``, ENDPOINT.GET_ALL],
+          {} as CredentialRequestType,
+          resolvedSubRequest
+        );
+      }
       break;
 
     case ENDPOINT.NOTES:

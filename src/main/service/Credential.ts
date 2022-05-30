@@ -131,6 +131,31 @@ const credential = (
         resolvedSubRequest.message = createMessage('success');
       break;
 
+    case ENDPOINT.GET_ALL:
+      // Get all Credentials.
+      const credentialList: CredentialsTableInterface[] =
+        database.getCredentials(
+          (resolvedSubRequest.data as SpaceInterface).space_id
+        );
+
+      // Converting to type of CredentialStoreType[] from CredentialsTableInterface[].
+      const credentialListSanitized: CredentialDataType[] = credentialList.map(
+        ({ _id, credential, updated_at }: CredentialsTableInterface) => {
+          const parsedCredential: CredentialBodyType = JSON.parse(credential);
+          return {
+            _id,
+            credential: { title: parsedCredential.title },
+            updated_at,
+          } as CredentialDataType;
+        }
+      );
+
+      resolvedSubRequest.data = {
+        ...(resolvedSubRequest.data as object),
+        credentials: credentialListSanitized,
+      };
+      break;
+
     default:
       // Invalid Sub Request.
       resolvedSubRequest.message = createMessage(
