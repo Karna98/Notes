@@ -14,7 +14,7 @@ import database from './../sql';
 const { ENDPOINT } = CONSTANT;
 
 /**
- * Handles Credentials related requests.
+ * Handles Credential related requests.
  *
  * @param requestType
  * @param requestData
@@ -157,11 +157,6 @@ const credential = (
       break;
 
     default:
-      // Invalid Sub Request.
-      resolvedSubRequest.message = createMessage(
-        'client-error',
-        'Invalid Request'
-      );
       break;
   }
 };

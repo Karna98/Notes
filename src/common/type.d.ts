@@ -21,12 +21,17 @@ type AuthPinRequestType = SessionType & {
   data: CredentialDataType | number;
 };
 
+type SpaceRequestType = Pick<SpacesTableInterface, '_id' | 'space_name'>;
+
+type NoteRequestType = OptionalExceptFor<
+  NotesTableInterface,
+  '_id' | 'space_id' | 'note'
+>;
+
 type CredentialRequestType = {
   s_pin: string;
   data: CredentialDataType | number;
 };
-
-type SpaceRequestType = Pick<SpacesTableInterface, '_id' | 'space_name'>;
 
 /**
  * RESPONSE TYPES

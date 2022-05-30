@@ -11,83 +11,13 @@ import {
   resolveAuth,
   resolveAuthPin,
   resolveCredential,
+  resolveNote,
   resolveSpace,
 } from './service';
-import database from './sql';
 import { resolveURI } from './util';
-
-// Temporary Types.
-
-type NotesRequestDataType = OptionalExceptFor<
-  NotesTableInterface,
-  '_id' | 'space_id' | 'note'
->;
 
 // Constant Endpoint String.
 const { ENDPOINT } = CONSTANT;
-
-/**
- * Handles Notes related requests.
- *
- * @param requestType
- * @param requestData
- * @returns {{data, message}} Data/Result and message regarding the request fulfillment.
- */
-const notesRequest = (
-  requestType: string[],
-  requestData: NotesRequestDataType
-): SubRequestResponseType => {
-  let result: unknown, message: MessageInterface;
-
-  switch (requestType[1]) {
-    case ENDPOINT.ADD:
-      const createStatus = database.createNewNote(
-        requestData.space_id,
-        requestData.note
-      );
-
-      message = createStatus.changes
-        ? // Note Added Successfully.
-          createMessage('success')
-        : // Error while adding Note.
-          createMessage('server-error', `Error while adding note.`);
-
-      if (createStatus.changes) {
-        // Get newly inserted Note.
-        result = database.getNoteWithId(createStatus.lastInsertRowid);
-      }
-      break;
-
-    case ENDPOINT.UPDATE:
-      // Update note.
-      const updateStatus = database.updateNote(
-        { note: requestData.note, updated_at: requestData.updated_at },
-        requestData._id
-      );
-
-      message = updateStatus
-        ? // Note updated Successfully.
-          createMessage('success')
-        : // Error while updating Note.
-          createMessage('server-error', `Error while saving note.`);
-
-      if (updateStatus)
-        result = {
-          _id: requestData._id,
-          note: requestData.note,
-          updated_at: requestData.updated_at,
-        };
-
-      break;
-
-    default:
-      // Invalid Sub Request.
-      message = createMessage('client-error', 'Invalid Request');
-      break;
-  }
-
-  return { data: result, message };
-};
 
 /**
  * This functions resolves all the request received from renderer on main process.
@@ -96,7 +26,7 @@ const notesRequest = (
  * @returns {IPCResponseObject} IPC Response Object to be sent to renderer process.
  */
 const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
-  let resolvedSubRequest: SubRequestResponseType = {
+  const resolvedSubRequest: SubRequestResponseType = {
     data: undefined,
     message: undefined,
   };
@@ -142,12 +72,15 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
         requestSubURI[1] === ENDPOINT.GET_SPACE &&
         resolvedSubRequest.data != undefined
       ) {
+        // Update Sub Request URI.
+        requestSubURI[1] = ENDPOINT.GET_ALL;
+
         // Populate Notes for respective Space
-        //  @TODO
+        resolveNote(requestSubURI, {} as NoteRequestType, resolvedSubRequest);
 
         // Populate Credentials for respective Space
         resolveCredential(
-          [``, ENDPOINT.GET_ALL],
+          requestSubURI,
           {} as CredentialRequestType,
           resolvedSubRequest
         );
@@ -155,9 +88,10 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
       break;
 
     case ENDPOINT.NOTES:
-      resolvedSubRequest = notesRequest(
+      resolveNote(
         requestSubURI,
-        <NotesRequestDataType>request.data
+        request.data as NoteRequestType,
+        resolvedSubRequest
       );
       break;
 
@@ -170,10 +104,6 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
       break;
 
     default:
-      resolvedSubRequest = {
-        data: -1,
-        message: createMessage('client-error', 'Invalid Request'),
-      };
       break;
   }
 

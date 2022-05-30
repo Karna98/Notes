@@ -13,6 +13,13 @@ import database from './../sql';
 // Constant Endpoint String.
 const { ENDPOINT } = CONSTANT;
 
+/**
+ * Handles PIN Authentication related requests.
+ *
+ * @param requestType
+ * @param requestData
+ * @param resolvedSubRequest
+ */
 const authPin = (
   requestType: string[],
   requestData: AuthPinRequestType,
@@ -152,11 +159,6 @@ const authPin = (
       break;
 
     default:
-      // Invalid Sub Request.
-      resolvedSubRequest.message = createMessage(
-        'client-error',
-        'Invalid Request'
-      );
       break;
   }
 };

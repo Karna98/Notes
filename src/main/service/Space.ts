@@ -14,7 +14,7 @@ import CONFIG from '../config';
 const { ENDPOINT } = CONSTANT;
 
 /**
- * Handles Spaces related requests.
+ * Handles Space related requests.
  *
  * @param requestType
  * @param requestData
@@ -62,24 +62,9 @@ const resolveSpace = (
       break;
 
     case ENDPOINT.GET_SPACE:
-      // Get all Notes.
-      const notesList: NotesTableInterface[] = database.getNotes(
-        requestData._id
-      );
-
-      // Converting to type of NoteStoreType[] from NotesTableInterface[].
-      const notesListMapped: NoteStoreType[] = notesList.map(
-        ({ _id, note, updated_at }: NotesTableInterface) => ({
-          _id,
-          note,
-          updated_at,
-        })
-      );
-
-      // Get all data related to Space ID.
+      // Set Space ID.
       resolvedSubRequest.data = {
         space_id: requestData._id,
-        notes: notesListMapped,
       };
 
       resolvedSubRequest.message = createMessage('success');
