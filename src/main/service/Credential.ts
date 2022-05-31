@@ -16,18 +16,18 @@ const { ENDPOINT } = CONSTANT;
 /**
  * Handles Credential related requests.
  *
- * @param requestType
+ * @param requestURI
  * @param requestData
- * @param resolvedSubRequest
+ * @param resolvedSubResponse
  */
 const credential = (
-  requestType: string[],
-  requestData: CredentialRequestType,
-  resolvedSubRequest: SubRequestResponseType
+  requestURI: string[],
+  resolvedSubResponse: SubRequestResponseType,
+  requestData: CredentialRequestType
 ): void => {
   let payloadRequestData;
 
-  switch (requestType[1]) {
+  switch (requestURI[1]) {
     case ENDPOINT.ADD:
       payloadRequestData = requestData.data as CredentialDataType;
 
@@ -58,10 +58,10 @@ const credential = (
 
         delete newCredential.credential.secure;
 
-        resolvedSubRequest.data = newCredential;
+        resolvedSubResponse.data = newCredential;
       }
 
-      resolvedSubRequest.message = createStatus.changes
+      resolvedSubResponse.message = createStatus.changes
         ? // Credential Added Successfully.
           createMessage('success')
         : // Error while updating Credential.
@@ -88,9 +88,9 @@ const credential = (
         payloadRequestData._id
       );
 
-      if (updateStatus) resolvedSubRequest.data = payloadRequestData;
+      if (updateStatus) resolvedSubResponse.data = payloadRequestData;
 
-      resolvedSubRequest.message = updateStatus
+      resolvedSubResponse.message = updateStatus
         ? // Credential updated Successfully.
           createMessage('success')
         : // Error while updating Credential.
@@ -101,8 +101,8 @@ const credential = (
       payloadRequestData = requestData.data as number;
 
       const encryptionKey =
-        resolvedSubRequest.data != undefined
-          ? (resolvedSubRequest.data as AuthPinRequestType)?.s_pin
+        resolvedSubResponse.data != undefined
+          ? (resolvedSubResponse.data as AuthPinRequestType)?.s_pin
           : requestData.s_pin;
 
       const credentialData: CredentialsTableInterface =
@@ -119,23 +119,23 @@ const credential = (
 
       credentialBody.secure = JSON.parse(decryptedCred);
 
-      resolvedSubRequest.data = {
-        ...(resolvedSubRequest.data as object),
+      resolvedSubResponse.data = {
+        ...(resolvedSubResponse.data as object),
         data: {
           ...credentialData,
           credential: credentialBody,
         },
       };
 
-      if (resolvedSubRequest.message == undefined)
-        resolvedSubRequest.message = createMessage('success');
+      if (resolvedSubResponse.message == undefined)
+        resolvedSubResponse.message = createMessage('success');
       break;
 
     case ENDPOINT.GET_ALL:
       // Get all Credentials.
       const credentialList: CredentialsTableInterface[] =
         database.getCredentials(
-          (resolvedSubRequest.data as SpaceInterface).space_id
+          (resolvedSubResponse.data as SpaceInterface).space_id
         );
 
       // Converting to type of CredentialStoreType[] from CredentialsTableInterface[].
@@ -150,8 +150,8 @@ const credential = (
         }
       );
 
-      resolvedSubRequest.data = {
-        ...(resolvedSubRequest.data as object),
+      resolvedSubResponse.data = {
+        ...(resolvedSubResponse.data as object),
         credentials: credentialListSanitized,
       };
       break;

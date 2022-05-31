@@ -20,16 +20,16 @@ const { ENDPOINT } = CONSTANT;
 /**
  * Handles Authentication related requests.
  *
- * @param requestType
+ * @param requestURI
  * @param requestData
- * @param resolvedSubRequest
+ * @param resolvedSubResponse
  */
 const resolveAuth = (
-  requestType: string[],
-  requestData: AuthRequestType,
-  resolvedSubRequest: SubRequestResponseType
+  requestURI: string[],
+  resolvedSubResponse: SubRequestResponseType,
+  requestData: AuthRequestType
 ): void => {
-  switch (requestType[1]) {
+  switch (requestURI[1]) {
     case ENDPOINT.STATUS:
       // Check if database exists
       if (database.checkIfDbExsts()) {
@@ -37,13 +37,13 @@ const resolveAuth = (
         database.updateDatabase();
 
         // Get Users Count from Database.
-        resolvedSubRequest.data = database.getUsersCount();
+        resolvedSubResponse.data = database.getUsersCount();
       } else {
         // Set result to 0 if no Database found.
-        resolvedSubRequest.data = 0;
+        resolvedSubResponse.data = 0;
       }
 
-      resolvedSubRequest.message = createMessage('success');
+      resolvedSubResponse.message = createMessage('success');
       break;
 
     case ENDPOINT.REGISTER:
@@ -55,7 +55,7 @@ const resolveAuth = (
         cryptBcryptHash(requestData.password)
       );
 
-      resolvedSubRequest.message = registerStatus
+      resolvedSubResponse.message = registerStatus
         ? // Registration Successful.
           createMessage('success', 'User Registered Successfully.')
         : // Registration Failure.
@@ -71,7 +71,7 @@ const resolveAuth = (
 
       if (loginStatus)
         // Create Session Object.
-        resolvedSubRequest.data = {
+        resolvedSubResponse.data = {
           _id: registeredUsers._id,
           username: requestData.username,
           password: cryptoHash(requestData.password),
@@ -81,7 +81,7 @@ const resolveAuth = (
           last_logged_in: registeredUsers.last_logged_in,
         };
 
-      resolvedSubRequest.message = loginStatus
+      resolvedSubResponse.message = loginStatus
         ? // Login Successful.
           createMessage('success')
         : // Login Failure.

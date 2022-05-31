@@ -15,16 +15,16 @@ const { ENDPOINT } = CONSTANT;
 /**
  * Handles Note related requests.
  *
- * @param requestType
+ * @param requestURI
  * @param requestData
- * @param resolvedSubRequest
+ * @param resolvedSubResponse
  */
 const resolveNote = (
-  requestType: string[],
-  requestData: NoteRequestType,
-  resolvedSubRequest: SubRequestResponseType
+  requestURI: string[],
+  resolvedSubResponse: SubRequestResponseType,
+  requestData: NoteRequestType
 ): void => {
-  switch (requestType[1]) {
+  switch (requestURI[1]) {
     case ENDPOINT.ADD:
       const createStatus = database.createNewNote(
         requestData.space_id,
@@ -33,11 +33,11 @@ const resolveNote = (
 
       if (createStatus.changes)
         // Get newly inserted Note.
-        resolvedSubRequest.data = database.getNoteWithId(
+        resolvedSubResponse.data = database.getNoteWithId(
           createStatus.lastInsertRowid
         );
 
-      resolvedSubRequest.message = createStatus.changes
+      resolvedSubResponse.message = createStatus.changes
         ? // Note Added Successfully.
           createMessage('success')
         : // Error while adding Note.
@@ -52,13 +52,13 @@ const resolveNote = (
       );
 
       if (updateStatus)
-        resolvedSubRequest.data = {
+        resolvedSubResponse.data = {
           _id: requestData._id,
           note: requestData.note,
           updated_at: requestData.updated_at,
         };
 
-      resolvedSubRequest.message = updateStatus
+      resolvedSubResponse.message = updateStatus
         ? // Note updated Successfully.
           createMessage('success')
         : // Error while updating Note.
@@ -68,7 +68,7 @@ const resolveNote = (
     case ENDPOINT.GET_ALL:
       // Get all Notes.
       const noteList: NotesTableInterface[] = database.getNotes(
-        (resolvedSubRequest.data as SpaceInterface).space_id
+        (resolvedSubResponse.data as SpaceInterface).space_id
       );
 
       // Converting to type of NoteStoreType[] from NotesTableInterface[].
@@ -80,8 +80,8 @@ const resolveNote = (
         })
       );
 
-      resolvedSubRequest.data = {
-        ...(resolvedSubRequest.data as object),
+      resolvedSubResponse.data = {
+        ...(resolvedSubResponse.data as object),
         notes: noteListSanitized,
       };
       break;

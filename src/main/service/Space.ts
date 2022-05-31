@@ -16,18 +16,18 @@ const { ENDPOINT } = CONSTANT;
 /**
  * Handles Space related requests.
  *
- * @param requestType
+ * @param requestURI
  * @param requestData
- * @param resolvedSubRequest
+ * @param resolvedSubResponse
  */
 const resolveSpace = (
-  requestType: string[],
-  requestData: SpaceRequestType,
-  resolvedSubRequest: SubRequestResponseType
+  requestURI: string[],
+  resolvedSubResponse: SubRequestResponseType,
+  requestData: SpaceRequestType
 ): void => {
-  switch (requestType[1]) {
+  switch (requestURI[1]) {
     case ENDPOINT.GET:
-      resolvedSubRequest.data = {
+      resolvedSubResponse.data = {
         metaData: {
           SPACES_MAX_COUNT_ALLOWED: CONFIG.SPACES_MAX_COUNT_ALLOWED,
         },
@@ -35,7 +35,7 @@ const resolveSpace = (
         list: database.getSpaces(),
       };
 
-      resolvedSubRequest.message = createMessage('success');
+      resolvedSubResponse.message = createMessage('success');
       break;
 
     case ENDPOINT.ADD:
@@ -43,11 +43,11 @@ const resolveSpace = (
 
       if (createStatus.changes)
         // Get newly inserted Space.
-        resolvedSubRequest.data = database.getSpaceWithId(
+        resolvedSubResponse.data = database.getSpaceWithId(
           createStatus.lastInsertRowid
         );
 
-      resolvedSubRequest.message = createStatus.changes
+      resolvedSubResponse.message = createStatus.changes
         ? // Space Added Successfully.
           createMessage(
             'success',
@@ -63,11 +63,11 @@ const resolveSpace = (
 
     case ENDPOINT.GET_SPACE:
       // Set Space ID.
-      resolvedSubRequest.data = {
+      resolvedSubResponse.data = {
         space_id: requestData._id,
       };
 
-      resolvedSubRequest.message = createMessage('success');
+      resolvedSubResponse.message = createMessage('success');
       break;
 
     default:

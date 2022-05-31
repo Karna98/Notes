@@ -23,21 +23,23 @@ const { ENDPOINT } = CONSTANT;
  * @param request
  * @returns {IPCResponseObject} IPC Response Object to be sent to renderer process.
  */
-const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
-  const resolvedSubRequest: SubRequestResponseType = {
+const resolveIpcRequest = (
+  request: IPCRequestInterface
+): IPCResponseInterface => {
+  const resolvedSubResponse: SubRequestResponseType = {
     data: undefined,
     message: undefined,
   };
 
   // Resolve Request URI
-  const requestSubURI: string[] = resolveURI(request.URI);
+  const requestURI: string[] = resolveURI(request.URI);
 
-  switch (requestSubURI[0]) {
+  switch (requestURI[0]) {
     case ENDPOINT.AUTH:
       resolveAuth(
-        requestSubURI,
-        request.data as AuthRequestType,
-        resolvedSubRequest
+        requestURI,
+        resolvedSubResponse,
+        request.data as AuthRequestType
       );
       break;
 
@@ -45,59 +47,59 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
       const requestData = request.data as AuthPinRequestType;
 
       if (requestData.l_pin != undefined)
-        resolveAuthPin(requestSubURI, requestData, resolvedSubRequest);
+        resolveAuthPin(requestURI, resolvedSubResponse, requestData);
 
       if (
         requestData.data != undefined &&
         (requestData.l_pin == undefined ||
-          resolvedSubRequest.message?.status == 200)
+          resolvedSubResponse.message?.status == 200)
       )
         resolveCredential(
           [``, ENDPOINT.GET],
-          request.data as CredentialRequestType,
-          resolvedSubRequest
+          resolvedSubResponse,
+          request.data as CredentialRequestType
         );
       break;
 
     case ENDPOINT.SPACES:
       resolveSpace(
-        requestSubURI,
-        request.data as SpaceRequestType,
-        resolvedSubRequest
+        requestURI,
+        resolvedSubResponse,
+        request.data as SpaceRequestType
       );
 
       if (
-        requestSubURI[1] === ENDPOINT.GET_SPACE &&
-        resolvedSubRequest.data != undefined
+        requestURI[1] === ENDPOINT.GET_SPACE &&
+        resolvedSubResponse.data != undefined
       ) {
         // Update Sub Request URI.
-        requestSubURI[1] = ENDPOINT.GET_ALL;
+        requestURI[1] = ENDPOINT.GET_ALL;
 
         // Populate Notes for respective Space
-        resolveNote(requestSubURI, {} as NoteRequestType, resolvedSubRequest);
+        resolveNote(requestURI, resolvedSubResponse, {} as NoteRequestType);
 
         // Populate Credentials for respective Space
         resolveCredential(
-          requestSubURI,
-          {} as CredentialRequestType,
-          resolvedSubRequest
+          requestURI,
+          resolvedSubResponse,
+          {} as CredentialRequestType
         );
       }
       break;
 
     case ENDPOINT.NOTES:
       resolveNote(
-        requestSubURI,
-        request.data as NoteRequestType,
-        resolvedSubRequest
+        requestURI,
+        resolvedSubResponse,
+        request.data as NoteRequestType
       );
       break;
 
     case ENDPOINT.CREDENTIAL:
       resolveCredential(
-        requestSubURI,
-        request.data as CredentialRequestType,
-        resolvedSubRequest
+        requestURI,
+        resolvedSubResponse,
+        request.data as CredentialRequestType
       );
       break;
 
@@ -106,8 +108,8 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
   }
 
   // If message is still undefined then throw client error.
-  if (resolvedSubRequest.message == undefined)
-    resolvedSubRequest.message = createMessage(
+  if (resolvedSubResponse.message == undefined)
+    resolvedSubResponse.message = createMessage(
       'client-error',
       'Invalid Request'
     );
@@ -115,10 +117,10 @@ const resolveRequest = (request: IPCRequestInterface): IPCResponseInterface => {
   return {
     URI: request.URI,
     timestamp: request.timestamp,
-    data: resolvedSubRequest.data,
-    status: resolvedSubRequest.message.status,
-    message: resolvedSubRequest.message.message,
+    data: resolvedSubResponse.data,
+    status: resolvedSubResponse.message.status,
+    message: resolvedSubResponse.message.message,
   };
 };
 
-export default resolveRequest;
+export default resolveIpcRequest;

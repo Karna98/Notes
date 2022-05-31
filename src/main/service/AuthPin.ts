@@ -16,16 +16,16 @@ const { ENDPOINT } = CONSTANT;
 /**
  * Handles PIN Authentication related requests.
  *
- * @param requestType
+ * @param requestURI
  * @param requestData
- * @param resolvedSubRequest
+ * @param resolvedSubResponse
  */
 const authPin = (
-  requestType: string[],
-  requestData: AuthPinRequestType,
-  resolvedSubRequest: SubRequestResponseType
+  requestURI: string[],
+  resolvedSubResponse: SubRequestResponseType,
+  requestData: AuthPinRequestType
 ): void => {
-  switch (requestType[1]) {
+  switch (requestURI[1]) {
     // PIN Flow for Login.
     case ENDPOINT.LOGIN:
       const loginPin = requestData.password + requestData.l_pin;
@@ -54,13 +54,13 @@ const authPin = (
             requestData._id
           );
 
-          resolvedSubRequest.message = createMessage(
+          resolvedSubResponse.message = createMessage(
             'success',
             'Login Successful.'
           );
         } else {
           // IF PIN mismatched.
-          resolvedSubRequest.message = createMessage(
+          resolvedSubResponse.message = createMessage(
             'client-error',
             'Invalid PIN.'
           );
@@ -77,17 +77,17 @@ const authPin = (
           requestData._id
         );
 
-        resolvedSubRequest.message = createMessage(
+        resolvedSubResponse.message = createMessage(
           'success',
           'Login Successful.'
         );
       }
 
-      if (resolvedSubRequest.message.status == 200) {
+      if (resolvedSubResponse.message.status == 200) {
         requestData.l_pin = loginPinHashed;
         requestData.lPinStatus = true;
 
-        resolvedSubRequest.data = requestData;
+        resolvedSubResponse.data = requestData;
       }
 
       break;
@@ -98,7 +98,7 @@ const authPin = (
         requestData.l_pin + requestData.s_pin
       );
 
-      switch (requestType[2]) {
+      switch (requestURI[2]) {
         case ENDPOINT.SETUP:
           // Update Credential PIN.
           const updateStatus = database.updateUser(
@@ -109,17 +109,17 @@ const authPin = (
           );
 
           if (updateStatus) {
-            resolvedSubRequest.data = {
+            resolvedSubResponse.data = {
               s_pin: credentialPinHashed,
               sPinStatus: true,
             };
 
-            resolvedSubRequest.message = createMessage(
+            resolvedSubResponse.message = createMessage(
               'success',
               'PIN set successfully.'
             );
           } else
-            resolvedSubRequest.message = createMessage(
+            resolvedSubResponse.message = createMessage(
               'server-error',
               'Error while setting PIN.'
             );
@@ -139,14 +139,14 @@ const authPin = (
           if (pinVerifyStatus) {
             // If PIN matches.
 
-            resolvedSubRequest.data = {
+            resolvedSubResponse.data = {
               s_pin: credentialPinHashed,
             };
 
-            resolvedSubRequest.message = createMessage('success');
+            resolvedSubResponse.message = createMessage('success');
           } else {
             // IF PIN mismatched.
-            resolvedSubRequest.message = createMessage(
+            resolvedSubResponse.message = createMessage(
               'client-error',
               'Invalid PIN.'
             );
