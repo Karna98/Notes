@@ -12,6 +12,14 @@ import { useAppDispatch, useAppSelector } from 'renderer/Hooks';
 import { setMessageState } from 'renderer/State';
 import { sendToMainWrapper } from 'renderer/util';
 
+// Constant Message String.
+const MSG_STR = {
+  SPACE_EXISTS: {
+    FUNC: (spaceName: string) =>
+      `Space with name "${spaceName}" already exists.`,
+  },
+};
+
 const List = () => {
   const dispatch = useAppDispatch();
 
@@ -37,8 +45,8 @@ const List = () => {
       dispatch(
         setMessageState(
           createMessage(
-            `client-error`,
-            `Space with name "${formData.space_name}" already exists.`
+            CONSTANT.MSG_CODE.ERR_CLIENT,
+            MSG_STR.SPACE_EXISTS.FUNC(formData.space_name as string)
           )
         )
       );

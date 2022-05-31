@@ -6,8 +6,6 @@
  *
  */
 
-import { getStatusCode } from './status-codes';
-
 /**
  * @NOTE :
  *     Needs to be declare so that React Components can detect window.NotesAPI and does not throw error on opening the application.
@@ -25,11 +23,8 @@ declare global {
  * @param message Status Message.
  * @returns {object}
  */
-const createMessage = (
-  status: string | number,
-  message?: string
-): MessageInterface => ({
-  status: typeof status === 'number' ? status : getStatusCode(status),
+const createMessage = (status: number, message?: string): MessageInterface => ({
+  status,
   message,
 });
 

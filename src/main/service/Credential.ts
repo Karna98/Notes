@@ -11,7 +11,13 @@ import { decryptData, encryptData } from '../secure-util';
 import database from './../sql';
 
 // Constant Endpoint String.
-const { ENDPOINT } = CONSTANT;
+const { ENDPOINT, MSG_CODE } = CONSTANT;
+
+// Constant Message String.
+const MSG_STR = {
+  CRED_ADD_FAILED: `Error while adding Credential !`,
+  CRED_UPDATE_FAILED: `Error while saving Credential !`,
+};
 
 /**
  * Handles Credential related requests.
@@ -63,9 +69,9 @@ const credential = (
 
       resolvedSubResponse.message = createStatus.changes
         ? // Credential Added Successfully.
-          createMessage('success')
+          createMessage(MSG_CODE.SUCCESS)
         : // Error while updating Credential.
-          createMessage('server-error', `Error while adding credential.`);
+          createMessage(MSG_CODE.ERR_SERVER, MSG_STR.CRED_ADD_FAILED);
       break;
 
     case ENDPOINT.UPDATE:
@@ -92,9 +98,9 @@ const credential = (
 
       resolvedSubResponse.message = updateStatus
         ? // Credential updated Successfully.
-          createMessage('success')
+          createMessage(MSG_CODE.SUCCESS)
         : // Error while updating Credential.
-          createMessage('server-error', `Error while saving credential.`);
+          createMessage(MSG_CODE.ERR_SERVER, MSG_STR.CRED_UPDATE_FAILED);
       break;
 
     case ENDPOINT.GET:
@@ -128,7 +134,7 @@ const credential = (
       };
 
       if (resolvedSubResponse.message == undefined)
-        resolvedSubResponse.message = createMessage('success');
+        resolvedSubResponse.message = createMessage(MSG_CODE.SUCCESS);
       break;
 
     case ENDPOINT.GET_ALL:

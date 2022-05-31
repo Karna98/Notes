@@ -15,7 +15,14 @@ import {
 import database from './../sql';
 
 // Constant Endpoint String.
-const { ENDPOINT } = CONSTANT;
+const { ENDPOINT, MSG_CODE } = CONSTANT;
+
+// Constant Message String.
+const MSG_STR = {
+  LOGIN_CRED_FAILED: `Wrong Credentials !`,
+  REGISTRATION_SUCCESS: `User Registered Successfully.`,
+  REGISTRATION_FAILED: `User Registration Failed !`,
+};
 
 /**
  * Handles Authentication related requests.
@@ -43,7 +50,7 @@ const resolveAuth = (
         resolvedSubResponse.data = 0;
       }
 
-      resolvedSubResponse.message = createMessage('success');
+      resolvedSubResponse.message = createMessage(MSG_CODE.SUCCESS);
       break;
 
     case ENDPOINT.REGISTER:
@@ -57,9 +64,9 @@ const resolveAuth = (
 
       resolvedSubResponse.message = registerStatus
         ? // Registration Successful.
-          createMessage('success', 'User Registered Successfully.')
+          createMessage(MSG_CODE.SUCCESS, MSG_STR.REGISTRATION_SUCCESS)
         : // Registration Failure.
-          createMessage('server-error', 'User Registration failed.');
+          createMessage(MSG_CODE.ERR_SERVER, MSG_STR.REGISTRATION_FAILED);
       break;
 
     case ENDPOINT.LOGIN:
@@ -83,9 +90,9 @@ const resolveAuth = (
 
       resolvedSubResponse.message = loginStatus
         ? // Login Successful.
-          createMessage('success')
+          createMessage(MSG_CODE.SUCCESS)
         : // Login Failure.
-          createMessage('client-error', 'Wrong Credentials.');
+          createMessage(MSG_CODE.ERR_CLIENT, MSG_STR.LOGIN_CRED_FAILED);
       break;
 
     default:

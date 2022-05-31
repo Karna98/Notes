@@ -15,7 +15,12 @@ import { resolveNote } from './Note';
 import { resolveSpace } from './Space';
 
 // Constant Endpoint String.
-const { ENDPOINT } = CONSTANT;
+const { ENDPOINT, MSG_CODE } = CONSTANT;
+
+// Constant Message String.
+const MSG_STR = {
+  INVALID_REQ: `Invalid Request !`,
+};
 
 /**
  * This functions resolves all the request received from renderer on main process.
@@ -110,16 +115,15 @@ const resolveIpcRequest = (
   // If message is still undefined then throw client error.
   if (resolvedSubResponse.message == undefined)
     resolvedSubResponse.message = createMessage(
-      'client-error',
-      'Invalid Request'
+      MSG_CODE.ERR_CLIENT,
+      MSG_STR.INVALID_REQ
     );
 
   return {
     URI: request.URI,
     timestamp: request.timestamp,
     data: resolvedSubResponse.data,
-    status: resolvedSubResponse.message.status,
-    message: resolvedSubResponse.message.message,
+    ...resolvedSubResponse.message,
   };
 };
 

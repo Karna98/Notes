@@ -9,7 +9,7 @@
 // Modules to control application life and create native browser window
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { join as pathJoin } from 'path';
-import CONSTANT from '../common/constant';
+import { CONSTANT } from '../common';
 import CONFIG from './config';
 import resolveIpcRequest from './service';
 import { resolveHtmlPath } from './util';

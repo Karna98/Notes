@@ -8,5 +8,4 @@
 
 export { default as CONSTANT } from './constant';
 export { resolveReactRoutes } from './routes';
-export { getStatusCode } from './status-codes';
 export { createMessage } from './util';

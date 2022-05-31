@@ -11,7 +11,17 @@ import database from './../sql';
 import CONFIG from '../config';
 
 // Constant Endpoint String.
-const { ENDPOINT } = CONSTANT;
+const { ENDPOINT, MSG_CODE } = CONSTANT;
+
+// Constant Message String.
+const MSG_STR = {
+  SPACE_ADD_SUCCESS: {
+    FUNC: (spaceName: string) => `"${spaceName}" Space added successfully.`,
+  },
+  SPACE_ADD_FAILED: {
+    FUNC: (spaceName: string) => `Error while adding "${spaceName}" Space !`,
+  },
+};
 
 /**
  * Handles Space related requests.
@@ -35,7 +45,7 @@ const resolveSpace = (
         list: database.getSpaces(),
       };
 
-      resolvedSubResponse.message = createMessage('success');
+      resolvedSubResponse.message = createMessage(MSG_CODE.SUCCESS);
       break;
 
     case ENDPOINT.ADD:
@@ -50,13 +60,13 @@ const resolveSpace = (
       resolvedSubResponse.message = createStatus.changes
         ? // Space Added Successfully.
           createMessage(
-            'success',
-            `${requestData.space_name} Space added successfully.`
+            MSG_CODE.SUCCESS,
+            MSG_STR.SPACE_ADD_SUCCESS.FUNC(requestData.space_name)
           )
         : // Error while adding Space.
           createMessage(
-            'server-error',
-            `Error while adding ${requestData.space_name} Space.`
+            MSG_CODE.ERR_SERVER,
+            MSG_STR.SPACE_ADD_FAILED.FUNC(requestData.space_name)
           );
 
       break;
@@ -67,7 +77,7 @@ const resolveSpace = (
         space_id: requestData._id,
       };
 
-      resolvedSubResponse.message = createMessage('success');
+      resolvedSubResponse.message = createMessage(MSG_CODE.SUCCESS);
       break;
 
     default:

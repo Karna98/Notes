@@ -12,6 +12,11 @@ import { useAppDispatch } from 'renderer/Hooks';
 import { setMessageState } from 'renderer/State';
 import { sendToMainWrapper } from 'renderer/util';
 
+// Constant Message String.
+const MSG_STR = {
+  CRED_VERIFYING: `Verifying Credentials ...`,
+};
+
 const Login = () => {
   const dispatch = useAppDispatch();
 
@@ -22,7 +27,9 @@ const Login = () => {
    */
   const formSubmitAction = (formData?: Record<string, unknown>): void => {
     dispatch(
-      setMessageState(createMessage(`progress`, `Checking Credentials ..`))
+      setMessageState(
+        createMessage(CONSTANT.MSG_CODE.PROGRESS, MSG_STR.CRED_VERIFYING)
+      )
     );
 
     sendToMainWrapper(CONSTANT.ROUTE.AUTH.LOGIN, formData);

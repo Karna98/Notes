@@ -57,4 +57,16 @@ const ENDPOINT = {
   VERIFY: `VERIFY`,
 };
 
-export default { CHANNEL_BUS, ROUTE, ENDPOINT };
+// Message/Error Code
+const MSG_CODE = {
+  // Intialized / In Progress
+  PROGRESS: 0,
+  // Success / Creation-Success
+  SUCCESS: 200,
+  // Bad-Request, Unauthorized
+  ERR_CLIENT: 400,
+  // Server-Error, Database-Error
+  ERR_SERVER: 500,
+};
+
+export default { CHANNEL_BUS, ENDPOINT, MSG_CODE, ROUTE };

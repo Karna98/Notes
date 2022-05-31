@@ -12,6 +12,11 @@ import { useAppDispatch, useAppSelector } from 'renderer/Hooks';
 import { setMessageState } from 'renderer/State';
 import { sendToMainWrapper } from 'renderer/util';
 
+// Constant Message String.
+const MSG_STR = {
+  PIN_VERIFYING: `Verifying PIN ...`,
+};
+
 const BASE_IDENTIFIER = `auth-pin`;
 
 const FORM_SETUP = BASE_IDENTIFIER + `-` + `form-setup`;
@@ -29,7 +34,11 @@ const AuthPin = () => {
    * @param formData Form fields value
    */
   const formSubmitAction = (formData?: Record<string, unknown>): void => {
-    dispatch(setMessageState(createMessage(`progress`, `Verifying PIN ..`)));
+    dispatch(
+      setMessageState(
+        createMessage(CONSTANT.MSG_CODE.PROGRESS, MSG_STR.PIN_VERIFYING)
+      )
+    );
 
     sendToMainWrapper(CONSTANT.ROUTE.AUTH_PIN.LOGIN, {
       ...sessionState,

@@ -11,7 +11,15 @@ import { bcryptHash, cryptBcryptCompare, cryptoHash } from '../secure-util';
 import database from './../sql';
 
 // Constant Endpoint String.
-const { ENDPOINT } = CONSTANT;
+const { ENDPOINT, MSG_CODE } = CONSTANT;
+
+// Constant Message String.
+const MSG_STR = {
+  LOGIN_PIN_SUCCESS: `Login Successful.`,
+  PIN_SETUP_FAILED: `Error while setting PIN !`,
+  PIN_SETUP_SUCCESS: `PIN set successfully.`,
+  PIN_VERIFY_FAILED: `Invalid PIN !`,
+};
 
 /**
  * Handles PIN Authentication related requests.
@@ -55,14 +63,14 @@ const authPin = (
           );
 
           resolvedSubResponse.message = createMessage(
-            'success',
-            'Login Successful.'
+            MSG_CODE.SUCCESS,
+            MSG_STR.LOGIN_PIN_SUCCESS
           );
         } else {
           // IF PIN mismatched.
           resolvedSubResponse.message = createMessage(
-            'client-error',
-            'Invalid PIN.'
+            MSG_CODE.ERR_CLIENT,
+            MSG_STR.PIN_VERIFY_FAILED
           );
         }
       } else {
@@ -78,8 +86,8 @@ const authPin = (
         );
 
         resolvedSubResponse.message = createMessage(
-          'success',
-          'Login Successful.'
+          MSG_CODE.SUCCESS,
+          MSG_STR.LOGIN_PIN_SUCCESS
         );
       }
 
@@ -115,13 +123,13 @@ const authPin = (
             };
 
             resolvedSubResponse.message = createMessage(
-              'success',
-              'PIN set successfully.'
+              MSG_CODE.SUCCESS,
+              MSG_STR.PIN_SETUP_SUCCESS
             );
           } else
             resolvedSubResponse.message = createMessage(
-              'server-error',
-              'Error while setting PIN.'
+              MSG_CODE.ERR_SERVER,
+              MSG_STR.PIN_SETUP_FAILED
             );
           break;
 
@@ -143,12 +151,12 @@ const authPin = (
               s_pin: credentialPinHashed,
             };
 
-            resolvedSubResponse.message = createMessage('success');
+            resolvedSubResponse.message = createMessage(MSG_CODE.SUCCESS);
           } else {
             // IF PIN mismatched.
             resolvedSubResponse.message = createMessage(
-              'client-error',
-              'Invalid PIN.'
+              MSG_CODE.ERR_CLIENT,
+              MSG_STR.PIN_VERIFY_FAILED
             );
           }
           break;

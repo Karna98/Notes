@@ -10,7 +10,13 @@ import { CONSTANT, createMessage } from '../../common';
 import database from './../sql';
 
 // Constant Endpoint String.
-const { ENDPOINT } = CONSTANT;
+const { ENDPOINT, MSG_CODE } = CONSTANT;
+
+// Constant Message String.
+const MSG_STR = {
+  NOTE_ADD_FAILED: `Error while adding Note !`,
+  NOTE_UPDATE_FAILED: `Error while saving Note !`,
+};
 
 /**
  * Handles Note related requests.
@@ -39,9 +45,9 @@ const resolveNote = (
 
       resolvedSubResponse.message = createStatus.changes
         ? // Note Added Successfully.
-          createMessage('success')
+          createMessage(MSG_CODE.SUCCESS)
         : // Error while adding Note.
-          createMessage('server-error', `Error while adding note.`);
+          createMessage(MSG_CODE.ERR_SERVER, MSG_STR.NOTE_ADD_FAILED);
       break;
 
     case ENDPOINT.UPDATE:
@@ -60,9 +66,9 @@ const resolveNote = (
 
       resolvedSubResponse.message = updateStatus
         ? // Note updated Successfully.
-          createMessage('success')
+          createMessage(MSG_CODE.SUCCESS)
         : // Error while updating Note.
-          createMessage('server-error', `Error while saving note.`);
+          createMessage(MSG_CODE.ERR_SERVER, MSG_STR.NOTE_UPDATE_FAILED);
       break;
 
     case ENDPOINT.GET_ALL:

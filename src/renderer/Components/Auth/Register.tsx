@@ -12,6 +12,12 @@ import { useAppDispatch } from 'renderer/Hooks';
 import { setMessageState } from 'renderer/State';
 import { sendToMainWrapper } from 'renderer/util';
 
+// Constant Message String.
+const MSG_STR = {
+  REGISTRATION_IN_PROG: `Registering User ...`,
+  PASS_MISMATCH: `Password Mismatch !`,
+};
+
 const Register = () => {
   const dispatch = useAppDispatch();
 
@@ -25,13 +31,20 @@ const Register = () => {
       delete formData[`retype_password`];
 
       dispatch(
-        setMessageState(createMessage(`progress`, `Registering User...`))
+        setMessageState(
+          createMessage(
+            CONSTANT.MSG_CODE.PROGRESS,
+            MSG_STR.REGISTRATION_IN_PROG
+          )
+        )
       );
       sendToMainWrapper(CONSTANT.ROUTE.AUTH.REGISTER, formData);
     } else {
       // Passored & Retype Password Mismatch.
       dispatch(
-        setMessageState(createMessage(`client-error`, `Password Mismatch.`))
+        setMessageState(
+          createMessage(CONSTANT.MSG_CODE.ERR_CLIENT, MSG_STR.PASS_MISMATCH)
+        )
       );
     }
   };
