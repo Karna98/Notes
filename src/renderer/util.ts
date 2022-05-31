@@ -6,8 +6,6 @@
  *
  */
 
-import { IPCRequestObject } from 'common';
-
 /**
  * Sends data to Main Process.
  *
@@ -22,13 +20,29 @@ const sendToIpcMain = (data: IPCRequestInterface) => {
 };
 
 /**
+ * Creates new IPC Request Object.
+ *
+ * @param URI URI String.
+ * @param data Payload.
+ * @returns {object}
+ */
+const createIpcRequestObject = (
+  URI: string,
+  data?: unknown | object
+): IPCRequestInterface => ({
+  timestamp: Date.now(),
+  URI,
+  data,
+});
+
+/**
  * Sent to Main Wrapper Function.
  *
  * @param route
  * @param data
  */
 const sendToMainWrapper = (route: string, data?: object | unknown) => {
-  sendToIpcMain(IPCRequestObject(route, data));
+  sendToIpcMain(createIpcRequestObject(route, data));
 };
 
 /*

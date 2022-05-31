@@ -11,7 +11,7 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import { join as pathJoin } from 'path';
 import CONSTANT from '../common/constant';
 import CONFIG from './config';
-import resolveRequest from './resolve';
+import resolveRequest from './service';
 import { resolveHtmlPath } from './util';
 
 /*
