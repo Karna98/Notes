@@ -12,6 +12,9 @@ import { useAppDispatch } from 'renderer/Hooks';
 import { setMessageState } from 'renderer/State';
 import { sendToMainWrapper } from 'renderer/util';
 
+// Constant String.
+const { IPC, MSG_CODE } = CONSTANT;
+
 // Constant Message String.
 const MSG_STR = {
   CRED_VERIFYING: `Verifying Credentials ...`,
@@ -27,12 +30,10 @@ const Login = () => {
    */
   const formSubmitAction = (formData?: Record<string, unknown>): void => {
     dispatch(
-      setMessageState(
-        createMessage(CONSTANT.MSG_CODE.PROGRESS, MSG_STR.CRED_VERIFYING)
-      )
+      setMessageState(createMessage(MSG_CODE.PROGRESS, MSG_STR.CRED_VERIFYING))
     );
 
-    sendToMainWrapper(CONSTANT.ROUTE.AUTH.LOGIN, formData);
+    sendToMainWrapper(IPC.ROUTE.AUTH.LOGIN, formData);
   };
 
   return <Form id="auth-form-login" submitAction={formSubmitAction} />;

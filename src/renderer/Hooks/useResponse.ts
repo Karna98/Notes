@@ -6,7 +6,7 @@
  *
  */
 
-import { CONSTANT, createMessage, resolveReactRoutes } from 'common';
+import { CONSTANT, createMessage } from 'common';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dispatch } from 'redux';
@@ -25,6 +25,10 @@ import {
 } from 'renderer/State';
 import { sendToMainWrapper } from 'renderer/util';
 import { useAppDispatch } from '.';
+
+// Constant String.
+const { IPC } = CONSTANT;
+const { ROUTE } = CONSTANT.REACT;
 
 /**
  * Displays Message.
@@ -48,24 +52,24 @@ const useResponse = () => {
 
   const resolveResponse = (response: IPCResponseInterface) => {
     switch (response.URI) {
-      case CONSTANT.ROUTE.AUTH.STATUS:
+      case IPC.ROUTE.AUTH.STATUS:
         // Based on auth-status, Login or Register Page will be displayed.
         response.status == 200 && response.data == 0
           ? // Register Page
-            navigate(resolveReactRoutes('auth_register'))
+            navigate(ROUTE.AUTH.REGISTER)
           : // Login Page
-            navigate(resolveReactRoutes('auth_login'));
+            navigate(ROUTE.AUTH.LOGIN);
         break;
 
-      case CONSTANT.ROUTE.AUTH.REGISTER:
+      case IPC.ROUTE.AUTH.REGISTER:
         // Display response message.
         dispatchMessage(dispatch, response.status as number, response.message);
 
         // Set Registration status to true.
-        response.status == 200 && navigate(resolveReactRoutes('auth_login'));
+        response.status == 200 && navigate(ROUTE.AUTH.LOGIN);
         break;
 
-      case CONSTANT.ROUTE.AUTH.LOGIN:
+      case IPC.ROUTE.AUTH.LOGIN:
         // Set Message to be displayed.
         dispatchMessage(dispatch, response.status as number, response.message);
 
@@ -73,11 +77,11 @@ const useResponse = () => {
           dispatch(setSessionState(response.data as SessionType));
 
           // Redirect to Auth PIN.
-          navigate(resolveReactRoutes('auth_pin'));
+          navigate(ROUTE.AUTH.PIN);
         }
         break;
 
-      case CONSTANT.ROUTE.AUTH_PIN.LOGIN:
+      case IPC.ROUTE.AUTH_PIN.LOGIN:
         // Set Message to be displayed.
         dispatchMessage(dispatch, response.status as number, response.message);
 
@@ -85,11 +89,11 @@ const useResponse = () => {
           dispatch(setSessionState(response.data as SessionType));
 
           // Get list of spaces.
-          sendToMainWrapper(CONSTANT.ROUTE.SPACE.STATUS);
+          sendToMainWrapper(IPC.ROUTE.SPACE.STATUS);
         }
         break;
 
-      case CONSTANT.ROUTE.AUTH_PIN.CRED_SETUP:
+      case IPC.ROUTE.AUTH_PIN.CRED_SETUP:
         if (response.status == 200)
           dispatch(
             updateSessionState({
@@ -101,7 +105,7 @@ const useResponse = () => {
         dispatchMessage(dispatch, response.status as number, response.message);
         break;
 
-      case CONSTANT.ROUTE.AUTH_PIN.CRED_VERIFY:
+      case IPC.ROUTE.AUTH_PIN.CRED_VERIFY:
         if (response.status == 200) {
           const responseData = response.data as AuthPinRequestType;
 
@@ -124,12 +128,12 @@ const useResponse = () => {
         }
         break;
 
-      case CONSTANT.ROUTE.SPACE.STATUS:
+      case IPC.ROUTE.SPACE.STATUS:
         if (response.status == 200)
           dispatch(setSpacesState(response.data as SpacesInterface));
         break;
 
-      case CONSTANT.ROUTE.SPACE.ADD:
+      case IPC.ROUTE.SPACE.ADD:
         if (response.status == 200) {
           dispatchMessage(dispatch, response.status, response.message);
           dispatch(addSpaceState(response.data as SpacesTableInterface));
@@ -139,12 +143,12 @@ const useResponse = () => {
         }
         break;
 
-      case CONSTANT.ROUTE.SPACE.GET:
+      case IPC.ROUTE.SPACE.GET:
         if (response.status == 200)
           dispatch(setCurrentSpaceState(response.data as SpaceInterface));
         break;
 
-      case CONSTANT.ROUTE.NOTE.ADD:
+      case IPC.ROUTE.NOTE.ADD:
         if (response.status == 200) {
           dispatch(addNoteState(response.data as NotesTableInterface));
         } else if (response.status == 500) {
@@ -153,7 +157,7 @@ const useResponse = () => {
         }
         break;
 
-      case CONSTANT.ROUTE.NOTE.UPDATE:
+      case IPC.ROUTE.NOTE.UPDATE:
         if (response.status == 200) {
           dispatch(updateNoteState(response.data as NoteStoreType));
         } else if (response.status == 500) {
@@ -161,7 +165,7 @@ const useResponse = () => {
         }
         break;
 
-      case CONSTANT.ROUTE.CRED.ADD:
+      case IPC.ROUTE.CRED.ADD:
         if (response.status == 200)
           dispatch(addCredentialState(response.data as CredentialDataType));
         else if (response.status == 500) {
@@ -170,7 +174,7 @@ const useResponse = () => {
         }
         break;
 
-      case CONSTANT.ROUTE.CRED.UPDATE:
+      case IPC.ROUTE.CRED.UPDATE:
         if (response.status == 200) {
           dispatch(setVolatileState(response.data as CredentialDataType));
           dispatch(updateCredentialState(response.data as CredentialStoreType));

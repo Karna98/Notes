@@ -14,8 +14,9 @@ import {
 } from '../secure-util';
 import database from './../sql';
 
-// Constant Endpoint String.
-const { ENDPOINT, MSG_CODE } = CONSTANT;
+// Constant String.
+const { MSG_CODE } = CONSTANT;
+const { ENDPOINT } = CONSTANT.IPC;
 
 // Constant Message String.
 const MSG_STR = {

@@ -14,6 +14,9 @@ import { useAppSelector } from 'renderer/Hooks';
 import { sendToMainWrapper } from 'renderer/util';
 import './notes.scss';
 
+// Constant String.
+const { IPC } = CONSTANT;
+
 const Notes = () => {
   // Modal State
   const [modalState, setModalState] = useState(false);
@@ -69,7 +72,7 @@ const Notes = () => {
    * @param formData Form fields value.
    */
   const addNoteFormAction = (formData?: Record<string, unknown>) => {
-    sendToMainWrapper(CONSTANT.ROUTE.NOTE.ADD, {
+    sendToMainWrapper(IPC.ROUTE.NOTE.ADD, {
       ...formData,
       space_id: Number(space_id),
     });
@@ -83,7 +86,7 @@ const Notes = () => {
    * @param formData Form fields value.
    */
   const updateNoteFormAction = (formData?: Record<string, unknown>) => {
-    sendToMainWrapper(CONSTANT.ROUTE.NOTE.UPDATE, formData);
+    sendToMainWrapper(IPC.ROUTE.NOTE.UPDATE, formData);
   };
 
   useEffect(() => {

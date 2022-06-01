@@ -7,5 +7,4 @@
  */
 
 export { default as CONSTANT } from './constant';
-export { resolveReactRoutes } from './routes';
 export { createMessage } from './util';

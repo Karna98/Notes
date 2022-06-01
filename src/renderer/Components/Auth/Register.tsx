@@ -12,10 +12,13 @@ import { useAppDispatch } from 'renderer/Hooks';
 import { setMessageState } from 'renderer/State';
 import { sendToMainWrapper } from 'renderer/util';
 
+// Constant String.
+const { IPC, MSG_CODE } = CONSTANT;
+
 // Constant Message String.
 const MSG_STR = {
-  REGISTRATION_IN_PROG: `Registering User ...`,
   PASS_MISMATCH: `Password Mismatch !`,
+  REG_IN_PROGRESS: `Registering User ...`,
 };
 
 const Register = () => {
@@ -32,13 +35,11 @@ const Register = () => {
 
       dispatch(
         setMessageState(
-          createMessage(
-            CONSTANT.MSG_CODE.PROGRESS,
-            MSG_STR.REGISTRATION_IN_PROG
-          )
+          createMessage(MSG_CODE.PROGRESS, MSG_STR.REG_IN_PROGRESS)
         )
       );
-      sendToMainWrapper(CONSTANT.ROUTE.AUTH.REGISTER, formData);
+
+      sendToMainWrapper(IPC.ROUTE.AUTH.REGISTER, formData);
     } else {
       // Passored & Retype Password Mismatch.
       dispatch(

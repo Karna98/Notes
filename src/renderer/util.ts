@@ -45,6 +45,25 @@ const sendToMainWrapper = (route: string, data?: object | unknown) => {
   sendToIpcMain(createIpcRequestObject(route, data));
 };
 
+/**
+ * Gets React Route with parameters replaced.
+ * @param route React Route URL
+ * @param params URL params
+ * @returns {string} Updated URL with params
+ */
+const resolveReactRoutes = (
+  route: string,
+  params?: Record<string, string | number>
+): string => {
+  let url: string = route;
+
+  if (url != undefined && params !== undefined)
+    for (const key in params)
+      url = url.replace(`{${key}}`, <string>params[key]);
+
+  return url;
+};
+
 /*
   Browser Session or Local Storage.
 
@@ -117,4 +136,4 @@ const removeItem = (type: 'local' | 'session', STORE_KEY: string) => {
 
 const browserStorage = { getValue, setValue, removeItem };
 
-export { browserStorage, sendToMainWrapper };
+export { browserStorage, resolveReactRoutes, sendToMainWrapper };
