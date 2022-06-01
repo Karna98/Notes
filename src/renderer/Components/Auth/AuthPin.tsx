@@ -6,11 +6,19 @@
  *
  */
 
-import { createMessage, IPCRequestObject } from 'common';
+import { CONSTANT, createMessage } from 'common';
 import { Form } from 'renderer/Components';
 import { useAppDispatch, useAppSelector } from 'renderer/Hooks';
 import { setMessageState } from 'renderer/State';
-import { sendToIpcMain } from 'renderer/util';
+import { sendToMainWrapper } from 'renderer/util';
+
+// Constant String.
+const { IPC, MSG_CODE } = CONSTANT;
+
+// Constant Message String.
+const MSG_STR = {
+  PIN_VERIFYING: `Verifying PIN ...`,
+};
 
 const BASE_IDENTIFIER = `auth-pin`;
 
@@ -29,14 +37,14 @@ const AuthPin = () => {
    * @param formData Form fields value
    */
   const formSubmitAction = (formData?: Record<string, unknown>): void => {
-    dispatch(setMessageState(createMessage(`progress`, `Verifying PIN ..`)));
-
-    sendToIpcMain(
-      IPCRequestObject(`auth-pin-login`, {
-        ...sessionState,
-        l_pin: formData?.pin,
-      })
+    dispatch(
+      setMessageState(createMessage(MSG_CODE.PROGRESS, MSG_STR.PIN_VERIFYING))
     );
+
+    sendToMainWrapper(IPC.ROUTE.AUTH_PIN.LOGIN, {
+      ...sessionState,
+      l_pin: formData?.pin,
+    });
   };
 
   return (

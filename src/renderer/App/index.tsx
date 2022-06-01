@@ -5,15 +5,19 @@
  *    Base file for all the pages to be rendered.
  */
 
-import { IPCRequestObject, resolveReactRoutes } from 'common';
+import { CONSTANT } from 'common';
 import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Message, Sidebar, Spaces } from 'renderer/Components';
 import { useAppSelector, useResponse } from 'renderer/Hooks';
-import { sendToIpcMain } from 'renderer/util';
+import { sendToMainWrapper } from 'renderer/util';
 import Auth from './Auth';
 import Profile from './Profile';
 import ProtectedRoute from './ProtectedRoutes';
+
+// Constant String.
+const { IPC } = CONSTANT;
+const { ENDPOINT, ROUTE } = CONSTANT.REACT;
 
 const App = () => {
   // Resolve Response Hook.
@@ -44,9 +48,7 @@ const App = () => {
     condition?: boolean
   ) => (
     <ProtectedRoute
-      redirectTo={
-        redirect === undefined ? resolveReactRoutes(`auth_login`) : redirect
-      }
+      redirectTo={redirect === undefined ? ROUTE.AUTH.LOGIN : redirect}
       condition={condition === undefined ? isAuthenticated() : condition}
     >
       {element}
@@ -55,33 +57,33 @@ const App = () => {
 
   useEffect(() => {
     // Get Auth Status.
-    sendToIpcMain(IPCRequestObject(`auth-status`));
+    sendToMainWrapper(IPC.ROUTE.AUTH.STATUS);
   }, []);
 
   // List of Routes.
   const RouteList = [
     {
       name: `Startup Page`,
-      path: resolveReactRoutes(`root`),
+      path: ENDPOINT.ROOT,
       element: <div> Loading.. </div>,
     },
     {
       name: `Auth Page`,
-      path: resolveReactRoutes(`auth`) + `/*`,
+      path: ENDPOINT.AUTH_,
       element: getProtectedRoutes(
         <Auth />,
-        resolveReactRoutes(`spaces`),
+        ROUTE.SPACES.LIST,
         !isAuthenticated()
       ),
     },
     {
       name: `Spaces Page`,
-      path: resolveReactRoutes(`spaces`) + `/*`,
+      path: ENDPOINT.SPACES_,
       element: getProtectedRoutes(<Spaces />),
     },
     {
       name: `Profile Page`,
-      path: resolveReactRoutes(`profile`),
+      path: ROUTE.PROFILE,
       element: getProtectedRoutes(<Profile />),
     },
   ];

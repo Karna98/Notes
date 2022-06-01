@@ -25,14 +25,7 @@ const DATABASE_NAME = `${IS_DEVELOPMENT_MODE ? `notes_dev` : `notes`}.sqlite`;
 // Maximum number of Spaces allowed.
 const SPACES_MAX_COUNT_ALLOWED = 4;
 
-// IPC Channel BUS
-const ALLOWED_CHANNEL_BUS = {
-  TO: [`toMain`],
-  FROM: [`fromMain`],
-};
-
 export default {
-  ALLOWED_CHANNEL_BUS,
   DATABASE_NAME,
   IS_DEVELOPMENT_MODE,
   PATH,

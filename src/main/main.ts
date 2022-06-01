@@ -9,8 +9,9 @@
 // Modules to control application life and create native browser window
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { join as pathJoin } from 'path';
+import { CONSTANT } from '../common';
 import CONFIG from './config';
-import resolveRequest from './resolve';
+import resolveIpcRequest from './service';
 import { resolveHtmlPath } from './util';
 
 /*
@@ -126,14 +127,14 @@ class Main {
     });
 
     ipcMain.on(
-      CONFIG.ALLOWED_CHANNEL_BUS.TO[0],
+      CONSTANT.CHANNEL_BUS.TO[0],
       (_event: Electron.IpcMainEvent, args: string) => {
-        const responseObject = resolveRequest(JSON.parse(args));
+        const responseObject = resolveIpcRequest(JSON.parse(args));
 
         if (responseObject != null) {
           // If Response object is created, send it as response
           this?.mainWindow?.webContents.send(
-            CONFIG.ALLOWED_CHANNEL_BUS.FROM[0],
+            CONSTANT.CHANNEL_BUS.FROM[0],
             JSON.stringify(responseObject)
           );
         }

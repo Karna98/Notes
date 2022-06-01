@@ -10,15 +10,31 @@ import { CONSTANT, createMessage } from '../../common';
 import { bcryptHash, cryptBcryptCompare, cryptoHash } from '../secure-util';
 import database from './../sql';
 
-// Constant Endpoint String.
-const { ENDPOINT } = CONSTANT;
+// Constant String.
+const { MSG_CODE } = CONSTANT;
+const { ENDPOINT } = CONSTANT.IPC;
 
+// Constant Message String.
+const MSG_STR = {
+  LOGIN_PIN_SUCCESS: `Login Successful.`,
+  PIN_SETUP_FAILED: `Error while setting PIN !`,
+  PIN_SETUP_SUCCESS: `PIN set successfully.`,
+  PIN_VERIFY_FAILED: `Invalid PIN !`,
+};
+
+/**
+ * Handles PIN Authentication related requests.
+ *
+ * @param requestURI
+ * @param requestData
+ * @param resolvedSubResponse
+ */
 const authPin = (
-  requestType: string[],
-  requestData: AuthPinRequestType,
-  resolvedSubRequest: SubRequestResponseType
+  requestURI: string[],
+  resolvedSubResponse: SubRequestResponseType,
+  requestData: AuthPinRequestType
 ): void => {
-  switch (requestType[1]) {
+  switch (requestURI[1]) {
     // PIN Flow for Login.
     case ENDPOINT.LOGIN:
       const loginPin = requestData.password + requestData.l_pin;
@@ -47,15 +63,15 @@ const authPin = (
             requestData._id
           );
 
-          resolvedSubRequest.message = createMessage(
-            'success',
-            'Login Successful.'
+          resolvedSubResponse.message = createMessage(
+            MSG_CODE.SUCCESS,
+            MSG_STR.LOGIN_PIN_SUCCESS
           );
         } else {
           // IF PIN mismatched.
-          resolvedSubRequest.message = createMessage(
-            'client-error',
-            'Invalid PIN.'
+          resolvedSubResponse.message = createMessage(
+            MSG_CODE.ERR_CLIENT,
+            MSG_STR.PIN_VERIFY_FAILED
           );
         }
       } else {
@@ -70,17 +86,17 @@ const authPin = (
           requestData._id
         );
 
-        resolvedSubRequest.message = createMessage(
-          'success',
-          'Login Successful.'
+        resolvedSubResponse.message = createMessage(
+          MSG_CODE.SUCCESS,
+          MSG_STR.LOGIN_PIN_SUCCESS
         );
       }
 
-      if (resolvedSubRequest.message.status == 200) {
+      if (resolvedSubResponse.message.status == 200) {
         requestData.l_pin = loginPinHashed;
         requestData.lPinStatus = true;
 
-        resolvedSubRequest.data = requestData;
+        resolvedSubResponse.data = requestData;
       }
 
       break;
@@ -91,7 +107,7 @@ const authPin = (
         requestData.l_pin + requestData.s_pin
       );
 
-      switch (requestType[2]) {
+      switch (requestURI[2]) {
         case ENDPOINT.SETUP:
           // Update Credential PIN.
           const updateStatus = database.updateUser(
@@ -102,19 +118,19 @@ const authPin = (
           );
 
           if (updateStatus) {
-            resolvedSubRequest.data = {
+            resolvedSubResponse.data = {
               s_pin: credentialPinHashed,
               sPinStatus: true,
             };
 
-            resolvedSubRequest.message = createMessage(
-              'success',
-              'PIN set successfully.'
+            resolvedSubResponse.message = createMessage(
+              MSG_CODE.SUCCESS,
+              MSG_STR.PIN_SETUP_SUCCESS
             );
           } else
-            resolvedSubRequest.message = createMessage(
-              'server-error',
-              'Error while setting PIN.'
+            resolvedSubResponse.message = createMessage(
+              MSG_CODE.ERR_SERVER,
+              MSG_STR.PIN_SETUP_FAILED
             );
           break;
 
@@ -132,16 +148,16 @@ const authPin = (
           if (pinVerifyStatus) {
             // If PIN matches.
 
-            resolvedSubRequest.data = {
+            resolvedSubResponse.data = {
               s_pin: credentialPinHashed,
             };
 
-            resolvedSubRequest.message = createMessage('success');
+            resolvedSubResponse.message = createMessage(MSG_CODE.SUCCESS);
           } else {
             // IF PIN mismatched.
-            resolvedSubRequest.message = createMessage(
-              'client-error',
-              'Invalid PIN.'
+            resolvedSubResponse.message = createMessage(
+              MSG_CODE.ERR_CLIENT,
+              MSG_STR.PIN_VERIFY_FAILED
             );
           }
           break;
@@ -152,11 +168,6 @@ const authPin = (
       break;
 
     default:
-      // Invalid Sub Request.
-      resolvedSubRequest.message = createMessage(
-        'client-error',
-        'Invalid Request'
-      );
       break;
   }
 };

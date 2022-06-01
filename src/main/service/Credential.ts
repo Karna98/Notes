@@ -10,24 +10,31 @@ import { CONSTANT, createMessage } from '../../common';
 import { decryptData, encryptData } from '../secure-util';
 import database from './../sql';
 
-// Constant Endpoint String.
-const { ENDPOINT } = CONSTANT;
+// Constant String.
+const { MSG_CODE } = CONSTANT;
+const { ENDPOINT } = CONSTANT.IPC;
+
+// Constant Message String.
+const MSG_STR = {
+  CRED_ADD_FAILED: `Error while adding Credential !`,
+  CRED_UPDATE_FAILED: `Error while saving Credential !`,
+};
 
 /**
- * Handles Credentials related requests.
+ * Handles Credential related requests.
  *
- * @param requestType
+ * @param requestURI
  * @param requestData
- * @param resolvedSubRequest
+ * @param resolvedSubResponse
  */
 const credential = (
-  requestType: string[],
-  requestData: CredentialRequestType,
-  resolvedSubRequest: SubRequestResponseType
+  requestURI: string[],
+  resolvedSubResponse: SubRequestResponseType,
+  requestData: CredentialRequestType
 ): void => {
   let payloadRequestData;
 
-  switch (requestType[1]) {
+  switch (requestURI[1]) {
     case ENDPOINT.ADD:
       payloadRequestData = requestData.data as CredentialDataType;
 
@@ -58,14 +65,14 @@ const credential = (
 
         delete newCredential.credential.secure;
 
-        resolvedSubRequest.data = newCredential;
+        resolvedSubResponse.data = newCredential;
       }
 
-      resolvedSubRequest.message = createStatus.changes
+      resolvedSubResponse.message = createStatus.changes
         ? // Credential Added Successfully.
-          createMessage('success')
+          createMessage(MSG_CODE.SUCCESS)
         : // Error while updating Credential.
-          createMessage('server-error', `Error while adding credential.`);
+          createMessage(MSG_CODE.ERR_SERVER, MSG_STR.CRED_ADD_FAILED);
       break;
 
     case ENDPOINT.UPDATE:
@@ -88,21 +95,21 @@ const credential = (
         payloadRequestData._id
       );
 
-      if (updateStatus) resolvedSubRequest.data = payloadRequestData;
+      if (updateStatus) resolvedSubResponse.data = payloadRequestData;
 
-      resolvedSubRequest.message = updateStatus
+      resolvedSubResponse.message = updateStatus
         ? // Credential updated Successfully.
-          createMessage('success')
+          createMessage(MSG_CODE.SUCCESS)
         : // Error while updating Credential.
-          createMessage('server-error', `Error while saving credential.`);
+          createMessage(MSG_CODE.ERR_SERVER, MSG_STR.CRED_UPDATE_FAILED);
       break;
 
     case ENDPOINT.GET:
       payloadRequestData = requestData.data as number;
 
       const encryptionKey =
-        resolvedSubRequest.data != undefined
-          ? (resolvedSubRequest.data as AuthPinRequestType)?.s_pin
+        resolvedSubResponse.data != undefined
+          ? (resolvedSubResponse.data as AuthPinRequestType)?.s_pin
           : requestData.s_pin;
 
       const credentialData: CredentialsTableInterface =
@@ -119,24 +126,44 @@ const credential = (
 
       credentialBody.secure = JSON.parse(decryptedCred);
 
-      resolvedSubRequest.data = {
-        ...(resolvedSubRequest.data as object),
+      resolvedSubResponse.data = {
+        ...(resolvedSubResponse.data as object),
         data: {
           ...credentialData,
           credential: credentialBody,
         },
       };
 
-      if (resolvedSubRequest.message == undefined)
-        resolvedSubRequest.message = createMessage('success');
+      if (resolvedSubResponse.message == undefined)
+        resolvedSubResponse.message = createMessage(MSG_CODE.SUCCESS);
+      break;
+
+    case ENDPOINT.GET_ALL:
+      // Get all Credentials.
+      const credentialList: CredentialsTableInterface[] =
+        database.getCredentials(
+          (resolvedSubResponse.data as SpaceInterface).space_id
+        );
+
+      // Converting to type of CredentialStoreType[] from CredentialsTableInterface[].
+      const credentialListSanitized: CredentialDataType[] = credentialList.map(
+        ({ _id, credential, updated_at }: CredentialsTableInterface) => {
+          const parsedCredential: CredentialBodyType = JSON.parse(credential);
+          return {
+            _id,
+            credential: { title: parsedCredential.title },
+            updated_at,
+          } as CredentialDataType;
+        }
+      );
+
+      resolvedSubResponse.data = {
+        ...(resolvedSubResponse.data as object),
+        credentials: credentialListSanitized,
+      };
       break;
 
     default:
-      // Invalid Sub Request.
-      resolvedSubRequest.message = createMessage(
-        'client-error',
-        'Invalid Request'
-      );
       break;
   }
 };

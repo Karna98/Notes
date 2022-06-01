@@ -6,8 +6,6 @@
  *
  */
 
-import { IPCRequestObject } from 'common';
-
 /**
  * Sends data to Main Process.
  *
@@ -22,13 +20,48 @@ const sendToIpcMain = (data: IPCRequestInterface) => {
 };
 
 /**
+ * Creates new IPC Request Object.
+ *
+ * @param URI URI String.
+ * @param data Payload.
+ * @returns {object}
+ */
+const createIpcRequestObject = (
+  URI: string,
+  data?: unknown | object
+): IPCRequestInterface => ({
+  timestamp: Date.now(),
+  URI,
+  data,
+});
+
+/**
  * Sent to Main Wrapper Function.
  *
  * @param route
  * @param data
  */
-const sendToMainWrapper = (route: string, data: object | unknown) => {
-  sendToIpcMain(IPCRequestObject(route, data));
+const sendToMainWrapper = (route: string, data?: object | unknown) => {
+  sendToIpcMain(createIpcRequestObject(route, data));
+};
+
+/**
+ * Gets React Route with parameters replaced.
+ * @param route React Route URL
+ * @param params URL params
+ * @returns {string} Updated URL with params
+ */
+const resolveReactRoutes = (
+  route: string,
+  params?: Record<string, string | number>
+): string => {
+  let url: string = route;
+
+  if (url != undefined && params !== undefined)
+    for (const key in params)
+      url = url.replace(`{${key}}`, <string>params[key]);
+
+  return url;
 };
 
 /*
@@ -103,4 +136,4 @@ const removeItem = (type: 'local' | 'session', STORE_KEY: string) => {
 
 const browserStorage = { getValue, setValue, removeItem };
 
-export { browserStorage, sendToIpcMain, sendToMainWrapper };
+export { browserStorage, resolveReactRoutes, sendToMainWrapper };

@@ -15,6 +15,9 @@ import { clearVolatileState } from 'renderer/State';
 import { sendToMainWrapper } from 'renderer/util';
 import './credentials.scss';
 
+// Constant String.
+const { IPC } = CONSTANT;
+
 const BASE_IDENTIFIER = `auth-pin`;
 
 const FORM_AUTH_SETUP = BASE_IDENTIFIER + `-` + `form-setup`;
@@ -65,7 +68,7 @@ const CredentialAuthComponent = ({
    * @param formData Form fields value
    */
   const credPinSubmitAction = (formData?: Record<string, unknown>): void => {
-    sendToMainWrapper(CONSTANT.ROUTE.AUTH.CRED.SETUP, {
+    sendToMainWrapper(IPC.ROUTE.AUTH_PIN.CRED_SETUP, {
       _id: sessionState?._id,
       l_pin: sessionState?.l_pin,
       s_pin: formData?.pin,
@@ -90,7 +93,7 @@ const CredentialAuthComponent = ({
             data: currentCredentialId,
           };
 
-    sendToMainWrapper(CONSTANT.ROUTE.AUTH.CRED.VERIFY, dataObject);
+    sendToMainWrapper(IPC.ROUTE.AUTH_PIN.CRED_VERIFY, dataObject);
   };
 
   formAttributes.submitAction =
@@ -184,7 +187,7 @@ const Credentials = () => {
     setCurrentCredential(credentialId);
 
     if (sessionState?.s_pin != undefined)
-      sendToMainWrapper(CONSTANT.ROUTE.AUTH.CRED.VERIFY, {
+      sendToMainWrapper(IPC.ROUTE.AUTH_PIN.CRED_VERIFY, {
         s_pin: sessionState?.s_pin,
         data: credentialId,
       });
@@ -198,7 +201,7 @@ const Credentials = () => {
    * @param formData Form fields value.
    */
   const addCredentialFormAction = (formData?: Record<string, unknown>) => {
-    sendToMainWrapper(CONSTANT.ROUTE.CRED.ADD, {
+    sendToMainWrapper(IPC.ROUTE.CRED.ADD, {
       s_pin: sessionState?.s_pin,
       data: {
         ...formData,
@@ -215,7 +218,7 @@ const Credentials = () => {
    * @param formData Form fields value.
    */
   const updateCredentialFormAction = (formData?: Record<string, unknown>) => {
-    sendToMainWrapper(CONSTANT.ROUTE.CRED.UPDATE, {
+    sendToMainWrapper(IPC.ROUTE.CRED.UPDATE, {
       s_pin: sessionState?.s_pin,
       data: formData,
     });

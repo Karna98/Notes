@@ -7,7 +7,7 @@
  */
 
 import NOTES_LOGO_256 from 'assets/logo/png/256x256.png';
-import { resolveReactRoutes } from 'common';
+import { CONSTANT } from 'common';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DivLink, Form } from 'renderer/Components';
@@ -17,7 +17,11 @@ import {
   clearSpacesState,
   clearVolatileState,
 } from 'renderer/State';
+import { resolveReactRoutes } from 'renderer/util';
 import './sidebar.scss';
+
+// Constant String.
+const { ROUTE } = CONSTANT.REACT;
 
 const Sidebar = () => {
   const dispatch = useAppDispatch();
@@ -38,23 +42,27 @@ const Sidebar = () => {
     main: [
       {
         title: `Spaces`,
-        URI: resolveReactRoutes(`spaces`),
+        URI: ROUTE.SPACES.LIST,
       },
     ],
     secondary: [
       {
         title: `Notes`,
-        URI: resolveReactRoutes(`notes`, { space_id: Number(space_id) }),
+        URI: resolveReactRoutes(ROUTE.SPACES.SPACE.NOTE.LIST, {
+          space_id: Number(space_id),
+        }),
       },
       {
         title: `Credentials`,
-        URI: resolveReactRoutes(`credentials`, { space_id: Number(space_id) }),
+        URI: resolveReactRoutes(ROUTE.SPACES.SPACE.CREDENTIAL.LIST, {
+          space_id: Number(space_id),
+        }),
       },
     ],
     others: [
       {
         title: `Profile`,
-        URI: resolveReactRoutes(`profile`),
+        URI: ROUTE.PROFILE,
       },
     ],
   };
@@ -117,7 +125,7 @@ const Sidebar = () => {
             {links.main.map((link) => customDevLink(link?.title, link.URI))}
           </div>
 
-          {location.pathname.startsWith(resolveReactRoutes(`spaces`) + `/`) && (
+          {location.pathname.startsWith(ROUTE.SPACES.LIST + `/`) && (
             <div className="d-flex flex-column align-items-center secondary-links">
               <h5>{currentSpaceDetails?.space_name}</h5>
 

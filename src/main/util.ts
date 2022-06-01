@@ -31,4 +31,12 @@ const resolveHtmlPath = (htmlFileName: string): string => {
   }
 };
 
-export { resolveHtmlPath };
+/**
+ * Splits URI Route on '-'.
+ *
+ * @param route Simple Route
+ * @returns {[]} Array of splitted URI string.
+ */
+const resolveURI = (route: string): string[] => route.toUpperCase().split(`-`);
+
+export { resolveHtmlPath, resolveURI };
