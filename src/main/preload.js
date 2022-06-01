@@ -9,17 +9,23 @@
 
 const { contextBridge, ipcRenderer } = require('electron');
 
+const WINDOW_API_NAME = `NotesAPI`;
+
+// IPC Channel BUS
+const ALLOWED_CHANNEL_BUS = {
+  TO: [`toMain`],
+  FROM: [`fromMain`],
+};
+
 const send = (channel, data) => {
   // whitelist channels
-  const validChannels = ['toMain'];
-  if (validChannels.includes(channel)) {
+  if (ALLOWED_CHANNEL_BUS.TO.includes(channel)) {
     ipcRenderer.send(channel, data);
   }
 };
 
 const receive = (channel, func) => {
-  const validChannels = ['fromMain'];
-  if (validChannels.includes(channel)) {
+  if (ALLOWED_CHANNEL_BUS.FROM.includes(channel)) {
     // Deliberately strip event as it includes `sender`
     ipcRenderer.on(channel, (_event, ...args) => func(...args));
   }
@@ -27,7 +33,7 @@ const receive = (channel, func) => {
 
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object
-contextBridge.exposeInMainWorld('NotesAPI', {
+contextBridge.exposeInMainWorld(WINDOW_API_NAME, {
   send,
   receive,
 });

@@ -79,3 +79,26 @@ form#credential-form-update {
     }
   }
 }
+
+form#auth-pin-form-setup,
+form#auth-pin-form-verify {
+  .input-element {
+    background-color: inherit;
+    width: 1.5 * $input-element-height;
+    padding: var(--x);
+
+    input {
+      height: 2 * $input-element-height;
+      text-align: center;
+      font-size: xx-large;
+
+      &::selection {
+        background: transparent;
+      }
+
+      &:focus {
+        box-shadow: inset 0 0 0 1px var(--text-dark-primary);
+      }
+    }
+  }
+}

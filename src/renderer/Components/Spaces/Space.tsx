@@ -6,12 +6,16 @@
  *
  */
 
-import { IPCRequestObject, resolveReactRoutes } from 'common';
+import { CONSTANT } from 'common';
 import { useEffect } from 'react';
 import { Route, Routes, useParams } from 'react-router-dom';
 import { Credentials, Notes } from 'renderer/Components';
 import { useAppSelector } from 'renderer/Hooks';
-import { sendToIpcMain } from 'renderer/util';
+import { sendToMainWrapper } from 'renderer/util';
+
+// Constant String.
+const { IPC } = CONSTANT;
+const { ENDPOINT } = CONSTANT.REACT;
 
 const Space = () => {
   // Get spaces value stored in Redux Store.
@@ -28,7 +32,7 @@ const Space = () => {
   const routeList = [
     {
       name: `Space Welcome Page`,
-      path: resolveReactRoutes(`root`),
+      path: ENDPOINT.ROOT,
       element: (
         <div className="d-flex flex-column justify-content-center align-items-center space-greeting unselectable">
           <h4>Welcome to</h4>
@@ -41,12 +45,12 @@ const Space = () => {
     },
     {
       name: `notes`,
-      path: `/notes/*`,
+      path: ENDPOINT.NOTE_,
       element: <Notes />,
     },
     {
       name: `credentials`,
-      path: `/credentials/*`,
+      path: ENDPOINT.CREDENTIAL_,
       element: <Credentials />,
     },
   ];
@@ -56,9 +60,7 @@ const Space = () => {
       spacesState?.currentSpace === undefined ||
       spacesState.currentSpace.space_id != Number(space_id)
     )
-      sendToIpcMain(
-        IPCRequestObject(`spaces-get-space`, { _id: Number(space_id) })
-      );
+      sendToMainWrapper(IPC.ROUTE.SPACE.GET, { _id: Number(space_id) });
   }, []);
 
   return (

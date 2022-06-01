@@ -6,11 +6,23 @@
  *
  */
 
-import { createMessage, IPCRequestObject, resolveReactRoutes } from 'common';
+import { CONSTANT, createMessage } from 'common';
 import { DivLink, Form } from 'renderer/Components';
 import { useAppDispatch, useAppSelector } from 'renderer/Hooks';
 import { setMessageState } from 'renderer/State';
-import { sendToIpcMain } from 'renderer/util';
+import { resolveReactRoutes, sendToMainWrapper } from 'renderer/util';
+
+// Constant String.
+const { IPC, MSG_CODE } = CONSTANT;
+const { ROUTE } = CONSTANT.REACT;
+
+// Constant Message String.
+const MSG_STR = {
+  SPACE_EXISTS: {
+    FUNC: (spaceName: string) =>
+      `Space with name "${spaceName}" already exists.`,
+  },
+};
 
 const List = () => {
   const dispatch = useAppDispatch();
@@ -37,12 +49,12 @@ const List = () => {
       dispatch(
         setMessageState(
           createMessage(
-            `client-error`,
-            `Space with name "${formData.space_name}" already exists.`
+            MSG_CODE.ERR_CLIENT,
+            MSG_STR.SPACE_EXISTS.FUNC(formData.space_name as string)
           )
         )
       );
-    else sendToIpcMain(IPCRequestObject(`spaces-add`, formData));
+    else sendToMainWrapper(IPC.ROUTE.SPACE.ADD, formData);
   };
 
   return (
@@ -61,7 +73,9 @@ const List = () => {
               <DivLink
                 key={value._id}
                 id={`${value._id}`}
-                to={resolveReactRoutes('space', { space_id: value._id })}
+                to={resolveReactRoutes(ROUTE.SPACES.SPACE.ID, {
+                  space_id: value._id,
+                })}
                 className="d-flex justify-content-center align-items-center space-card"
               >
                 <h3>{value.space_name}</h3>

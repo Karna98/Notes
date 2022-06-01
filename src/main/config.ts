@@ -1,5 +1,5 @@
 /**
- * constants.ts
+ * config.ts
  *
  * Description:
  *    Declaring all static values for Main Process.
@@ -26,8 +26,8 @@ const DATABASE_NAME = `${IS_DEVELOPMENT_MODE ? `notes_dev` : `notes`}.sqlite`;
 const SPACES_MAX_COUNT_ALLOWED = 4;
 
 export default {
-  SPACES_MAX_COUNT_ALLOWED,
   DATABASE_NAME,
-  PATH,
   IS_DEVELOPMENT_MODE,
+  PATH,
+  SPACES_MAX_COUNT_ALLOWED,
 };

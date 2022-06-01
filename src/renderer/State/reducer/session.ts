@@ -25,6 +25,17 @@ const sessionSlice = createSlice({
       browserStorage.setValue(`session`, `SESSION`, action.payload);
       return action.payload;
     },
+    // Update Session.
+    updateSessionState: (state, action: PayloadAction<object>) => {
+      const updatedSession = {
+        ...state,
+        ...action.payload,
+      };
+
+      // Save in browser's session storage.
+      browserStorage.setValue(`session`, `SESSION`, updatedSession);
+      Object.assign(state, updatedSession);
+    },
     // Clear Session.
     clearSessionState: () => {
       // Remove from browser's session storage.
@@ -34,6 +45,7 @@ const sessionSlice = createSlice({
   },
 });
 
-export const { setSessionState, clearSessionState } = sessionSlice.actions;
+export const { setSessionState, clearSessionState, updateSessionState } =
+  sessionSlice.actions;
 
 export default sessionSlice.reducer;

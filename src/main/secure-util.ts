@@ -10,7 +10,13 @@ import {
   compareSync as bcryptCompareSync,
   hashSync as bcryptHashSync,
 } from 'bcryptjs';
-import { createHash } from 'crypto';
+import {
+  createCipheriv,
+  createDecipheriv,
+  createHash,
+  randomBytes,
+  scryptSync,
+} from 'crypto';
 
 /**
  * @TODO
@@ -19,6 +25,9 @@ import { createHash } from 'crypto';
 
 // Salt rounds, higher is safer.
 const SALT_ROUNDS = 10;
+
+const ENC_DEC_ALGORITHM = `aes-256-ctr`;
+const ENC_DEC_SEPERATOR = `$`;
 
 /**
  * Compute Hash using SHA256 Algorithm.
@@ -57,8 +66,64 @@ const cryptBcryptHash = (key: string) => {
  * @param hash Hash value to be compared with.
  * @returns {boolean} Returns Status of key matches the hash or not.
  */
-const cryptBcryptCompare = (key: string, hash: string) => {
+const cryptBcryptCompare = (key: string, hash: string, keyHashed = false) => {
+  if (keyHashed) return bcryptCompareSync(key, hash);
+
   return bcryptCompareSync(cryptoHash(key), hash);
 };
 
-export { cryptBcryptCompare, cryptBcryptHash };
+/**
+ * Encrypt data using Key.
+ *
+ * @param key Encryption Key.
+ * @param data Data to be encrypted
+ * @returns {string} Encrypted Data
+ */
+const encryptData = (key: string, data: string): string => {
+  const cipherIV = randomBytes(16);
+
+  const cipher = createCipheriv(
+    ENC_DEC_ALGORITHM,
+    scryptSync(key, 'N0TE$', 32),
+    cipherIV
+  );
+
+  const encrypted = Buffer.concat([cipher.update(data), cipher.final()]);
+
+  return [cipherIV.toString(`hex`), encrypted.toString(`hex`)].join(
+    ENC_DEC_SEPERATOR
+  );
+};
+
+/**
+ * Decrypt data using Key.
+ *
+ * @param key Decryption Key.
+ * @param data Data to be decrypted
+ * @returns {string} Decrypted Data
+ */
+const decryptData = (key: string, data: string): string => {
+  const [IV, encryptedData] = data.split(ENC_DEC_SEPERATOR);
+
+  const decipher = createDecipheriv(
+    ENC_DEC_ALGORITHM,
+    scryptSync(key, 'N0TE$', 32),
+    Buffer.from(IV, `hex`)
+  );
+
+  const decrypted = Buffer.concat([
+    decipher.update(Buffer.from(encryptedData, `hex`)),
+    decipher.final(),
+  ]);
+
+  return decrypted.toString();
+};
+
+export {
+  bcryptHash,
+  cryptBcryptCompare,
+  cryptBcryptHash,
+  cryptoHash,
+  decryptData,
+  encryptData,
+};

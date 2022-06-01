@@ -6,13 +6,16 @@
  *
  */
 
-import { IPCRequestObject } from 'common';
+import { CONSTANT } from 'common';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Form, Modal, TextArea } from 'renderer/Components';
 import { useAppSelector } from 'renderer/Hooks';
-import { sendToIpcMain } from 'renderer/util';
+import { sendToMainWrapper } from 'renderer/util';
 import './notes.scss';
+
+// Constant String.
+const { IPC } = CONSTANT;
 
 const Notes = () => {
   // Modal State
@@ -69,12 +72,10 @@ const Notes = () => {
    * @param formData Form fields value.
    */
   const addNoteFormAction = (formData?: Record<string, unknown>) => {
-    sendToIpcMain(
-      IPCRequestObject(`notes-add`, {
-        ...formData,
-        space_id: Number(space_id),
-      })
-    );
+    sendToMainWrapper(IPC.ROUTE.NOTE.ADD, {
+      ...formData,
+      space_id: Number(space_id),
+    });
 
     setModalState(!modalState);
   };
@@ -85,7 +86,7 @@ const Notes = () => {
    * @param formData Form fields value.
    */
   const updateNoteFormAction = (formData?: Record<string, unknown>) => {
-    sendToIpcMain(IPCRequestObject(`notes-update`, formData));
+    sendToMainWrapper(IPC.ROUTE.NOTE.UPDATE, formData);
   };
 
   useEffect(() => {
